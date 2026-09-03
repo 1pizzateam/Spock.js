@@ -1,28 +1,29 @@
-/** MIT License
- *
- * Copyright (c) 2011 Ludovic CLUBER
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice (including the next
- * paragraph) shall be included in all copies or substantial portions of the
- * Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
- *
- * https://github.com/LCluber/Type6.js
- */
+/*
+MIT License
+
+Copyright (c) 2011 Ludovic CLUBER
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+https://github.com/LCluber/Type6.js
+*/
+
 class Utils {
     static round(x, decimals) {
         decimals = Math.pow(10, decimals);
@@ -405,6 +406,9 @@ class Vector {
             this.z += scalar;
         return this;
     }
+    addComponents() {
+        return this.x + this.y + (this.hasOwnProperty('z') ? this.z : 0);
+    }
     subtract(vector) {
         this.x -= vector.x;
         this.y -= vector.y;
@@ -440,10 +444,12 @@ class Vector {
             this.z *= vector.z * scalar;
         return this;
     }
-    scale(scalar) {
-        this.x *= scalar;
-        this.y *= scalar;
-        if (this.hasOwnProperty('z'))
+    scale(scalar, axis) {
+        if (!axis || axis === 'x')
+            this.x *= scalar;
+        if (!axis || axis === 'y')
+            this.y *= scalar;
+        if (this.hasOwnProperty('z') && (!axis || axis === 'z'))
             this.z *= scalar;
         return this;
     }
@@ -525,6 +531,24 @@ class Vector {
             this.y = -this.y;
         if (this.hasOwnProperty('z') && (!axis || axis === 'z'))
             this.z = -this.z;
+        return this;
+    }
+    floor(axis) {
+        if (!axis || axis === 'x')
+            this.x = Math.floor(this.x);
+        if (!axis || axis === 'y')
+            this.y = Math.floor(this.y);
+        if (this.hasOwnProperty('z') && (!axis || axis === 'z'))
+            this.z = Math.floor(this.z);
+        return this;
+    }
+    ceil(axis) {
+        if (!axis || axis === 'x')
+            this.x = Math.ceil(this.x);
+        if (!axis || axis === 'y')
+            this.y = Math.ceil(this.y);
+        if (this.hasOwnProperty('z') && (!axis || axis === 'z'))
+            this.z = Math.ceil(this.z);
         return this;
     }
     dotProduct(vector) {
@@ -610,12 +634,17 @@ class Vector2 extends Vector {
 }
 
 class Circle {
-    constructor(radius, positionX, positionY) {
+    constructor(radius, positionX, positionY, grid) {
+        this.gridCells = [0, 0, 0, 0];
         this.shape = 'circle';
         this._radius = 0.0;
         this._diameter = 0.0;
         this.position = new Vector2(positionX, positionY);
         this.radius = radius;
+        this.grid = grid || null;
+        this.cellTlc = new Vector2();
+        this.cellBrc = new Vector2();
+        this.setGridPos();
     }
     set radius(radius) {
         this._radius = radius;
@@ -632,7 +661,7 @@ class Circle {
         return this._diameter;
     }
     clone() {
-        return new Circle(this.radius, this.position.x, this.position.y);
+        return new Circle(this.radius, this.position.x, this.position.y, this.grid);
     }
     copy(circle) {
         this.position.copy(circle.position);
@@ -641,10 +670,12 @@ class Circle {
     }
     setPosition(positionX, positionY) {
         this.position.setScalar(positionX, positionY);
+        this.setGridPos();
         return this;
     }
     setRadius(radius) {
         this.radius = radius;
+        this.setGridPos();
         return this;
     }
     setDiameter(diameter) {
@@ -671,21 +702,43 @@ class Circle {
             context.stroke();
         }
     }
+    setGridPos() {
+        if (this.grid) {
+            const size = this.grid.cellSize;
+            const colLen = this.grid.len.x;
+            const sizeInv = 1 / size;
+            this.cellTlc.copy(this.position).subtractScalar(this.radius).scale(sizeInv).floor().scale(colLen, 'y');
+            this.cellBrc.copy(this.position).addScalar(this.radius).scale(sizeInv).floor().scale(colLen, 'y');
+            const tlcxtlcy = this.cellTlc.addComponents();
+            const brcxtlcy = this.cellBrc.x + this.cellTlc.y;
+            const tlcxbrcy = this.cellTlc.x + this.cellBrc.y;
+            const brcxbrcy = this.cellBrc.addComponents();
+            this.gridCells[0] = tlcxtlcy;
+            this.gridCells[1] = brcxtlcy !== tlcxtlcy ? brcxtlcy : -1;
+            this.gridCells[2] = tlcxbrcy !== tlcxtlcy && tlcxbrcy !== brcxtlcy ? tlcxbrcy : -1;
+            this.gridCells[3] = brcxbrcy !== tlcxtlcy && brcxbrcy !== brcxtlcy && brcxbrcy !== tlcxtlcy ? brcxbrcy : -1;
+        }
+    }
 }
 
 class Rectangle {
-    constructor(width, height, positionX, positionY) {
+    constructor(width, height, positionX, positionY, grid) {
+        this.gridCells = [0, 0, 0, 0];
         this.shape = 'aabb';
         this.position = new Vector2(positionX, positionY);
         this.size = new Vector2(width, height);
         this.halfSize = new Vector2();
         this.topLeftCorner = new Vector2();
         this.bottomRightCorner = new Vector2();
+        this.grid = grid || null;
+        this.cellTlc = new Vector2();
+        this.cellBrc = new Vector2();
         this.setHalfSize();
         this.setCorners();
+        this.setGridPos();
     }
     clone() {
-        return new Rectangle(this.size.x, this.size.y, this.position.x, this.position.y);
+        return new Rectangle(this.size.x, this.size.y, this.position.x, this.position.y, this.grid);
     }
     copy(rectangle) {
         this.setSize(rectangle.size.x, rectangle.size.y);
@@ -695,11 +748,13 @@ class Rectangle {
     setPosition(positionX, positionY) {
         this.position.setScalar(positionX, positionY);
         this.setCorners();
+        this.setGridPos();
     }
     setSize(width, height) {
         this.size.setScalar(width, height);
         this.setHalfSize();
         this.setCorners();
+        this.setGridPos();
     }
     isIn(vector) {
         return (Utils.isIn(vector.x, this.topLeftCorner.x, this.bottomRightCorner.x)
@@ -724,6 +779,34 @@ class Rectangle {
     }
     setHalfSize() {
         this.halfSize.copy(this.size).halve();
+    }
+    setGridPos() {
+        if (this.grid) {
+            const size = this.grid.cellSize;
+            const colLen = this.grid.len.x;
+            const sizeInv = 1 / size;
+            this.cellTlc.copy(this.topLeftCorner).scale(sizeInv).floor().scale(colLen, 'y');
+            this.cellBrc.copy(this.bottomRightCorner).scale(sizeInv).floor().scale(colLen, 'y');
+            const tlcxtlcy = this.cellTlc.addComponents();
+            const brcxtlcy = this.cellBrc.x + this.cellTlc.y;
+            const tlcxbrcy = this.cellTlc.x + this.cellBrc.y;
+            const brcxbrcy = this.cellBrc.addComponents();
+            this.gridCells[0] = tlcxtlcy;
+            this.gridCells[1] = brcxtlcy !== tlcxtlcy ? brcxtlcy : -1;
+            this.gridCells[2] = tlcxbrcy !== tlcxtlcy && tlcxbrcy !== brcxtlcy ? tlcxbrcy : -1;
+            this.gridCells[3] = brcxbrcy !== tlcxtlcy && brcxbrcy !== brcxtlcy && brcxbrcy !== tlcxtlcy ? brcxbrcy : -1;
+        }
+    }
+}
+
+class Grid {
+    constructor(width, height, cellSize) {
+        this.cellSize = cellSize;
+        const lenX = Math.ceil(width / cellSize);
+        const lenY = Math.ceil(height / cellSize);
+        this.len = new Vector2(lenX, lenY);
+    }
+    draw() {
     }
 }
 
@@ -980,4 +1063,4 @@ class Matrix4x4 {
     }
 }
 
-export { Bezier, Circle, Matrix3x3, Matrix4x3, Matrix4x4, NumArray, Random, Rectangle, Time, Trigonometry, Utils, Vector2, Vector3 };
+export { Bezier, Circle, Grid, Matrix3x3, Matrix4x3, Matrix4x4, NumArray, Random, Rectangle, Time, Trigonometry, Utils, Vector2, Vector3 };

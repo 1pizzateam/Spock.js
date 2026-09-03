@@ -1,18 +1,27 @@
 import {Trigonometry} from '../trigonometry';
+import { Grid }    from './grid';
 import {Vector2} from '../vectors/vector2';
 
 export class Circle {
 
   public position: Vector2;
+  public gridCells: number[] = [0,0,0,0];
+  private grid: Grid | null;
+  private cellTlc: Vector2;
+  private cellBrc: Vector2;
   private _radius: number;
   private _diameter: number;
   readonly shape: 'circle' = 'circle';
 
-  constructor(radius: number, positionX: number, positionY: number) {
+  constructor(radius: number, positionX: number, positionY: number, grid: Grid|null) {
     this._radius = 0.0;
     this._diameter = 0.0;
-    this.position = new Vector2( positionX, positionY );
+    this.position = new Vector2(positionX, positionY);
     this.radius = radius;
+    this.grid = grid || null;
+    this.cellTlc = new Vector2(); // cell top left corner
+    this.cellBrc = new Vector2(); // cell bottom right corner
+    this.setGridPos();
   }
 
   set radius(radius : number) {
@@ -34,7 +43,7 @@ export class Circle {
   }
 
   public clone(): Circle {
-    return new Circle(this.radius, this.position.x, this.position.y);
+    return new Circle(this.radius, this.position.x, this.position.y, this.grid);
   }
 
   public copy( circle: Circle ): Circle {
@@ -45,11 +54,13 @@ export class Circle {
 
   public setPosition( positionX: number, positionY: number ) {
     this.position.setScalar(positionX, positionY);
+    this.setGridPos();
     return this;
   }
 
   public setRadius( radius: number ) {
     this.radius = radius;
+    this.setGridPos();
     return this;
   }
 
@@ -88,6 +99,28 @@ export class Circle {
       context.lineWidth = strokeWidth;
       context.stroke();
     }
+  }
+
+  private setGridPos(): void {
+
+    if (this.grid) {
+      const size = this.grid.cellSize;
+      const colLen = this.grid.len.x;
+      const sizeInv = 1/size;
+      this.cellTlc.copy(this.position).subtractScalar(this.radius).scale(sizeInv).floor().scale(colLen, 'y');
+      this.cellBrc.copy(this.position).addScalar(this.radius).scale(sizeInv).floor().scale(colLen, 'y');
+
+      const tlcxtlcy = this.cellTlc.addComponents();
+      const brcxtlcy = this.cellBrc.x + this.cellTlc.y;
+      const tlcxbrcy = this.cellTlc.x + this.cellBrc.y;
+      const brcxbrcy = this.cellBrc.addComponents();
+
+      this.gridCells[0] = tlcxtlcy;
+      this.gridCells[1] = brcxtlcy !== tlcxtlcy ? brcxtlcy : -1;
+      this.gridCells[2] = tlcxbrcy !== tlcxtlcy && tlcxbrcy !== brcxtlcy ? tlcxbrcy : -1;
+      this.gridCells[3] = brcxbrcy !== tlcxtlcy && brcxbrcy !== brcxtlcy && brcxbrcy !== tlcxtlcy ? brcxbrcy : -1;
+    }
+    
   }
 
 };

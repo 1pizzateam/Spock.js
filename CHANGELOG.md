@@ -1,3 +1,18 @@
+
+Version 3.1.0 (October 10th 2023)
+-----------------------------
+ * Vector class:
+    * Add Floor() method
+    * Add Ceil() method
+    * Add axis parameter to scale method to select which axis to scale
+    * Add addComponents() method
+ * Grid class:
+    * Add grid geometry class which creates a grid divided in x cells of size y on a given space size
+ * Circle class:
+    * Add grid parameter in order to pass a grid into which the circle will be positioned
+ * Rectangle class:
+    * Add grid parameter in order to pass a grid into which the rectangle will be positioned
+
 Version 3.0.0 (May 18th 2021)
 -----------------------------
  * Vector class:

@@ -127,6 +127,10 @@ export class Vector {
     return this;
   }
 
+  public addComponents(): number {
+    return this.x + this.y + (this.hasOwnProperty('z') ? this.z as number : 0);
+  }
+
   public subtract(vector: any): any {
     this.x -= vector.x;
     this.y -= vector.y;
@@ -173,10 +177,12 @@ export class Vector {
     return this;
   }
 
-  public scale(scalar: number): any {
-    this.x *= scalar;
-    this.y *= scalar;
-    if (this.hasOwnProperty('z'))
+  public scale(scalar: number, axis?: 'x' | 'y' | 'z'): any {
+    if (!axis || axis === 'x')
+      this.x *= scalar;
+    if (!axis || axis === 'y')
+      this.y *= scalar;
+    if (this.hasOwnProperty('z') && (!axis || axis === 'z'))
       (this.z as number) *= scalar;
     
     return this; 
@@ -259,7 +265,7 @@ export class Vector {
     if( length && length != 1)
       this.scale(1/length);
 
-    return this
+    return this;
   }
 
   public absolute(axis?: 'x' | 'y' | 'z'): any {
@@ -270,7 +276,7 @@ export class Vector {
     if (this.hasOwnProperty('z') && (!axis || axis === 'z'))
       this.z = Math.abs(this.z as number);
        
-    return this
+    return this;
   }
 
   public opposite(axis?: 'x' | 'y' | 'z'): any {
@@ -281,8 +287,29 @@ export class Vector {
     if (this.hasOwnProperty('z') && (!axis || axis === 'z'))
       this.z = -(this.z as number);
        
-    return this
-    
+    return this;
+  }
+
+  public floor(axis?: 'x' | 'y' | 'z'): any {
+    if (!axis || axis === 'x')
+      this.x = Math.floor(this.x);
+    if (!axis || axis === 'y')
+      this.y = Math.floor(this.y);
+    if (this.hasOwnProperty('z') && (!axis || axis === 'z'))
+      this.z = Math.floor(this.z as number);
+       
+    return this;
+  }
+
+  public ceil(axis?: 'x' | 'y' | 'z'): any {
+    if (!axis || axis === 'x')
+      this.x = Math.ceil(this.x);
+    if (!axis || axis === 'y')
+      this.y = Math.ceil(this.y);
+    if (this.hasOwnProperty('z') && (!axis || axis === 'z'))
+      this.z = Math.ceil(this.z as number);
+       
+    return this;
   }
 
   public dotProduct(vector: any): number { //scalar product

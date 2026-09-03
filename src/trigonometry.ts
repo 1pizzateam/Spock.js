@@ -117,10 +117,9 @@ export class Trigonometry {
   */
   static normalizeRadian(angle: number): number {
     //console.log(angle);
-    if ( angle > this.pi || angle < -this.pi ) {
-      //console.log(angle - this.TWOPI * Math.floor((angle + this.pi) / this.TWOPI));
+    if ( angle > this.pi || angle < -this.pi )
       return angle - this.twopi * Math.floor((angle + this.pi) / this.twopi);
-    }
+  
     return angle;
   }
 
@@ -133,8 +132,8 @@ export class Trigonometry {
     angle = this.normalizeRadian(angle);
     if( Trigonometry.sineDecimals <= 2 && (angle < 0.28 && angle > -0.28) )
       return angle;
-    else
-      return this.taylorSerie(3, Trigonometry.sineLoops[this.sineDecimals], angle, angle, true);
+    
+    return this.taylorSerie(3, Trigonometry.sineLoops[this.sineDecimals], angle, angle, true);
   }
 
   /**
@@ -147,8 +146,8 @@ export class Trigonometry {
     var squaredAngle = angle * angle;
     if( this.cosineDecimals <= 2 && (angle <= 0.5 && angle >= -0.5) )
       return 1 - ( squaredAngle * 0.5 );
-    else
-      return this.taylorSerie(2, Trigonometry.cosineLoops[this.cosineDecimals], 1, angle, true);
+    
+    return this.taylorSerie(2, Trigonometry.cosineLoops[this.cosineDecimals], 1, angle, true);
   }
 
   /**
@@ -185,12 +184,12 @@ export class Trigonometry {
     let loops = Trigonometry.arctanLoops[this.arctanDecimals];
     if(angle < 1 && angle > -1)
       return this.taylorSerie(3, loops, angle, angle, false);
-    else{
+    else {
       //- arctan (x) = actan (1/x) - pi/2
       if(angle >= 1) {
         angle = 1/angle;
         return - (this.taylorSerie(3, loops, angle, angle, false) - this.halfpi);
-      }else{
+      } else {
         angle = -1/angle;
         return this.taylorSerie(3, loops, angle, angle, false) - this.halfpi;
       }

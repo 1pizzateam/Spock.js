@@ -7,6 +7,7 @@ export { NumArray }     from './array';
 export { Bezier }       from './bezier';
 export { Circle }       from './geometry/circle';
 export { Rectangle }    from './geometry/rectangle';
+export { Grid }         from './geometry/grid';
 export { Vector2 }      from './vectors/vector2';
 export { Vector3 }      from './vectors/vector3';
 export { Matrix3x3 }    from './matrices/matrix3x3';
