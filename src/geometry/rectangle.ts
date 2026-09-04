@@ -1,7 +1,9 @@
 import { Vector2 } from '../vectors/vector2';
-import { Grid }    from './grid';
+import { type Grid, fillGridCells, clearGridCells, GRID_EMPTY_CELL } from './grid';
+import { applyCanvasStyle } from './canvas';
 import { Utils }   from '../utils';
 
+/** Axis-aligned rectangle with optional grid occupancy. */
 export class Rectangle {
 
   public position : Vector2;
@@ -9,57 +11,70 @@ export class Rectangle {
   public bottomRightCorner : Vector2;
   public size : Vector2;
   public halfSize : Vector2;
-  public gridCells: number[] = [0,0,0,0];
+  public gridCells: number[] = [GRID_EMPTY_CELL];
   private grid: Grid | null;
-  private cellTlc: Vector2;
-  private cellBrc: Vector2;
   readonly shape: 'aabb' = 'aabb';
 
-  constructor( width: number, height: number, positionX: number, positionY: number, grid: Grid|null ) {
+  /** Rectangle of width × height centered at (positionX, positionY). */
+  constructor( width: number, height: number, positionX: number, positionY: number ) {
     this.position = new Vector2(positionX, positionY);
     this.size = new Vector2( width, height );
     this.halfSize = new Vector2();
     this.topLeftCorner = new Vector2();
     this.bottomRightCorner = new Vector2();
-    this.grid = grid || null;
-    this.cellTlc = new Vector2(); // cell top left corner
-    this.cellBrc = new Vector2(); // cell bottom right corner
+    this.grid = null;
     this.setHalfSize();
     this.setCorners();
-    this.setGridPos();
   }
 
+  /** Copy with the same grid. */
   public clone(): Rectangle {
-    return new Rectangle(this.size.x, this.size.y, this.position.x, this.position.y, this.grid);
+    return new Rectangle(this.size.x, this.size.y, this.position.x, this.position.y).setGrid(this.grid);
   }
 
+  /** Copy size, position, and grid from another rectangle. */
   public copy( rectangle: Rectangle ): Rectangle {
-    this.setSize( rectangle.size.x, rectangle.size.y );
-    this.setPosition( rectangle.position.x, rectangle.position.y );
+    this.size.setScalar(rectangle.size.x, rectangle.size.y);
+    this.position.setScalar(rectangle.position.x, rectangle.position.y);
+    this.setHalfSize();
+    this.setCorners();
+    return this.setGrid(rectangle.grid);
+  }
+
+  /** Attach a grid for occupancy, or clear it. */
+  public setGrid(grid: Grid | null): Rectangle {
+    this.grid = grid;
+    if (grid)
+      this.setGridPos();
+    else
+      clearGridCells(this.gridCells);
     return this;
   }
-  
-  public setPosition(positionX: number, positionY: number): void {
+
+  /** Move the center and refresh corners and occupancy. */
+  public setPosition(positionX: number, positionY: number): Rectangle {
     this.position.setScalar( positionX, positionY );
     this.setCorners();
     this.setGridPos();
+    return this;
   }
 
-  public setSize(width: number, height: number): void {
+  /** Resize and refresh corners and occupancy. */
+  public setSize(width: number, height: number): Rectangle {
     this.size.setScalar(width, height);
     this.setHalfSize();
     this.setCorners();
     this.setGridPos();
+    return this;
   }
 
+  /** True if the point lies inside or on the rectangle. */
   public isIn(vector: Vector2): boolean {
     return (Utils.isIn(vector.x, this.topLeftCorner.x, this.bottomRightCorner.x)
             && Utils.isIn(vector.y, this.topLeftCorner.y, this.bottomRightCorner.y));
   }
 
-  /**
-  * draw the rectangle in a canvas.
-  */
+  /** Draw the rectangle on a canvas. */
   public draw( context: CanvasRenderingContext2D, fillColor: string, strokeColor: string, strokeWidth: number ): void {
     context.beginPath();
     context.rect( this.topLeftCorner.x,
@@ -67,50 +82,31 @@ export class Rectangle {
                   this.size.x,
                   this.size.y
                 );
-    if( fillColor ){
-      context.fillStyle = fillColor;
-      context.fill();
-    }
-    if( strokeColor ){
-      context.strokeStyle = strokeColor;
-      context.lineWidth = strokeWidth;
-      context.stroke();
-    }
+    applyCanvasStyle(context, fillColor, strokeColor, strokeWidth);
   }
 
+  /** Update top-left and bottom-right from center and half-size. */
   private setCorners(): void {
     this.topLeftCorner.copy(this.position).subtract(this.halfSize);
     this.bottomRightCorner.copy(this.position).add(this.halfSize);
   }
 
+  /** Cache half of the current size. */
   private setHalfSize(): void {
     this.halfSize.copy(this.size).halve();
   }
 
+  /** Record occupied cells on the attached grid. */
   private setGridPos(): void {
-
-    if (this.grid) {
-      const size = this.grid.cellSize;
-      const colLen = this.grid.len.x;
-      const sizeInv = 1/size;
-      this.cellTlc.copy(this.topLeftCorner).scale(sizeInv).floor().scale(colLen, 'y');
-      this.cellBrc.copy(this.bottomRightCorner).scale(sizeInv).floor().scale(colLen, 'y');
-
-      const tlcxtlcy = this.cellTlc.addComponents();
-      const brcxtlcy = this.cellBrc.x + this.cellTlc.y;
-      const tlcxbrcy = this.cellTlc.x + this.cellBrc.y;
-      const brcxbrcy = this.cellBrc.addComponents();
-
-      this.gridCells[0] = tlcxtlcy;
-      this.gridCells[1] = brcxtlcy !== tlcxtlcy ? brcxtlcy : -1;
-      this.gridCells[2] = tlcxbrcy !== tlcxtlcy && tlcxbrcy !== brcxtlcy ? tlcxbrcy : -1;
-      this.gridCells[3] = brcxbrcy !== tlcxtlcy && brcxbrcy !== brcxtlcy && brcxbrcy !== tlcxtlcy ? brcxbrcy : -1;
-    }
-    
+    if (this.grid)
+      fillGridCells(
+        this.grid,
+        this.topLeftCorner.x,
+        this.topLeftCorner.y,
+        this.bottomRightCorner.x,
+        this.bottomRightCorner.y,
+        this.gridCells
+      );
   }
-
-  // clampTo:function(rectangle){
-  //   this.position.clampTo(rectangle);
-  // },
 
 };

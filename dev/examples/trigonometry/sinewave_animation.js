@@ -5,7 +5,7 @@ window.onload = function() {
   var height  = canvas.height = window.innerHeight;
 
   var baseRadius = 50;
-  var circle     = new Type6.Circle( width * 0.5, 0, baseRadius );
+  var circle     = new Spock.Circle( width * 0.5, 0, baseRadius );
 
   var alpha      = 0.0;
   var baseAlpha  = 0.5;
@@ -19,9 +19,9 @@ window.onload = function() {
 
   function render() {
     //amplitude, period, shiftX, shiftY
-    alpha = Type6.Trigonometry.sineEquation(amplitude, period, 0, baseAlpha);
-    circle.position.y = (Type6.Trigonometry.sineEquation(amplitude * 600, period, 0, height * 0.5));
-    circle.radius = (Type6.Trigonometry.sineEquation(amplitude * 20, period, 0, baseRadius));
+    alpha = Spock.Trigonometry.sineEquation(amplitude, period, 0, baseAlpha);
+    circle.position.y = (Spock.Trigonometry.sineEquation(amplitude * 600, period, 0, height * 0.5));
+    circle.radius = (Spock.Trigonometry.sineEquation(amplitude * 20, period, 0, baseRadius));
 
     context.clearRect(0, 0, width, height);
 

@@ -1,0 +1,25 @@
+{
+  "name": "spockjs-docs",
+  "version": "4.0.0",
+  "description": "Documentation for Spock.js.",
+  "private": true,
+  "scripts": {
+    "dev": "vitepress dev docs --host",
+    "build": "vitepress build docs",
+    "preview": "vitepress preview docs"
+  },
+  "author": "Ludovic Cluber",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/1pizzateam/Spock.js.git",
+    "directory": "website"
+  },
+  "devDependencies": {
+    "typescript": "6.0.3",
+    "vitepress": "1.6.4"
+  },
+  "dependencies": {
+    "@lcluber/frameratjs": "1.1.0"
+  }
+}

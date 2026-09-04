@@ -1,6 +1,6 @@
-## Type6.js project installation guide
+## Spock.js project installation guide
 
-You just cloned Type6.js : git clone https://github.com/LCluber/Type6.js.git
+You just cloned Spock.js : git clone https://github.com/1pizzateam/Spock.js.git
 
 ### Install nodejs on your server :
   - Windows and OSX : **https://nodejs.org/en/**

@@ -4,7 +4,7 @@ window.onload = function() {
   var width     = canvas.width = window.innerWidth;
   var height    = canvas.height = window.innerHeight;
   var gridSize  = 40;
-  var circle    = new Type6.Circle( 0, 0, 20 );
+  var circle    = new Spock.Circle( 0, 0, 20 );
 	drawGrid();
 
   document.body.addEventListener("mousemove", function(event) {
@@ -12,8 +12,8 @@ window.onload = function() {
     drawGrid();
 
     circle.position.set(
-      Type6.Utils.roundToNearest(event.clientX, gridSize),
-      Type6.Utils.roundToNearest(event.clientY, gridSize)
+      Spock.Utils.roundToNearest(event.clientX, gridSize),
+      Spock.Utils.roundToNearest(event.clientY, gridSize)
     );
 
     circle.draw( context, 'rgba(0,0,0,1)', null, null );

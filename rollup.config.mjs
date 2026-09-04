@@ -1,13 +1,22 @@
+import dts from "rollup-plugin-dts";
 
-export default {
-  input: "build/es6/type6.js",
-  output: {
-    name: "Type6",
-    file: "build/type6.js",
-    format: "es"
+const config = [
+  {
+    input: "build/es6/spock.js",
+    output: {
+      file: "build/spock.mjs",
+      format: "es",
+      generatedCode: "es2015",
+    },
   },
-  external: [
-  ],
-  plugins: [
-  ]
-};
+  {
+    input: "build/es6/spock.d.ts",
+    output: {
+      file: "build/spock.d.mts",
+      format: "es",
+    },
+    plugins: [dts()],
+  },
+];
+
+export default config;

@@ -1,86 +1,104 @@
 import {Trigonometry} from '../trigonometry';
-import { Grid }    from './grid';
+import { type Grid, fillGridCells, clearGridCells, GRID_EMPTY_CELL } from './grid';
+import { applyCanvasStyle } from './canvas';
 import {Vector2} from '../vectors/vector2';
 
+/** Circle with optional grid occupancy. */
 export class Circle {
 
   public position: Vector2;
-  public gridCells: number[] = [0,0,0,0];
+  public gridCells: number[] = [GRID_EMPTY_CELL];
   private grid: Grid | null;
-  private cellTlc: Vector2;
-  private cellBrc: Vector2;
   private _radius: number;
   private _diameter: number;
   readonly shape: 'circle' = 'circle';
 
-  constructor(radius: number, positionX: number, positionY: number, grid: Grid|null) {
-    this._radius = 0.0;
-    this._diameter = 0.0;
+  /** Circle of radius at (positionX, positionY). Occupancy is opt-in via setGrid(). */
+  constructor(radius: number, positionX: number, positionY: number) {
     this.position = new Vector2(positionX, positionY);
-    this.radius = radius;
-    this.grid = grid || null;
-    this.cellTlc = new Vector2(); // cell top left corner
-    this.cellBrc = new Vector2(); // cell bottom right corner
-    this.setGridPos();
+    this._radius = radius;
+    this._diameter = radius * 2;
+    this.grid = null;
   }
 
+  /** Set radius and refresh occupancy. */
   set radius(radius : number) {
     this._radius   = radius;
     this._diameter = this._radius * 2;
+    this.setGridPos();
   }
 
+  /** Current radius. */
   get radius(): number {
     return this._radius;
   }
 
+  /** Set diameter and refresh occupancy. */
   set diameter(diameter : number) {
     this._diameter = diameter;
     this._radius = this._diameter * 0.5;
+    this.setGridPos();
   }
 
+  /** Current diameter. */
   get diameter(): number {
     return this._diameter;
   }
 
+  /** Copy with the same grid. */
   public clone(): Circle {
-    return new Circle(this.radius, this.position.x, this.position.y, this.grid);
+    return new Circle(this.radius, this.position.x, this.position.y).setGrid(this.grid);
   }
 
+  /** Copy size, position, and grid from another circle. */
   public copy( circle: Circle ): Circle {
     this.position.copy(circle.position);
-    this.radius = circle.radius;
+    this._radius = circle.radius;
+    this._diameter = circle.diameter;
+    return this.setGrid(circle.grid);
+  }
+
+  /** Attach a grid for occupancy, or clear it. */
+  public setGrid(grid: Grid | null): Circle {
+    this.grid = grid;
+    if (grid)
+      this.setGridPos();
+    else
+      clearGridCells(this.gridCells);
     return this;
   }
 
-  public setPosition( positionX: number, positionY: number ) {
+  /** Move the center and refresh occupancy. */
+  public setPosition( positionX: number, positionY: number ): Circle {
     this.position.setScalar(positionX, positionY);
     this.setGridPos();
     return this;
   }
 
+  /** Set radius. */
   public setRadius( radius: number ) {
     this.radius = radius;
-    this.setGridPos();
     return this;
   }
 
+  /** Set diameter. */
   public setDiameter( diameter: number ) {
     this.diameter = diameter;
     return this;
   }
 
+  /** Multiply radius by scalar. */
   public scale(scalar: number): Circle {
     this.radius *= scalar;
     return this;
   }
 
+  /** True if the point lies inside or on the circle. */
   public isIn(v: Vector2): boolean {
     return v.getDistance(this.position, true) <= this.radius * this.radius;
   }
 
-  /**
-  * draw the circle in a canvas.
-  */
+  /** Draw the circle on a canvas. */
   draw( context: CanvasRenderingContext2D, fillColor: string, strokeColor: string, strokeWidth: number ): void {
     context.beginPath();
     context.arc(  this.position.x,
@@ -90,37 +108,20 @@ export class Circle {
                   Trigonometry.twopi,
                   false
                 );
-    if(fillColor) {
-      context.fillStyle = fillColor;
-      context.fill();
-    }
-    if(strokeColor) {
-      context.strokeStyle = strokeColor;
-      context.lineWidth = strokeWidth;
-      context.stroke();
-    }
+    applyCanvasStyle(context, fillColor, strokeColor, strokeWidth);
   }
 
+  /** Record occupied AABB cells on the attached grid. */
   private setGridPos(): void {
-
-    if (this.grid) {
-      const size = this.grid.cellSize;
-      const colLen = this.grid.len.x;
-      const sizeInv = 1/size;
-      this.cellTlc.copy(this.position).subtractScalar(this.radius).scale(sizeInv).floor().scale(colLen, 'y');
-      this.cellBrc.copy(this.position).addScalar(this.radius).scale(sizeInv).floor().scale(colLen, 'y');
-
-      const tlcxtlcy = this.cellTlc.addComponents();
-      const brcxtlcy = this.cellBrc.x + this.cellTlc.y;
-      const tlcxbrcy = this.cellTlc.x + this.cellBrc.y;
-      const brcxbrcy = this.cellBrc.addComponents();
-
-      this.gridCells[0] = tlcxtlcy;
-      this.gridCells[1] = brcxtlcy !== tlcxtlcy ? brcxtlcy : -1;
-      this.gridCells[2] = tlcxbrcy !== tlcxtlcy && tlcxbrcy !== brcxtlcy ? tlcxbrcy : -1;
-      this.gridCells[3] = brcxbrcy !== tlcxtlcy && brcxbrcy !== brcxtlcy && brcxbrcy !== tlcxtlcy ? brcxbrcy : -1;
-    }
-    
+    if (this.grid)
+      fillGridCells(
+        this.grid,
+        this.position.x - this._radius,
+        this.position.y - this._radius,
+        this.position.x + this._radius,
+        this.position.y + this._radius,
+        this.gridCells
+      );
   }
 
 };

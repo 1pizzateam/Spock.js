@@ -1,33 +1,16 @@
-// const path = require('path');
-const fs      = require('fs');
+import fs from 'node:fs';
 
-const mail    = 'https://github.com/LCluber/Type6.js';
-const CRLF    = '\r\n';
-const rel     = './';
-const src     = `${rel}build/`;
-const dest    = `${rel}dist/`; 
-const files   = [
-  {
-    src:  `${rel}src/type6.d.ts`,
-    dest: `${dest}type6.d.ts`
-  },
-  {
-    src:  `${src}type6.js`,
-    dest: `${dest}type6.js`
-  },
+const mail = 'https://github.com/1pizzateam/Spock.js';
+const CRLF = '\r\n';
+const dest = './dist/';
+const license = fs.readFileSync('./LICENSE');
+const header = `/*${CRLF}${license}${CRLF}${mail}${CRLF}*/${CRLF}${CRLF}`;
+
+const files = [
+  ['./build/spock.mjs', `${dest}spock.js`],
+  ['./build/spock.d.mts', `${dest}spock.d.ts`],
 ];
 
-fs.mkdir(dest, { recursive: false },(err) => {
-  if (err) throw err;
-  fs.readFile(`${rel}LICENSE`, (err, license) => {
-    if (err) throw err;
-    for (let file of files) {
-      fs.readFile(file.src, (err, fileContent) => {
-        if (err) throw err;
-        fs.writeFile(file.dest, `/*${CRLF}${license}${CRLF}${mail}${CRLF}*/${CRLF}${CRLF}${fileContent}`, (err) => {
-          if (err) throw err;
-        });
-      });
-    }
-  });
-});
+fs.mkdirSync(dest, { recursive: true });
+for (const [src, out] of files)
+  fs.writeFileSync(out, header + fs.readFileSync(src));

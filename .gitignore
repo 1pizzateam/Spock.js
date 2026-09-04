@@ -1,6 +1,12 @@
 
 node_modules/
 build/
-dev/jest/coverage/
+dist/
 .tscache/
 npm-debug.log
+tests/coverage/
+website/node_modules/
+website/docs/.vitepress/cache/
+website/docs/.vitepress/dist/
+.size-snapshot.json
+.npmrc
