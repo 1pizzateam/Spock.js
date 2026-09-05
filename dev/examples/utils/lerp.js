@@ -4,10 +4,10 @@ window.onload = function() {
   var width   = canvas.width = window.innerWidth;
   var height  = canvas.height = window.innerHeight;
 
-  var x      = new Spock.Vector2(50, width - 100);
-  var y      = new Spock.Vector2(50, height - 100);
-  var radius = new Spock.Vector2(10, 300);
-  var alpha  = new Spock.Vector2(0, 1);
+  var x      = new Spock.Vec2(50, width - 100);
+  var y      = new Spock.Vec2(50, height - 100);
+  var radius = new Spock.Vec2(10, 300);
+  var alpha  = new Spock.Vec2(0, 1);
   var time   = 0;
 
   render();
@@ -22,7 +22,7 @@ window.onload = function() {
       Spock.Utils.lerp(y.x, y.y, time),
       Spock.Utils.lerp(radius.x, radius.y, time),
       0,
-      Spock.Trigonometry.twopi,
+      Spock.Trigo.twopi,
       false
     );
     context.fill();

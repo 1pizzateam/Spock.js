@@ -6,19 +6,19 @@ window.onload = function() {
 
   context.translate( width * 0.5, height * 0.5 );
   context.scale( 1, -1 );
-  Spock.Trigonometry.setArctanPrecision(8);
+  Spock.Trigo.setArctanPrecision(8);
   
-  for(var angle = -Spock.Trigonometry.pi; angle <= Spock.Trigonometry.pi; angle += 0.04) {
+  for(var angle = -Spock.Trigo.pi; angle <= Spock.Trigo.pi; angle += 0.04) {
 
     var x = angle * 200;
 
-    var y = Spock.Trigonometry.sineEquation(240, angle, 0, 40);
+    var y = Spock.Trigo.sineEquation(240, angle, 0, 40);
     draw("black", 5);
 
-    y = Spock.Trigonometry.cosineEquation(240, angle, 0, 0);
+    y = Spock.Trigo.cosineEquation(240, angle, 0, 0);
     draw("red", 5);
 
-    y = Spock.Trigonometry.arctanEquation(240, angle, 0, 0);
+    y = Spock.Trigo.arctanEquation(240, angle, 0, 0);
     draw("green", 5);
 
   }

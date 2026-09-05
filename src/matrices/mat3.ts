@@ -1,8 +1,8 @@
-import type {Vector2} from '../vectors/vector2';
+import type {Vec2} from '../vectors/vec2';
 import { matrixToArray, transposeLinear3, determinantLinear3, invertLinear3 } from './buffer';
 
 /** 3×3 affine matrix stored in a Float32Array. */
-export class Matrix3x3 {
+export class Mat3 {
 
   private m: Float32Array;
 
@@ -38,7 +38,7 @@ export class Matrix3x3 {
   }
 
   /** Copy another matrix into this one. */
-  public copy(matrix3x3: Matrix3x3 ): Matrix3x3 {
+  public copy(matrix3x3: Mat3 ): Mat3 {
     matrixToArray(matrix3x3.m, this.m);
     return this;
   }
@@ -56,7 +56,7 @@ export class Matrix3x3 {
   }
 
   /** Set this matrix to identity. */
-  public identity(): Matrix3x3 {
+  public identity(): Mat3 {
     this.make(  1.0,  0.0,  0.0,
                 0.0,  1.0,  0.0,
                 0.0,  0.0,  1.0
@@ -65,7 +65,7 @@ export class Matrix3x3 {
   }
 
   /** Compose a 2D scale onto this matrix. */
-  public scale(vector2: Vector2): Matrix3x3 {
+  public scale(vector2: Vec2): Mat3 {
     const m = this.m;
     const sx = vector2.x;
     const sy = vector2.y;
@@ -75,7 +75,7 @@ export class Matrix3x3 {
   }
 
   /** Compose a 2D rotation (radians) onto this matrix. */
-  public rotate(angle: number): Matrix3x3 {
+  public rotate(angle: number): Mat3 {
     const m = this.m;
     const c = Math.cos(angle);
     const s = Math.sin(angle);
@@ -91,7 +91,7 @@ export class Matrix3x3 {
   }
 
   /** Compose a 2D translation onto this matrix. */
-  public translate(vector2: Vector2): Matrix3x3 {
+  public translate(vector2: Vec2): Mat3 {
     const m = this.m;
     const tx = vector2.x;
     const ty = vector2.y;
@@ -102,7 +102,7 @@ export class Matrix3x3 {
   }
 
   /** Multiply by another 3×3 matrix. */
-  public multiply(matrix3x3: Matrix3x3): Matrix3x3 {
+  public multiply(matrix3x3: Mat3): Mat3 {
     const a = this.m;
     const b = matrix3x3.m;
     const a0 = a[0], a1 = a[1], a2 = a[2];
@@ -121,7 +121,7 @@ export class Matrix3x3 {
   }
 
   /** Transpose in place. */
-  public transpose(): Matrix3x3 {
+  public transpose(): Mat3 {
     transposeLinear3(this.m, 3);
     return this;
   }
@@ -132,7 +132,7 @@ export class Matrix3x3 {
   }
 
   /** Invert in place; unchanged if singular. */
-  public invert(): Matrix3x3 {
+  public invert(): Mat3 {
     invertLinear3(this.m, 3);
     return this;
   }

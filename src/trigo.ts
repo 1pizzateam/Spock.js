@@ -35,7 +35,7 @@ const TWOPI = PI * 2;
 const HALFPI = PI * 0.5;
 
 /** Angles, LUT sine/cosine, and wave equations. */
-export const Trigonometry = {
+export const Trigo = {
 
   pi: PI,
   twopi: TWOPI,

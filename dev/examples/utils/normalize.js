@@ -15,7 +15,7 @@ window.onload = function() {
   //compute positions
   for ( var i = 0; i <= qty; i++ ) {
     var normValue = Spock.Utils.normalize(values[i], min, max);
-    positions[i]  = new Spock.Vector2(
+    positions[i]  = new Spock.Vec2(
       slice * i,
       height - height * normValue
     );
@@ -39,7 +39,7 @@ window.onload = function() {
   for(i = 0; i <= qty; i++) {
     position = positions[i];
     context.beginPath();
-    context.arc(position.x, position.y, 4, 0, Spock.Trigonometry.twopi, false);
+    context.arc(position.x, position.y, 4, 0, Spock.Trigo.twopi, false);
     context.fill();
   }
 

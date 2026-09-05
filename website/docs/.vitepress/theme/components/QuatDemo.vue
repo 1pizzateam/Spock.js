@@ -1,12 +1,12 @@
 <script setup>
-import { Quaternion, Trigonometry, Vector3 } from '@1pizzateam/spockjs';
+import { Quat, Trigo, Vec3 } from '@1pizzateam/spockjs';
 import DemoFrame from './DemoFrame.vue';
 import { label, polyline } from '../canvas.js';
 
 const CORNERS = [
   [-1, -1, -1], [1, -1, -1], [1, 1, -1], [-1, 1, -1],
   [-1, -1, 1], [1, -1, 1], [1, 1, 1], [-1, 1, 1],
-].map(([x, y, z]) => new Vector3(x, y, z));
+].map(([x, y, z]) => new Vec3(x, y, z));
 
 const EDGES = [
   [0, 1], [1, 2], [2, 3], [3, 0],
@@ -14,9 +14,9 @@ const EDGES = [
   [0, 4], [1, 5], [2, 6], [3, 7],
 ];
 
-const rotation = new Quaternion();
-const axis = new Vector3(0.4, 1, 0.25);
-const rotated = new Vector3();
+const rotation = new Quat();
+const axis = new Vec3(0.4, 1, 0.25);
+const rotated = new Vec3();
 
 function draw(context, state, theme) {
   const { width, height } = state;
@@ -36,7 +36,7 @@ function draw(context, state, theme) {
   for (const [from, to] of EDGES)
     polyline(context, [projected[from], projected[to]], theme.accent, 2);
 
-  rotation.multiplyVector(new Vector3(0, 0, 1), rotated);
+  rotation.multiplyVector(new Vec3(0, 0, 1), rotated);
   polyline(
     context,
     [[width * 0.5, height * 0.5], [width * 0.5 + rotated.x * scale, height * 0.5 + rotated.y * scale]],
@@ -46,7 +46,7 @@ function draw(context, state, theme) {
 
   label(
     context,
-    `axis (${axis.x}, ${axis.y}, ${axis.z})   angle ${Math.round(Trigonometry.radianToDegree(angle) % 360)}°`,
+    `axis (${axis.x}, ${axis.y}, ${axis.z})   angle ${Math.round(Trigo.radianToDegree(angle) % 360)}°`,
     theme.text
   );
 }
@@ -54,7 +54,7 @@ function draw(context, state, theme) {
 
 <template>
   <DemoFrame :draw="draw">
-    A single <code>Quaternion.setAxisAngle()</code> rotation applied to each cube corner with
+    A single <code>Quat.setAxisAngle()</code> rotation applied to each cube corner with
     <code>multiplyVector()</code>, which writes into a reusable target instead of allocating.
     The orange arm is the rotated forward axis.
   </DemoFrame>

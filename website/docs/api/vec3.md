@@ -1,13 +1,13 @@
-# Vector3
+# Vec3
 
-Import with `import { Vector3 } from '@1pizzateam/spockjs';`.
+Import with `import { Vec3 } from '@1pizzateam/spockjs';`.
 
 ## Constructor
 
 Create a 3D vector (defaults to the origin).
 
 ```ts
-new Vector3(x: number = 0, y: number = 0, z: number = 0)
+new Vec3(x: number = 0, y: number = 0, z: number = 0)
 ```
 
 ### Parameters
@@ -18,22 +18,22 @@ new Vector3(x: number = 0, y: number = 0, z: number = 0)
 
 ### Returns
 
-`Vector3`
+`Vec3`
 
 ### Example
 
 ```js
-import { Vector3 } from '@1pizzateam/spockjs';
+import { Vec3 } from '@1pizzateam/spockjs';
 
-const value = new Vector3(1, 1, 1);
+const value = new Vec3(1, 1, 1);
 ```
 
-## Vector3.setScalar()
+## Vec3.setScalar()
 
 Set x, y, and/or z; omitted axes are unchanged.
 
 ```ts
-setScalar(x?: number | null, y?: number | null, z?: number | null): Vector3
+setScalar(x?: number | null, y?: number | null, z?: number | null): Vec3
 ```
 
 ### Parameters
@@ -44,23 +44,23 @@ setScalar(x?: number | null, y?: number | null, z?: number | null): Vector3
 
 ### Returns
 
-`Vector3`
+`Vec3`
 
 ### Example
 
 ```js
-import { Vector3 } from '@1pizzateam/spockjs';
+import { Vec3 } from '@1pizzateam/spockjs';
 
 
-const result = new Vector3().setScalar(1, 1, 1);
+const result = new Vec3().setScalar(1, 1, 1);
 ```
 
-## Vector3.setArray()
+## Vec3.setArray()
 
 Set x, y, z from array at offset.
 
 ```ts
-setArray(array: number[], offset: number = 0): Vector3
+setArray(array: number[], offset: number = 0): Vec3
 ```
 
 ### Parameters
@@ -70,43 +70,43 @@ setArray(array: number[], offset: number = 0): Vector3
 
 ### Returns
 
-`Vector3` — The vector with its new values
+`Vec3` — The vector with its new values
 
 ### Example
 
 ```js
-import { Vector3 } from '@1pizzateam/spockjs';
+import { Vec3 } from '@1pizzateam/spockjs';
 
 
-const result = new Vector3().setArray([1, 2, 3], 0);
+const result = new Vec3().setArray([1, 2, 3], 0);
 ```
 
-## Vector3.copy()
+## Vec3.copy()
 
 Copy another vector into this one.
 
 ```ts
-copy(vector: Vector3): Vector3
+copy(vector: Vec3): Vec3
 ```
 
 ### Parameters
 
-- `vector` — `Vector3`.
+- `vector` — `Vec3`.
 
 ### Returns
 
-`Vector3` — The vector with its new values
+`Vec3` — The vector with its new values
 
 ### Example
 
 ```js
-import { Vector3 } from '@1pizzateam/spockjs';
+import { Vec3 } from '@1pizzateam/spockjs';
 
 
-const result = new Vector3().copy(new Vector3(1, 2, 3));
+const result = new Vec3().copy(new Vec3(1, 2, 3));
 ```
 
-## Vector3.isPositive()
+## Vec3.isPositive()
 
 True if all components are >= 0.
 
@@ -125,13 +125,13 @@ None.
 ### Example
 
 ```js
-import { Vector3 } from '@1pizzateam/spockjs';
+import { Vec3 } from '@1pizzateam/spockjs';
 
 
-const result = new Vector3().isPositive();
+const result = new Vec3().isPositive();
 ```
 
-## Vector3.isEqualTo()
+## Vec3.isEqualTo()
 
 True if all components equal scalar.
 
@@ -150,23 +150,23 @@ isEqualTo(scalar: number): boolean
 ### Example
 
 ```js
-import { Vector3 } from '@1pizzateam/spockjs';
+import { Vec3 } from '@1pizzateam/spockjs';
 
 
-const result = new Vector3().isEqualTo(1);
+const result = new Vec3().isEqualTo(1);
 ```
 
-## Vector3.equals()
+## Vec3.equals()
 
 True if all components match the other vector.
 
 ```ts
-equals(vector: Vector3): boolean
+equals(vector: Vec3): boolean
 ```
 
 ### Parameters
 
-- `vector` — `Vector3`.
+- `vector` — `Vec3`.
 
 ### Returns
 
@@ -175,13 +175,13 @@ equals(vector: Vector3): boolean
 ### Example
 
 ```js
-import { Vector3 } from '@1pizzateam/spockjs';
+import { Vec3 } from '@1pizzateam/spockjs';
 
 
-const result = new Vector3().equals(new Vector3(1, 2, 3));
+const result = new Vec3().equals(new Vec3(1, 2, 3));
 ```
 
-## Vector3.isOrigin()
+## Vec3.isOrigin()
 
 True if all components are 0.
 
@@ -200,13 +200,13 @@ None.
 ### Example
 
 ```js
-import { Vector3 } from '@1pizzateam/spockjs';
+import { Vec3 } from '@1pizzateam/spockjs';
 
 
-const result = new Vector3().isOrigin();
+const result = new Vec3().isOrigin();
 ```
 
-## Vector3.toArray()
+## Vec3.toArray()
 
 Write [x, y, z] into target (or a new array).
 
@@ -225,13 +225,13 @@ toArray(target: number[] = []): number[]
 ### Example
 
 ```js
-import { Vector3 } from '@1pizzateam/spockjs';
+import { Vec3 } from '@1pizzateam/spockjs';
 
 
-const result = new Vector3().toArray([1, 2, 3]);
+const result = new Vec3().toArray([1, 2, 3]);
 ```
 
-## Vector3.toString()
+## Vec3.toString()
 
 Human-readable (x, y, z) string.
 
@@ -250,18 +250,18 @@ None.
 ### Example
 
 ```js
-import { Vector3 } from '@1pizzateam/spockjs';
+import { Vec3 } from '@1pizzateam/spockjs';
 
 
-const result = new Vector3().toString();
+const result = new Vec3().toString();
 ```
 
-## Vector3.origin()
+## Vec3.origin()
 
 Set all components to 0.
 
 ```ts
-origin(): Vector3
+origin(): Vec3
 ```
 
 ### Parameters
@@ -270,18 +270,18 @@ None.
 
 ### Returns
 
-`Vector3` — The vector with its new values
+`Vec3` — The vector with its new values
 
 ### Example
 
 ```js
-import { Vector3 } from '@1pizzateam/spockjs';
+import { Vec3 } from '@1pizzateam/spockjs';
 
 
-const result = new Vector3().origin();
+const result = new Vec3().origin();
 ```
 
-## Vector3.getMagnitude()
+## Vec3.getMagnitude()
 
 Length, or squared length if square is true.
 
@@ -300,23 +300,23 @@ getMagnitude(square: boolean = false): number
 ### Example
 
 ```js
-import { Vector3 } from '@1pizzateam/spockjs';
+import { Vec3 } from '@1pizzateam/spockjs';
 
 
-const result = new Vector3().getMagnitude(false);
+const result = new Vec3().getMagnitude(false);
 ```
 
-## Vector3.getDistance()
+## Vec3.getDistance()
 
 Distance to vector; squared if square is true.
 
 ```ts
-getDistance(vector: Vector3, square: boolean = false): number
+getDistance(vector: Vec3, square: boolean = false): number
 ```
 
 ### Parameters
 
-- `vector` — `Vector3`.
+- `vector` — `Vec3`.
 - `square` — `boolean`. Optional.
 
 ### Returns
@@ -326,69 +326,69 @@ getDistance(vector: Vector3, square: boolean = false): number
 ### Example
 
 ```js
-import { Vector3 } from '@1pizzateam/spockjs';
+import { Vec3 } from '@1pizzateam/spockjs';
 
 
-const result = new Vector3().getDistance(new Vector3(1, 2, 3), false);
+const result = new Vec3().getDistance(new Vec3(1, 2, 3), false);
 ```
 
-## Vector3.add()
+## Vec3.add()
 
 Add vector in place.
 
 ```ts
-add(vector: Vector3): Vector3
+add(vector: Vec3): Vec3
 ```
 
 ### Parameters
 
-- `vector` — `Vector3`.
+- `vector` — `Vec3`.
 
 ### Returns
 
-`Vector3` — The vector with its new values
+`Vec3` — The vector with its new values
 
 ### Example
 
 ```js
-import { Vector3 } from '@1pizzateam/spockjs';
+import { Vec3 } from '@1pizzateam/spockjs';
 
 
-const result = new Vector3().add(new Vector3(1, 2, 3));
+const result = new Vec3().add(new Vec3(1, 2, 3));
 ```
 
-## Vector3.addScaledVector()
+## Vec3.addScaledVector()
 
 Add vector scaled by scalar.
 
 ```ts
-addScaledVector(vector: Vector3, scalar: number): Vector3
+addScaledVector(vector: Vec3, scalar: number): Vec3
 ```
 
 ### Parameters
 
-- `vector` — `Vector3`.
+- `vector` — `Vec3`.
 - `scalar` — `number`.
 
 ### Returns
 
-`Vector3` — The vector with its new values
+`Vec3` — The vector with its new values
 
 ### Example
 
 ```js
-import { Vector3 } from '@1pizzateam/spockjs';
+import { Vec3 } from '@1pizzateam/spockjs';
 
 
-const result = new Vector3().addScaledVector(new Vector3(1, 2, 3), 1);
+const result = new Vec3().addScaledVector(new Vec3(1, 2, 3), 1);
 ```
 
-## Vector3.addScalar()
+## Vec3.addScalar()
 
 Add scalar to all components.
 
 ```ts
-addScalar(scalar: number): Vector3
+addScalar(scalar: number): Vec3
 ```
 
 ### Parameters
@@ -397,18 +397,18 @@ addScalar(scalar: number): Vector3
 
 ### Returns
 
-`Vector3` — The vector with its new values
+`Vec3` — The vector with its new values
 
 ### Example
 
 ```js
-import { Vector3 } from '@1pizzateam/spockjs';
+import { Vec3 } from '@1pizzateam/spockjs';
 
 
-const result = new Vector3().addScalar(1);
+const result = new Vec3().addScalar(1);
 ```
 
-## Vector3.addComponents()
+## Vec3.addComponents()
 
 Sum of x, y, and z.
 
@@ -427,69 +427,69 @@ None.
 ### Example
 
 ```js
-import { Vector3 } from '@1pizzateam/spockjs';
+import { Vec3 } from '@1pizzateam/spockjs';
 
 
-const result = new Vector3().addComponents();
+const result = new Vec3().addComponents();
 ```
 
-## Vector3.subtract()
+## Vec3.subtract()
 
 Subtract vector in place.
 
 ```ts
-subtract(vector: Vector3): Vector3
+subtract(vector: Vec3): Vec3
 ```
 
 ### Parameters
 
-- `vector` — `Vector3`.
+- `vector` — `Vec3`.
 
 ### Returns
 
-`Vector3` — The vector with its new values
+`Vec3` — The vector with its new values
 
 ### Example
 
 ```js
-import { Vector3 } from '@1pizzateam/spockjs';
+import { Vec3 } from '@1pizzateam/spockjs';
 
 
-const result = new Vector3().subtract(new Vector3(1, 2, 3));
+const result = new Vec3().subtract(new Vec3(1, 2, 3));
 ```
 
-## Vector3.subtractScaledVector()
+## Vec3.subtractScaledVector()
 
 Subtract vector scaled by scalar.
 
 ```ts
-subtractScaledVector(vector: Vector3, scalar: number): Vector3
+subtractScaledVector(vector: Vec3, scalar: number): Vec3
 ```
 
 ### Parameters
 
-- `vector` — `Vector3`.
+- `vector` — `Vec3`.
 - `scalar` — `number`.
 
 ### Returns
 
-`Vector3` — The vector with its new values
+`Vec3` — The vector with its new values
 
 ### Example
 
 ```js
-import { Vector3 } from '@1pizzateam/spockjs';
+import { Vec3 } from '@1pizzateam/spockjs';
 
 
-const result = new Vector3().subtractScaledVector(new Vector3(1, 2, 3), 1);
+const result = new Vec3().subtractScaledVector(new Vec3(1, 2, 3), 1);
 ```
 
-## Vector3.subtractScalar()
+## Vec3.subtractScalar()
 
 Subtract scalar from all components.
 
 ```ts
-subtractScalar(scalar: number): Vector3
+subtractScalar(scalar: number): Vec3
 ```
 
 ### Parameters
@@ -498,74 +498,74 @@ subtractScalar(scalar: number): Vector3
 
 ### Returns
 
-`Vector3` — The vector with its new values
+`Vec3` — The vector with its new values
 
 ### Example
 
 ```js
-import { Vector3 } from '@1pizzateam/spockjs';
+import { Vec3 } from '@1pizzateam/spockjs';
 
 
-const result = new Vector3().subtractScalar(1);
+const result = new Vec3().subtractScalar(1);
 ```
 
-## Vector3.multiply()
+## Vec3.multiply()
 
 Component-wise multiply.
 
 ```ts
-multiply(vector: Vector3): Vector3
+multiply(vector: Vec3): Vec3
 ```
 
 ### Parameters
 
-- `vector` — `Vector3`.
+- `vector` — `Vec3`.
 
 ### Returns
 
-`Vector3` — The vector with its new values
+`Vec3` — The vector with its new values
 
 ### Example
 
 ```js
-import { Vector3 } from '@1pizzateam/spockjs';
+import { Vec3 } from '@1pizzateam/spockjs';
 
 
-const result = new Vector3().multiply(new Vector3(1, 2, 3));
+const result = new Vec3().multiply(new Vec3(1, 2, 3));
 ```
 
-## Vector3.multiplyScaledVector()
+## Vec3.multiplyScaledVector()
 
 Component-wise multiply by vector * scalar.
 
 ```ts
-multiplyScaledVector(vector: Vector3, scalar: number): Vector3
+multiplyScaledVector(vector: Vec3, scalar: number): Vec3
 ```
 
 ### Parameters
 
-- `vector` — `Vector3`.
+- `vector` — `Vec3`.
 - `scalar` — `number`.
 
 ### Returns
 
-`Vector3` — The vector with its new values
+`Vec3` — The vector with its new values
 
 ### Example
 
 ```js
-import { Vector3 } from '@1pizzateam/spockjs';
+import { Vec3 } from '@1pizzateam/spockjs';
 
 
-const result = new Vector3().multiplyScaledVector(new Vector3(1, 2, 3), 1);
+const result = new Vec3().multiplyScaledVector(new Vec3(1, 2, 3), 1);
 ```
 
-## Vector3.scale()
+## Vec3.scale()
 
 Multiply by scalar, optionally on one axis.
 
 ```ts
-scale(scalar: number, axis?: 'x' | 'y' | 'z'): Vector3
+scale(scalar: number, axis?: 'x' | 'y' | 'z'): Vec3
 ```
 
 ### Parameters
@@ -575,74 +575,74 @@ scale(scalar: number, axis?: 'x' | 'y' | 'z'): Vector3
 
 ### Returns
 
-`Vector3` — The vector with its new values
+`Vec3` — The vector with its new values
 
 ### Example
 
 ```js
-import { Vector3 } from '@1pizzateam/spockjs';
+import { Vec3 } from '@1pizzateam/spockjs';
 
 
-const result = new Vector3().scale(1, 'x');
+const result = new Vec3().scale(1, 'x');
 ```
 
-## Vector3.divide()
+## Vec3.divide()
 
 Component-wise divide.
 
 ```ts
-divide(vector: Vector3): Vector3
+divide(vector: Vec3): Vec3
 ```
 
 ### Parameters
 
-- `vector` — `Vector3`.
+- `vector` — `Vec3`.
 
 ### Returns
 
-`Vector3` — The vector with its new values
+`Vec3` — The vector with its new values
 
 ### Example
 
 ```js
-import { Vector3 } from '@1pizzateam/spockjs';
+import { Vec3 } from '@1pizzateam/spockjs';
 
 
-const result = new Vector3().divide(new Vector3(1, 2, 3));
+const result = new Vec3().divide(new Vec3(1, 2, 3));
 ```
 
-## Vector3.divideScaledVector()
+## Vec3.divideScaledVector()
 
 Component-wise divide by vector * scalar.
 
 ```ts
-divideScaledVector(vector: Vector3, scalar: number): Vector3
+divideScaledVector(vector: Vec3, scalar: number): Vec3
 ```
 
 ### Parameters
 
-- `vector` — `Vector3`.
+- `vector` — `Vec3`.
 - `scalar` — `number`.
 
 ### Returns
 
-`Vector3` — The vector with its new values
+`Vec3` — The vector with its new values
 
 ### Example
 
 ```js
-import { Vector3 } from '@1pizzateam/spockjs';
+import { Vec3 } from '@1pizzateam/spockjs';
 
 
-const result = new Vector3().divideScaledVector(new Vector3(1, 2, 3), 1);
+const result = new Vec3().divideScaledVector(new Vec3(1, 2, 3), 1);
 ```
 
-## Vector3.divideScalar()
+## Vec3.divideScalar()
 
 Divide all components by scalar.
 
 ```ts
-divideScalar(scalar: number): Vector3
+divideScalar(scalar: number): Vec3
 ```
 
 ### Parameters
@@ -651,23 +651,23 @@ divideScalar(scalar: number): Vector3
 
 ### Returns
 
-`Vector3`
+`Vec3`
 
 ### Example
 
 ```js
-import { Vector3 } from '@1pizzateam/spockjs';
+import { Vec3 } from '@1pizzateam/spockjs';
 
 
-const result = new Vector3().divideScalar(1);
+const result = new Vec3().divideScalar(1);
 ```
 
-## Vector3.halve()
+## Vec3.halve()
 
 Scale by 1/2.
 
 ```ts
-halve(): Vector3
+halve(): Vec3
 ```
 
 ### Parameters
@@ -676,73 +676,73 @@ None.
 
 ### Returns
 
-`Vector3` — The vector with its new values
+`Vec3` — The vector with its new values
 
 ### Example
 
 ```js
-import { Vector3 } from '@1pizzateam/spockjs';
+import { Vec3 } from '@1pizzateam/spockjs';
 
 
-const result = new Vector3().halve();
+const result = new Vec3().halve();
 ```
 
-## Vector3.max()
+## Vec3.max()
 
 Component-wise maximum with vector.
 
 ```ts
-max(vector: Vector3): Vector3
+max(vector: Vec3): Vec3
 ```
 
 ### Parameters
 
-- `vector` — `Vector3`.
+- `vector` — `Vec3`.
 
 ### Returns
 
-`Vector3` — The vector with its new values
+`Vec3` — The vector with its new values
 
 ### Example
 
 ```js
-import { Vector3 } from '@1pizzateam/spockjs';
+import { Vec3 } from '@1pizzateam/spockjs';
 
 
-const result = new Vector3().max(new Vector3(1, 2, 3));
+const result = new Vec3().max(new Vec3(1, 2, 3));
 ```
 
-## Vector3.min()
+## Vec3.min()
 
 Component-wise minimum with vector.
 
 ```ts
-min(vector: Vector3): Vector3
+min(vector: Vec3): Vec3
 ```
 
 ### Parameters
 
-- `vector` — `Vector3`.
+- `vector` — `Vec3`.
 
 ### Returns
 
-`Vector3` — The vector with its new values
+`Vec3` — The vector with its new values
 
 ### Example
 
 ```js
-import { Vector3 } from '@1pizzateam/spockjs';
+import { Vec3 } from '@1pizzateam/spockjs';
 
 
-const result = new Vector3().min(new Vector3(1, 2, 3));
+const result = new Vec3().min(new Vec3(1, 2, 3));
 ```
 
-## Vector3.maxScalar()
+## Vec3.maxScalar()
 
 Raise each component to at least scalar.
 
 ```ts
-maxScalar(scalar: number): Vector3
+maxScalar(scalar: number): Vec3
 ```
 
 ### Parameters
@@ -751,23 +751,23 @@ maxScalar(scalar: number): Vector3
 
 ### Returns
 
-`Vector3` — The vector with its new values
+`Vec3` — The vector with its new values
 
 ### Example
 
 ```js
-import { Vector3 } from '@1pizzateam/spockjs';
+import { Vec3 } from '@1pizzateam/spockjs';
 
 
-const result = new Vector3().maxScalar(1);
+const result = new Vec3().maxScalar(1);
 ```
 
-## Vector3.minScalar()
+## Vec3.minScalar()
 
 Lower each component to at most scalar.
 
 ```ts
-minScalar(scalar: number): Vector3
+minScalar(scalar: number): Vec3
 ```
 
 ### Parameters
@@ -776,23 +776,23 @@ minScalar(scalar: number): Vector3
 
 ### Returns
 
-`Vector3` — The vector with its new values
+`Vec3` — The vector with its new values
 
 ### Example
 
 ```js
-import { Vector3 } from '@1pizzateam/spockjs';
+import { Vec3 } from '@1pizzateam/spockjs';
 
 
-const result = new Vector3().minScalar(1);
+const result = new Vec3().minScalar(1);
 ```
 
-## Vector3.normalize()
+## Vec3.normalize()
 
 Scale to unit length.
 
 ```ts
-normalize(): Vector3
+normalize(): Vec3
 ```
 
 ### Parameters
@@ -801,23 +801,23 @@ None.
 
 ### Returns
 
-`Vector3` — The vector with its new values
+`Vec3` — The vector with its new values
 
 ### Example
 
 ```js
-import { Vector3 } from '@1pizzateam/spockjs';
+import { Vec3 } from '@1pizzateam/spockjs';
 
 
-const result = new Vector3().normalize();
+const result = new Vec3().normalize();
 ```
 
-## Vector3.absolute()
+## Vec3.absolute()
 
 Absolute value, optionally on one axis.
 
 ```ts
-absolute(axis?: 'x' | 'y' | 'z'): Vector3
+absolute(axis?: 'x' | 'y' | 'z'): Vec3
 ```
 
 ### Parameters
@@ -826,23 +826,23 @@ absolute(axis?: 'x' | 'y' | 'z'): Vector3
 
 ### Returns
 
-`Vector3` — The vector with its new values
+`Vec3` — The vector with its new values
 
 ### Example
 
 ```js
-import { Vector3 } from '@1pizzateam/spockjs';
+import { Vec3 } from '@1pizzateam/spockjs';
 
 
-const result = new Vector3().absolute('x');
+const result = new Vec3().absolute('x');
 ```
 
-## Vector3.opposite()
+## Vec3.opposite()
 
 Negate, optionally on one axis.
 
 ```ts
-opposite(axis?: 'x' | 'y' | 'z'): Vector3
+opposite(axis?: 'x' | 'y' | 'z'): Vec3
 ```
 
 ### Parameters
@@ -851,23 +851,23 @@ opposite(axis?: 'x' | 'y' | 'z'): Vector3
 
 ### Returns
 
-`Vector3` — The vector with its new values
+`Vec3` — The vector with its new values
 
 ### Example
 
 ```js
-import { Vector3 } from '@1pizzateam/spockjs';
+import { Vec3 } from '@1pizzateam/spockjs';
 
 
-const result = new Vector3().opposite('x');
+const result = new Vec3().opposite('x');
 ```
 
-## Vector3.floor()
+## Vec3.floor()
 
 Floor, optionally on one axis.
 
 ```ts
-floor(axis?: 'x' | 'y' | 'z'): Vector3
+floor(axis?: 'x' | 'y' | 'z'): Vec3
 ```
 
 ### Parameters
@@ -876,23 +876,23 @@ floor(axis?: 'x' | 'y' | 'z'): Vector3
 
 ### Returns
 
-`Vector3`
+`Vec3`
 
 ### Example
 
 ```js
-import { Vector3 } from '@1pizzateam/spockjs';
+import { Vec3 } from '@1pizzateam/spockjs';
 
 
-const result = new Vector3().floor('x');
+const result = new Vec3().floor('x');
 ```
 
-## Vector3.ceil()
+## Vec3.ceil()
 
 Ceil, optionally on one axis.
 
 ```ts
-ceil(axis?: 'x' | 'y' | 'z'): Vector3
+ceil(axis?: 'x' | 'y' | 'z'): Vec3
 ```
 
 ### Parameters
@@ -901,28 +901,28 @@ ceil(axis?: 'x' | 'y' | 'z'): Vector3
 
 ### Returns
 
-`Vector3`
+`Vec3`
 
 ### Example
 
 ```js
-import { Vector3 } from '@1pizzateam/spockjs';
+import { Vec3 } from '@1pizzateam/spockjs';
 
 
-const result = new Vector3().ceil('x');
+const result = new Vec3().ceil('x');
 ```
 
-## Vector3.dotProduct()
+## Vec3.dotProduct()
 
 Dot product with vector.
 
 ```ts
-dotProduct(vector: Vector3): number
+dotProduct(vector: Vec3): number
 ```
 
 ### Parameters
 
-- `vector` — `Vector3`.
+- `vector` — `Vec3`.
 
 ### Returns
 
@@ -931,18 +931,18 @@ dotProduct(vector: Vector3): number
 ### Example
 
 ```js
-import { Vector3 } from '@1pizzateam/spockjs';
+import { Vec3 } from '@1pizzateam/spockjs';
 
 
-const result = new Vector3().dotProduct(new Vector3(1, 2, 3));
+const result = new Vec3().dotProduct(new Vec3(1, 2, 3));
 ```
 
-## Vector3.clone()
+## Vec3.clone()
 
 Independent copy.
 
 ```ts
-clone(): Vector3
+clone(): Vec3
 ```
 
 ### Parameters
@@ -951,53 +951,53 @@ None.
 
 ### Returns
 
-`Vector3` — The new vector
+`Vec3` — The new vector
 
 ### Example
 
 ```js
-import { Vector3 } from '@1pizzateam/spockjs';
+import { Vec3 } from '@1pizzateam/spockjs';
 
 
-const result = new Vector3().clone();
+const result = new Vec3().clone();
 ```
 
-## Vector3.cross()
+## Vec3.cross()
 
 Cross product with v, in place.
 
 ```ts
-cross(v: Vector3): Vector3
+cross(v: Vec3): Vec3
 ```
 
 ### Parameters
 
-- `v` — `Vector3`.
+- `v` — `Vec3`.
 
 ### Returns
 
-`Vector3` — The vector with its new values
+`Vec3` — The vector with its new values
 
 ### Example
 
 ```js
-import { Vector3 } from '@1pizzateam/spockjs';
+import { Vec3 } from '@1pizzateam/spockjs';
 
 
-const result = new Vector3().cross(new Vector3(1, 2, 3));
+const result = new Vec3().cross(new Vec3(1, 2, 3));
 ```
 
-## Vector3.getAngle()
+## Vec3.getAngle()
 
 Angle in radians between this and vector, or false if either is zero.
 
 ```ts
-getAngle(vector: Vector3): number | false
+getAngle(vector: Vec3): number | false
 ```
 
 ### Parameters
 
-- `vector` — `Vector3`.
+- `vector` — `Vec3`.
 
 ### Returns
 
@@ -1006,142 +1006,142 @@ getAngle(vector: Vector3): number | false
 ### Example
 
 ```js
-import { Vector3 } from '@1pizzateam/spockjs';
+import { Vec3 } from '@1pizzateam/spockjs';
 
 
-const result = new Vector3().getAngle(new Vector3(1, 2, 3));
+const result = new Vec3().getAngle(new Vec3(1, 2, 3));
 ```
 
-## Vector3.quadraticBezier()
+## Vec3.quadraticBezier()
 
 Evaluate a quadratic Bézier at t into this vector.
 
 ```ts
-quadraticBezier(p0: Vector3, p1: Vector3, p2: Vector3, t: number): Vector3
+quadraticBezier(p0: Vec3, p1: Vec3, p2: Vec3, t: number): Vec3
 ```
 
 ### Parameters
 
-- `p0` — `Vector3`.
-- `p1` — `Vector3`.
-- `p2` — `Vector3`.
+- `p0` — `Vec3`.
+- `p1` — `Vec3`.
+- `p2` — `Vec3`.
 - `t` — `number`.
 
 ### Returns
 
-`Vector3`
+`Vec3`
 
 ### Example
 
 ```js
-import { Vector3 } from '@1pizzateam/spockjs';
+import { Vec3 } from '@1pizzateam/spockjs';
 
 
-const result = new Vector3().quadraticBezier(new Vector3(1, 2, 3), new Vector3(1, 2, 3), new Vector3(1, 2, 3), 0.5);
+const result = new Vec3().quadraticBezier(new Vec3(1, 2, 3), new Vec3(1, 2, 3), new Vec3(1, 2, 3), 0.5);
 ```
 
-## Vector3.cubicBezier()
+## Vec3.cubicBezier()
 
 Evaluate a cubic Bézier at t into this vector.
 
 ```ts
-cubicBezier(p0: Vector3, p1: Vector3, p2: Vector3, p3: Vector3, t: number): Vector3
+cubicBezier(p0: Vec3, p1: Vec3, p2: Vec3, p3: Vec3, t: number): Vec3
 ```
 
 ### Parameters
 
-- `p0` — `Vector3`.
-- `p1` — `Vector3`.
-- `p2` — `Vector3`.
-- `p3` — `Vector3`.
+- `p0` — `Vec3`.
+- `p1` — `Vec3`.
+- `p2` — `Vec3`.
+- `p3` — `Vec3`.
 - `t` — `number`.
 
 ### Returns
 
-`Vector3`
+`Vec3`
 
 ### Example
 
 ```js
-import { Vector3 } from '@1pizzateam/spockjs';
+import { Vec3 } from '@1pizzateam/spockjs';
 
 
-const result = new Vector3().cubicBezier(new Vector3(1, 2, 3), new Vector3(1, 2, 3), new Vector3(1, 2, 3), new Vector3(1, 2, 3), 0.5);
+const result = new Vec3().cubicBezier(new Vec3(1, 2, 3), new Vec3(1, 2, 3), new Vec3(1, 2, 3), new Vec3(1, 2, 3), 0.5);
 ```
 
-## Vector3.quadraticBezierDerivative()
+## Vec3.quadraticBezierDerivative()
 
 Quadratic Bézier tangent at t.
 
 ```ts
-quadraticBezierDerivative(p0: Vector3, p1: Vector3, p2: Vector3, t: number): Vector3
+quadraticBezierDerivative(p0: Vec3, p1: Vec3, p2: Vec3, t: number): Vec3
 ```
 
 ### Parameters
 
-- `p0` — `Vector3`.
-- `p1` — `Vector3`.
-- `p2` — `Vector3`.
+- `p0` — `Vec3`.
+- `p1` — `Vec3`.
+- `p2` — `Vec3`.
 - `t` — `number`.
 
 ### Returns
 
-`Vector3`
+`Vec3`
 
 ### Example
 
 ```js
-import { Vector3 } from '@1pizzateam/spockjs';
+import { Vec3 } from '@1pizzateam/spockjs';
 
 
-const result = new Vector3().quadraticBezierDerivative(new Vector3(1, 2, 3), new Vector3(1, 2, 3), new Vector3(1, 2, 3), 0.5);
+const result = new Vec3().quadraticBezierDerivative(new Vec3(1, 2, 3), new Vec3(1, 2, 3), new Vec3(1, 2, 3), 0.5);
 ```
 
-## Vector3.cubicBezierDerivative()
+## Vec3.cubicBezierDerivative()
 
 Cubic Bézier tangent at t.
 
 ```ts
-cubicBezierDerivative(p0: Vector3, p1: Vector3, p2: Vector3, p3: Vector3, t: number): Vector3
+cubicBezierDerivative(p0: Vec3, p1: Vec3, p2: Vec3, p3: Vec3, t: number): Vec3
 ```
 
 ### Parameters
 
-- `p0` — `Vector3`.
-- `p1` — `Vector3`.
-- `p2` — `Vector3`.
-- `p3` — `Vector3`.
+- `p0` — `Vec3`.
+- `p1` — `Vec3`.
+- `p2` — `Vec3`.
+- `p3` — `Vec3`.
 - `t` — `number`.
 
 ### Returns
 
-`Vector3`
+`Vec3`
 
 ### Example
 
 ```js
-import { Vector3 } from '@1pizzateam/spockjs';
+import { Vec3 } from '@1pizzateam/spockjs';
 
 
-const result = new Vector3().cubicBezierDerivative(new Vector3(1, 2, 3), new Vector3(1, 2, 3), new Vector3(1, 2, 3), new Vector3(1, 2, 3), 0.5);
+const result = new Vec3().cubicBezierDerivative(new Vec3(1, 2, 3), new Vec3(1, 2, 3), new Vec3(1, 2, 3), new Vec3(1, 2, 3), 0.5);
 ```
 
-## Vector3.quadraticBezierSplit()
+## Vec3.quadraticBezierSplit()
 
 Split a quadratic at t into left and right.
 
 ```ts
-quadraticBezierSplit(p0: Vector3, p1: Vector3, p2: Vector3, t: number, left: Vector3[], right: Vector3[]): void
+quadraticBezierSplit(p0: Vec3, p1: Vec3, p2: Vec3, t: number, left: Vec3[], right: Vec3[]): void
 ```
 
 ### Parameters
 
-- `p0` — `Vector3`.
-- `p1` — `Vector3`.
-- `p2` — `Vector3`.
+- `p0` — `Vec3`.
+- `p1` — `Vec3`.
+- `p2` — `Vec3`.
 - `t` — `number`.
-- `left` — `Vector3[]`.
-- `right` — `Vector3[]`.
+- `left` — `Vec3[]`.
+- `right` — `Vec3[]`.
 
 ### Returns
 
@@ -1150,29 +1150,29 @@ quadraticBezierSplit(p0: Vector3, p1: Vector3, p2: Vector3, t: number, left: Vec
 ### Example
 
 ```js
-import { Vector3 } from '@1pizzateam/spockjs';
+import { Vec3 } from '@1pizzateam/spockjs';
 
 
-const result = new Vector3().quadraticBezierSplit(new Vector3(1, 2, 3), new Vector3(1, 2, 3), new Vector3(1, 2, 3), 0.5, new Vector3(1, 2, 3), new Vector3(1, 2, 3));
+const result = new Vec3().quadraticBezierSplit(new Vec3(1, 2, 3), new Vec3(1, 2, 3), new Vec3(1, 2, 3), 0.5, new Vec3(1, 2, 3), new Vec3(1, 2, 3));
 ```
 
-## Vector3.cubicBezierSplit()
+## Vec3.cubicBezierSplit()
 
 Split a cubic at t into left and right.
 
 ```ts
-cubicBezierSplit(p0: Vector3, p1: Vector3, p2: Vector3, p3: Vector3, t: number, left: Vector3[], right: Vector3[]): void
+cubicBezierSplit(p0: Vec3, p1: Vec3, p2: Vec3, p3: Vec3, t: number, left: Vec3[], right: Vec3[]): void
 ```
 
 ### Parameters
 
-- `p0` — `Vector3`.
-- `p1` — `Vector3`.
-- `p2` — `Vector3`.
-- `p3` — `Vector3`.
+- `p0` — `Vec3`.
+- `p1` — `Vec3`.
+- `p2` — `Vec3`.
+- `p3` — `Vec3`.
 - `t` — `number`.
-- `left` — `Vector3[]`.
-- `right` — `Vector3[]`.
+- `left` — `Vec3[]`.
+- `right` — `Vec3[]`.
 
 ### Returns
 
@@ -1181,25 +1181,25 @@ cubicBezierSplit(p0: Vector3, p1: Vector3, p2: Vector3, p3: Vector3, t: number, 
 ### Example
 
 ```js
-import { Vector3 } from '@1pizzateam/spockjs';
+import { Vec3 } from '@1pizzateam/spockjs';
 
 
-const result = new Vector3().cubicBezierSplit(new Vector3(1, 2, 3), new Vector3(1, 2, 3), new Vector3(1, 2, 3), new Vector3(1, 2, 3), 0.5, new Vector3(1, 2, 3), new Vector3(1, 2, 3));
+const result = new Vec3().cubicBezierSplit(new Vec3(1, 2, 3), new Vec3(1, 2, 3), new Vec3(1, 2, 3), new Vec3(1, 2, 3), 0.5, new Vec3(1, 2, 3), new Vec3(1, 2, 3));
 ```
 
-## Vector3.quadraticBezierLength()
+## Vec3.quadraticBezierLength()
 
 Sampled arc length of a quadratic.
 
 ```ts
-quadraticBezierLength(p0: Vector3, p1: Vector3, p2: Vector3, samples?: number): number
+quadraticBezierLength(p0: Vec3, p1: Vec3, p2: Vec3, samples?: number): number
 ```
 
 ### Parameters
 
-- `p0` — `Vector3`.
-- `p1` — `Vector3`.
-- `p2` — `Vector3`.
+- `p0` — `Vec3`.
+- `p1` — `Vec3`.
+- `p2` — `Vec3`.
 - `samples` — `number`. Optional.
 
 ### Returns
@@ -1209,26 +1209,26 @@ quadraticBezierLength(p0: Vector3, p1: Vector3, p2: Vector3, samples?: number): 
 ### Example
 
 ```js
-import { Vector3 } from '@1pizzateam/spockjs';
+import { Vec3 } from '@1pizzateam/spockjs';
 
 
-const result = new Vector3().quadraticBezierLength(new Vector3(1, 2, 3), new Vector3(1, 2, 3), new Vector3(1, 2, 3), 16);
+const result = new Vec3().quadraticBezierLength(new Vec3(1, 2, 3), new Vec3(1, 2, 3), new Vec3(1, 2, 3), 16);
 ```
 
-## Vector3.cubicBezierLength()
+## Vec3.cubicBezierLength()
 
 Sampled arc length of a cubic.
 
 ```ts
-cubicBezierLength(p0: Vector3, p1: Vector3, p2: Vector3, p3: Vector3, samples?: number): number
+cubicBezierLength(p0: Vec3, p1: Vec3, p2: Vec3, p3: Vec3, samples?: number): number
 ```
 
 ### Parameters
 
-- `p0` — `Vector3`.
-- `p1` — `Vector3`.
-- `p2` — `Vector3`.
-- `p3` — `Vector3`.
+- `p0` — `Vec3`.
+- `p1` — `Vec3`.
+- `p2` — `Vec3`.
+- `p3` — `Vec3`.
 - `samples` — `number`. Optional.
 
 ### Returns
@@ -1238,25 +1238,25 @@ cubicBezierLength(p0: Vector3, p1: Vector3, p2: Vector3, p3: Vector3, samples?: 
 ### Example
 
 ```js
-import { Vector3 } from '@1pizzateam/spockjs';
+import { Vec3 } from '@1pizzateam/spockjs';
 
 
-const result = new Vector3().cubicBezierLength(new Vector3(1, 2, 3), new Vector3(1, 2, 3), new Vector3(1, 2, 3), new Vector3(1, 2, 3), 16);
+const result = new Vec3().cubicBezierLength(new Vec3(1, 2, 3), new Vec3(1, 2, 3), new Vec3(1, 2, 3), new Vec3(1, 2, 3), 16);
 ```
 
-## Vector3.quadraticBezierParameterAtLength()
+## Vec3.quadraticBezierParameterAtLength()
 
 Parameter t at the given quadratic arc length.
 
 ```ts
-quadraticBezierParameterAtLength(p0: Vector3, p1: Vector3, p2: Vector3, distance: number, samples?: number): number
+quadraticBezierParameterAtLength(p0: Vec3, p1: Vec3, p2: Vec3, distance: number, samples?: number): number
 ```
 
 ### Parameters
 
-- `p0` — `Vector3`.
-- `p1` — `Vector3`.
-- `p2` — `Vector3`.
+- `p0` — `Vec3`.
+- `p1` — `Vec3`.
+- `p2` — `Vec3`.
 - `distance` — `number`.
 - `samples` — `number`. Optional.
 
@@ -1267,26 +1267,26 @@ quadraticBezierParameterAtLength(p0: Vector3, p1: Vector3, p2: Vector3, distance
 ### Example
 
 ```js
-import { Vector3 } from '@1pizzateam/spockjs';
+import { Vec3 } from '@1pizzateam/spockjs';
 
 
-const result = new Vector3().quadraticBezierParameterAtLength(new Vector3(1, 2, 3), new Vector3(1, 2, 3), new Vector3(1, 2, 3), 10, 16);
+const result = new Vec3().quadraticBezierParameterAtLength(new Vec3(1, 2, 3), new Vec3(1, 2, 3), new Vec3(1, 2, 3), 10, 16);
 ```
 
-## Vector3.cubicBezierParameterAtLength()
+## Vec3.cubicBezierParameterAtLength()
 
 Parameter t at the given cubic arc length.
 
 ```ts
-cubicBezierParameterAtLength(p0: Vector3, p1: Vector3, p2: Vector3, p3: Vector3, distance: number, samples?: number): number
+cubicBezierParameterAtLength(p0: Vec3, p1: Vec3, p2: Vec3, p3: Vec3, distance: number, samples?: number): number
 ```
 
 ### Parameters
 
-- `p0` — `Vector3`.
-- `p1` — `Vector3`.
-- `p2` — `Vector3`.
-- `p3` — `Vector3`.
+- `p0` — `Vec3`.
+- `p1` — `Vec3`.
+- `p2` — `Vec3`.
+- `p3` — `Vec3`.
 - `distance` — `number`.
 - `samples` — `number`. Optional.
 
@@ -1297,62 +1297,62 @@ cubicBezierParameterAtLength(p0: Vector3, p1: Vector3, p2: Vector3, p3: Vector3,
 ### Example
 
 ```js
-import { Vector3 } from '@1pizzateam/spockjs';
+import { Vec3 } from '@1pizzateam/spockjs';
 
 
-const result = new Vector3().cubicBezierParameterAtLength(new Vector3(1, 2, 3), new Vector3(1, 2, 3), new Vector3(1, 2, 3), new Vector3(1, 2, 3), 10, 16);
+const result = new Vec3().cubicBezierParameterAtLength(new Vec3(1, 2, 3), new Vec3(1, 2, 3), new Vec3(1, 2, 3), new Vec3(1, 2, 3), 10, 16);
 ```
 
-## Vector3.clamp()
+## Vec3.clamp()
 
 Clamp each component between min and max.
 
 ```ts
-clamp(min: Vector3, max: Vector3): Vector3
+clamp(min: Vec3, max: Vec3): Vec3
 ```
 
 ### Parameters
 
-- `min` — `Vector3`.
-- `max` — `Vector3`.
+- `min` — `Vec3`.
+- `max` — `Vec3`.
 
 ### Returns
 
-`Vector3`
+`Vec3`
 
 ### Example
 
 ```js
-import { Vector3 } from '@1pizzateam/spockjs';
+import { Vec3 } from '@1pizzateam/spockjs';
 
 
-const result = new Vector3().clamp(new Vector3(1, 2, 3), new Vector3(1, 2, 3));
+const result = new Vec3().clamp(new Vec3(1, 2, 3), new Vec3(1, 2, 3));
 ```
 
-## Vector3.lerp()
+## Vec3.lerp()
 
 Linear interpolate from min to max by amount.
 
 ```ts
-lerp(min: Vector3, max: Vector3, amount: number): Vector3
+lerp(min: Vec3, max: Vec3, amount: number): Vec3
 ```
 
 ### Parameters
 
-- `min` — `Vector3`.
-- `max` — `Vector3`.
+- `min` — `Vec3`.
+- `max` — `Vec3`.
 - `amount` — `number`.
 
 ### Returns
 
-`Vector3`
+`Vec3`
 
 ### Example
 
 ```js
-import { Vector3 } from '@1pizzateam/spockjs';
+import { Vec3 } from '@1pizzateam/spockjs';
 
 
-const result = new Vector3().lerp(new Vector3(1, 2, 3), new Vector3(1, 2, 3), 0.5);
+const result = new Vec3().lerp(new Vec3(1, 2, 3), new Vec3(1, 2, 3), 0.5);
 ```
 

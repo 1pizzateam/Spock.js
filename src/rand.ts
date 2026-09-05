@@ -44,7 +44,7 @@ let next = Math.random;
 const methods = fromNext(() => next());
 
 /** Random numbers; unseeded calls use Math.random(). */
-export const Random = {
+export const Rand = {
 
   /** Uniform float in [min, max). */
   float: methods.float,

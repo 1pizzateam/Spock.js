@@ -12,13 +12,13 @@ window.onload = function() {
   findById('bn').innerHTML = normAnglesHtml;
   findById('cn').innerHTML = normAnglesHtml;
 
-  test(angles, 'test my sine',     '1', Spock.Trigonometry, 'sine');
+  test(angles, 'test my sine',     '1', Spock.Trigo, 'sine');
   test(angles, 'test math sine',   '2', Math, 'sin');
-  test(angles, 'test my cosine',   '3', Spock.Trigonometry, 'cosine');
+  test(angles, 'test my cosine',   '3', Spock.Trigo, 'cosine');
   test(angles, 'test math cosine', '4', Math, 'cos');
-  test(angles, 'test my arctan',   '5', Spock.Trigonometry, 'arctan');
+  test(angles, 'test my arctan',   '5', Spock.Trigo, 'arctan');
   test(angles, 'test math arctan', '6', Math, 'atan');
-  //test(angles, 'test my arctan2',   '5', Spock.Trigonometry, 'arctan2');
+  //test(angles, 'test my arctan2',   '5', Spock.Trigo, 'arctan2');
   //test(angles, 'test math arctan2', '6', Math, 'atan2');
 
 }
@@ -37,10 +37,10 @@ function test(angles, name, container, _this, callback){
 }
 
 function computeAngles(){
-  //var angle = Spock.Trigonometry.TWOPI * 2;
+  //var angle = Spock.Trigo.TWOPI * 2;
   var angles = [];
   //var dxdy = []
-  for(var i = -Spock.Trigonometry.TWOPI ; i <= Spock.Trigonometry.TWOPI ; i+=0.1){
+  for(var i = -Spock.Trigo.TWOPI ; i <= Spock.Trigo.TWOPI ; i+=0.1){
     angles.push(i);
   }
   return angles;
@@ -49,8 +49,8 @@ function computeAngles(){
 function computeNormAngles(){
   var angles = [];
   //var dxdy = []
-  for(var i = -Spock.Trigonometry.TWOPI ; i <= Spock.Trigonometry.TWOPI ; i+=0.1){
-    angles.push(Spock.Trigonometry.normalizeRadian(i));
+  for(var i = -Spock.Trigo.TWOPI ; i <= Spock.Trigo.TWOPI ; i+=0.1){
+    angles.push(Spock.Trigo.normalizeRadian(i));
   }
   return angles;
 }

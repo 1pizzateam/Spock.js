@@ -1,15 +1,15 @@
 
-import {Vector3} from '../vectors/vector3';
+import {Vec3} from '../vectors/vec3';
 import { matrixToArray, transposeLinear3, determinantLinear3, invertLinear3 } from './buffer';
 import { setLookAtAxes } from './lookAt';
 
 /** 4×3 affine transform stored in a 4×4 Float32Array. */
-export class Matrix4x3 {
+export class Mat4x3 {
 
   private m: Float32Array;
-  private xAxis: Vector3 | undefined;
-  private yAxis: Vector3 | undefined;
-  private zAxis: Vector3 | undefined;
+  private xAxis: Vec3 | undefined;
+  private yAxis: Vec3 | undefined;
+  private zAxis: Vec3 | undefined;
 
   /** Identity if no arguments; otherwise the given affine entries. */
   constructor(  x1?:number, x2?:number, x3?:number,
@@ -53,7 +53,7 @@ export class Matrix4x3 {
   }
 
   /** Copy another matrix into this one. */
-  public copy(matrix4x3: Matrix4x3 ): Matrix4x3 {
+  public copy(matrix4x3: Mat4x3 ): Mat4x3 {
     matrixToArray(matrix4x3.m, this.m);
     return this;
   }
@@ -73,7 +73,7 @@ export class Matrix4x3 {
   }
 
   /** Set this matrix to identity. */
-  public identity(): Matrix4x3 {
+  public identity(): Mat4x3 {
     this.make(  1.0,  0.0,  0.0,
                 0.0,  1.0,  0.0,
                 0.0,  0.0,  1.0,
@@ -83,7 +83,7 @@ export class Matrix4x3 {
   }
 
   /** Compose a 3D scale onto this matrix. */
-  public scale(vector3: Vector3): Matrix4x3 {
+  public scale(vector3: Vec3): Mat4x3 {
     const m = this.m;
     const sx = vector3.x;
     const sy = vector3.y;
@@ -95,7 +95,7 @@ export class Matrix4x3 {
   }
 
   /** Compose a rotation about X (radians). */
-  public rotateX(angle: number): Matrix4x3 {
+  public rotateX(angle: number): Mat4x3 {
     const m = this.m;
     const c = Math.cos(angle);
     const s = Math.sin(angle);
@@ -111,7 +111,7 @@ export class Matrix4x3 {
   }
 
   /** Compose a rotation about Y (radians). */
-  public rotateY(angle: number): Matrix4x3 {
+  public rotateY(angle: number): Mat4x3 {
     const m = this.m;
     const c = Math.cos(angle);
     const s = Math.sin(angle);
@@ -127,7 +127,7 @@ export class Matrix4x3 {
   }
 
   /** Compose a rotation about Z (radians). */
-  public rotateZ(angle: number): Matrix4x3 {
+  public rotateZ(angle: number): Mat4x3 {
     const m = this.m;
     const c = Math.cos(angle);
     const s = Math.sin(angle);
@@ -143,7 +143,7 @@ export class Matrix4x3 {
   }
 
   /** Compose a 3D translation onto this matrix. */
-  public translate(vector3: Vector3): Matrix4x3 {
+  public translate(vector3: Vec3): Mat4x3 {
     const m = this.m;
     const tx = vector3.x;
     const ty = vector3.y;
@@ -155,7 +155,7 @@ export class Matrix4x3 {
   }
 
   /** Multiply by another affine 4×3 matrix. */
-  public multiply(matrix4x3: Matrix4x3): Matrix4x3 {
+  public multiply(matrix4x3: Mat4x3): Mat4x3 {
     const a = this.m;
     const b = matrix4x3.m;
     const a0 = a[0], a1 = a[1], a2 = a[2];
@@ -178,10 +178,10 @@ export class Matrix4x3 {
   }
 
   /** Right-handed look-at view matrix; identity if eye equals target. */
-  public lookAtRH(eye: Vector3, target: Vector3, up: Vector3): Matrix4x3 {
-    const zAxis = this.zAxis ??= new Vector3();
-    const xAxis = this.xAxis ??= new Vector3();
-    const yAxis = this.yAxis ??= new Vector3();
+  public lookAtRH(eye: Vec3, target: Vec3, up: Vec3): Mat4x3 {
+    const zAxis = this.zAxis ??= new Vec3();
+    const xAxis = this.xAxis ??= new Vec3();
+    const yAxis = this.yAxis ??= new Vec3();
     if (!setLookAtAxes(eye, target, up, xAxis, yAxis, zAxis))
       return this.identity();
 
@@ -194,7 +194,7 @@ export class Matrix4x3 {
   }
 
   /** Transpose the linear 3×3 part. */
-  public transposeLinear(): Matrix4x3 {
+  public transposeLinear(): Mat4x3 {
     transposeLinear3(this.m, 4);
     return this;
   }
@@ -205,7 +205,7 @@ export class Matrix4x3 {
   }
 
   /** Invert as an affine transform; unchanged if the linear part is singular. */
-  public invertAffine(): Matrix4x3 {
+  public invertAffine(): Mat4x3 {
     const m = this.m;
     const tx = m[12], ty = m[13], tz = m[14];
     if (!invertLinear3(m, 4))

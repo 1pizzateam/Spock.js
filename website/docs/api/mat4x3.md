@@ -1,13 +1,13 @@
-# Matrix4x3
+# Mat4x3
 
-Import with `import { Matrix4x3 } from '@1pizzateam/spockjs';`.
+Import with `import { Mat4x3 } from '@1pizzateam/spockjs';`.
 
 ## Constructor
 
 Identity if no arguments; otherwise the given affine entries.
 
 ```ts
-new Matrix4x3(x1?:number, x2?:number, x3?:number, y1?:number, y2?:number, y3?:number, z1?:number, z2?:number, z3?:number, t1?:number, t2?:number, t3?:number)
+new Mat4x3(x1?:number, x2?:number, x3?:number, y1?:number, y2?:number, y3?:number, z1?:number, z2?:number, z3?:number, t1?:number, t2?:number, t3?:number)
 ```
 
 ### Parameters
@@ -27,42 +27,42 @@ new Matrix4x3(x1?:number, x2?:number, x3?:number, y1?:number, y2?:number, y3?:nu
 
 ### Returns
 
-`Matrix4x3`
+`Mat4x3`
 
 ### Example
 
 ```js
-import { Matrix4x3 } from '@1pizzateam/spockjs';
+import { Mat4x3 } from '@1pizzateam/spockjs';
 
-const value = new Matrix4x3(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
+const value = new Mat4x3(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
 ```
 
-## Matrix4x3.copy()
+## Mat4x3.copy()
 
 Copy another matrix into this one.
 
 ```ts
-copy(matrix4x3: Matrix4x3): Matrix4x3
+copy(matrix4x3: Mat4x3): Mat4x3
 ```
 
 ### Parameters
 
-- `matrix4x3` — `Matrix4x3`.
+- `matrix4x3` — `Mat4x3`.
 
 ### Returns
 
-`Matrix4x3` — the Matrix4x3 with its new values
+`Mat4x3` — the Mat4x3 with its new values
 
 ### Example
 
 ```js
-import { Matrix4x3 } from '@1pizzateam/spockjs';
+import { Mat4x3 } from '@1pizzateam/spockjs';
 
 
-const result = new Matrix4x3().copy(new Matrix4x3());
+const result = new Mat4x3().copy(new Mat4x3());
 ```
 
-## Matrix4x3.toArray()
+## Mat4x3.toArray()
 
 Live buffer, or a copy into target.
 
@@ -76,18 +76,18 @@ toArray(target?: Float32Array): Float32Array
 
 ### Returns
 
-`Float32Array` — the Matrix4x3 as an array
+`Float32Array` — the Mat4x3 as an array
 
 ### Example
 
 ```js
-import { Matrix4x3 } from '@1pizzateam/spockjs';
+import { Mat4x3 } from '@1pizzateam/spockjs';
 
 
-const result = new Matrix4x3().toArray(new Float32Array(16));
+const result = new Mat4x3().toArray(new Float32Array(16));
 ```
 
-## Matrix4x3.toString()
+## Mat4x3.toString()
 
 Human-readable row string.
 
@@ -101,23 +101,23 @@ None.
 
 ### Returns
 
-`string` — the Matrix4x3 as a string
+`string` — the Mat4x3 as a string
 
 ### Example
 
 ```js
-import { Matrix4x3 } from '@1pizzateam/spockjs';
+import { Mat4x3 } from '@1pizzateam/spockjs';
 
 
-const result = new Matrix4x3().toString();
+const result = new Mat4x3().toString();
 ```
 
-## Matrix4x3.identity()
+## Mat4x3.identity()
 
 Set this matrix to identity.
 
 ```ts
-identity(): Matrix4x3
+identity(): Mat4x3
 ```
 
 ### Parameters
@@ -126,48 +126,48 @@ None.
 
 ### Returns
 
-`Matrix4x3` — the Matrix4x3 with its new values
+`Mat4x3` — the Mat4x3 with its new values
 
 ### Example
 
 ```js
-import { Matrix4x3 } from '@1pizzateam/spockjs';
+import { Mat4x3 } from '@1pizzateam/spockjs';
 
 
-const result = new Matrix4x3().identity();
+const result = new Mat4x3().identity();
 ```
 
-## Matrix4x3.scale()
+## Mat4x3.scale()
 
 Compose a 3D scale onto this matrix.
 
 ```ts
-scale(vector3: Vector3): Matrix4x3
+scale(vector3: Vec3): Mat4x3
 ```
 
 ### Parameters
 
-- `vector3` — `Vector3`.
+- `vector3` — `Vec3`.
 
 ### Returns
 
-`Matrix4x3` — the Matrix4x3 with its new values
+`Mat4x3` — the Mat4x3 with its new values
 
 ### Example
 
 ```js
-import { Matrix4x3, Vector3 } from '@1pizzateam/spockjs';
+import { Mat4x3, Vec3 } from '@1pizzateam/spockjs';
 
 
-const result = new Matrix4x3().scale(new Vector3(1, 2, 3));
+const result = new Mat4x3().scale(new Vec3(1, 2, 3));
 ```
 
-## Matrix4x3.rotateX()
+## Mat4x3.rotateX()
 
 Compose a rotation about X (radians).
 
 ```ts
-rotateX(angle: number): Matrix4x3
+rotateX(angle: number): Mat4x3
 ```
 
 ### Parameters
@@ -176,23 +176,23 @@ rotateX(angle: number): Matrix4x3
 
 ### Returns
 
-`Matrix4x3` — the Matrix4x3 with its new values
+`Mat4x3` — the Mat4x3 with its new values
 
 ### Example
 
 ```js
-import { Matrix4x3 } from '@1pizzateam/spockjs';
+import { Mat4x3 } from '@1pizzateam/spockjs';
 
 
-const result = new Matrix4x3().rotateX(Math.PI / 4);
+const result = new Mat4x3().rotateX(Math.PI / 4);
 ```
 
-## Matrix4x3.rotateY()
+## Mat4x3.rotateY()
 
 Compose a rotation about Y (radians).
 
 ```ts
-rotateY(angle: number): Matrix4x3
+rotateY(angle: number): Mat4x3
 ```
 
 ### Parameters
@@ -201,23 +201,23 @@ rotateY(angle: number): Matrix4x3
 
 ### Returns
 
-`Matrix4x3` — the Matrix4x3 with its new values
+`Mat4x3` — the Mat4x3 with its new values
 
 ### Example
 
 ```js
-import { Matrix4x3 } from '@1pizzateam/spockjs';
+import { Mat4x3 } from '@1pizzateam/spockjs';
 
 
-const result = new Matrix4x3().rotateY(Math.PI / 4);
+const result = new Mat4x3().rotateY(Math.PI / 4);
 ```
 
-## Matrix4x3.rotateZ()
+## Mat4x3.rotateZ()
 
 Compose a rotation about Z (radians).
 
 ```ts
-rotateZ(angle: number): Matrix4x3
+rotateZ(angle: number): Mat4x3
 ```
 
 ### Parameters
@@ -226,100 +226,100 @@ rotateZ(angle: number): Matrix4x3
 
 ### Returns
 
-`Matrix4x3` — the Matrix4x3 with its new values
+`Mat4x3` — the Mat4x3 with its new values
 
 ### Example
 
 ```js
-import { Matrix4x3 } from '@1pizzateam/spockjs';
+import { Mat4x3 } from '@1pizzateam/spockjs';
 
 
-const result = new Matrix4x3().rotateZ(Math.PI / 4);
+const result = new Mat4x3().rotateZ(Math.PI / 4);
 ```
 
-## Matrix4x3.translate()
+## Mat4x3.translate()
 
 Compose a 3D translation onto this matrix.
 
 ```ts
-translate(vector3: Vector3): Matrix4x3
+translate(vector3: Vec3): Mat4x3
 ```
 
 ### Parameters
 
-- `vector3` — `Vector3`.
+- `vector3` — `Vec3`.
 
 ### Returns
 
-`Matrix4x3` — the Matrix4x3 with its new values
+`Mat4x3` — the Mat4x3 with its new values
 
 ### Example
 
 ```js
-import { Matrix4x3, Vector3 } from '@1pizzateam/spockjs';
+import { Mat4x3, Vec3 } from '@1pizzateam/spockjs';
 
 
-const result = new Matrix4x3().translate(new Vector3(1, 2, 3));
+const result = new Mat4x3().translate(new Vec3(1, 2, 3));
 ```
 
-## Matrix4x3.multiply()
+## Mat4x3.multiply()
 
 Multiply by another affine 4×3 matrix.
 
 ```ts
-multiply(matrix4x3: Matrix4x3): Matrix4x3
+multiply(matrix4x3: Mat4x3): Mat4x3
 ```
 
 ### Parameters
 
-- `matrix4x3` — `Matrix4x3`.
+- `matrix4x3` — `Mat4x3`.
 
 ### Returns
 
-`Matrix4x3` — the Matrix4x3 with its new values
+`Mat4x3` — the Mat4x3 with its new values
 
 ### Example
 
 ```js
-import { Matrix4x3 } from '@1pizzateam/spockjs';
+import { Mat4x3 } from '@1pizzateam/spockjs';
 
 
-const result = new Matrix4x3().multiply(new Matrix4x3());
+const result = new Mat4x3().multiply(new Mat4x3());
 ```
 
-## Matrix4x3.lookAtRH()
+## Mat4x3.lookAtRH()
 
 Right-handed look-at view matrix; identity if eye equals target.
 
 ```ts
-lookAtRH(eye: Vector3, target: Vector3, up: Vector3): Matrix4x3
+lookAtRH(eye: Vec3, target: Vec3, up: Vec3): Mat4x3
 ```
 
 ### Parameters
 
-- `eye` — `Vector3`.
-- `target` — `Vector3`.
-- `up` — `Vector3`.
+- `eye` — `Vec3`.
+- `target` — `Vec3`.
+- `up` — `Vec3`.
 
 ### Returns
 
-`Matrix4x3` — the Matrix4x3 with its new values
+`Mat4x3` — the Mat4x3 with its new values
 
 ### Example
 
 ```js
-import { Matrix4x3, Vector3 } from '@1pizzateam/spockjs';
+import { Mat4x3, Vec3 } from '@1pizzateam/spockjs';
 
 
-const result = new Matrix4x3().lookAtRH(new Vector3(1, 2, 3), new Vector3(1, 2, 3), new Vector3(1, 2, 3));
+const result = new Mat4x3().lookAtRH(new Vec3(1, 2, 3), new Vec3(1, 2, 3), new Vec3(1, 2, 3));
 ```
 
-## Matrix4x3.transposeLinear()
+## Mat4x3.transposeLinear()
 
 Transpose the linear 3×3 part.
 
 ```ts
-transposeLinear(): Matrix4x3
+transposeLinear(): Mat4x3
 ```
 
 ### Parameters
@@ -328,18 +328,18 @@ None.
 
 ### Returns
 
-`Matrix4x3`
+`Mat4x3`
 
 ### Example
 
 ```js
-import { Matrix4x3 } from '@1pizzateam/spockjs';
+import { Mat4x3 } from '@1pizzateam/spockjs';
 
 
-const result = new Matrix4x3().transposeLinear();
+const result = new Mat4x3().transposeLinear();
 ```
 
-## Matrix4x3.determinantLinear()
+## Mat4x3.determinantLinear()
 
 Determinant of the linear 3×3 part.
 
@@ -358,18 +358,18 @@ None.
 ### Example
 
 ```js
-import { Matrix4x3 } from '@1pizzateam/spockjs';
+import { Mat4x3 } from '@1pizzateam/spockjs';
 
 
-const result = new Matrix4x3().determinantLinear();
+const result = new Mat4x3().determinantLinear();
 ```
 
-## Matrix4x3.invertAffine()
+## Mat4x3.invertAffine()
 
 Invert as an affine transform; unchanged if the linear part is singular.
 
 ```ts
-invertAffine(): Matrix4x3
+invertAffine(): Mat4x3
 ```
 
 ### Parameters
@@ -378,14 +378,14 @@ None.
 
 ### Returns
 
-`Matrix4x3`
+`Mat4x3`
 
 ### Example
 
 ```js
-import { Matrix4x3 } from '@1pizzateam/spockjs';
+import { Mat4x3 } from '@1pizzateam/spockjs';
 
 
-const result = new Matrix4x3().invertAffine();
+const result = new Mat4x3().invertAffine();
 ```
 

@@ -25,9 +25,9 @@ $ npm install @1pizzateam/spockjs
 
 ## Documentation
 
-The doumentation website is at **[https://1pizzateam.github.io/Spock.js/](https://1pizzateam.github.io/Spock.js/)**.
+The documentation website is at **[https://1pizzateam.github.io/Spock.js/](https://1pizzateam.github.io/Spock.js/)**.
 
 ## Contributors
 
 Spock.js is still in development and I would be glad to get all the help you can provide.
-To contribute you can clone the project on **[GitHub](https://github.com/1pizzateam/Spock.js)** and See **NOTICE.md** for detailed installation walkthrough.
+To contribute you can clone the project on **[GitHub](https://github.com/1pizzateam/Spock.js)** and see **[contributor.md](contributor.md)** for the installation walkthrough.

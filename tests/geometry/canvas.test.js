@@ -1,6 +1,6 @@
 import { applyCanvasStyle } from '../../build/es6/geometry/canvas.js';
-import { Circle } from '../../build/es6/geometry/circle.js';
-import { Rectangle } from '../../build/es6/geometry/rectangle.js';
+import { Circ } from '../../build/es6/geometry/circ.js';
+import { Rect } from '../../build/es6/geometry/rect.js';
 
 function fakeContext() {
   return {
@@ -49,7 +49,7 @@ describe('canvas drawing', () => {
 
   it('should draw a circle path then fill and stroke it', () => {
     const context = fakeContext();
-    new Circle(10, 4, 6).draw(context, '#f00', '#0f0', 2);
+    new Circ(10, 4, 6).draw(context, '#f00', '#0f0', 2);
     expect(context.begun).toBe(1);
     expect(context.arcs[0]).toEqual({
       x: 4,
@@ -68,7 +68,7 @@ describe('canvas drawing', () => {
 
   it('should draw a rectangle from its top-left corner', () => {
     const context = fakeContext();
-    new Rectangle(10, 6, 5, 5).draw(context, '#111', '#222', 1);
+    new Rect(10, 6, 5, 5).draw(context, '#111', '#222', 1);
     expect(context.begun).toBe(1);
     expect(context.rects[0]).toEqual({ x: 0, y: 2, width: 10, height: 6 });
     expect(context.fillStyle).toBe('#111');

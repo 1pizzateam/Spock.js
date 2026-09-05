@@ -7,10 +7,10 @@ window.onload = function() {
 
   for (var i = 0 ; i < 300 ; i += 1){
     var iMod3 = i%3;
-    var circle = new Spock.Circle(
-                  Spock.Random.float( width * iMod3/3, width * (iMod3+1)/3 ),
-                  Spock.Random.float( 0, height ),
-                  Spock.Random.float( 10, 40 )
+    var circle = new Spock.Circ(
+                  Spock.Rand.float( width * iMod3/3, width * (iMod3+1)/3 ),
+                  Spock.Rand.float( 0, height ),
+                  Spock.Rand.float( 10, 40 )
                 );
 
     circle.draw( context, colors[ iMod3 ], null, null );

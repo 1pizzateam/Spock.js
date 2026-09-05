@@ -1,16 +1,16 @@
 
-import {Trigonometry} from '../trigonometry';
-import {Vector3} from '../vectors/vector3';
+import {Trigo} from '../trigo';
+import {Vec3} from '../vectors/vec3';
 import { matrixToArray, transpose4, determinant4, invert4 } from './buffer';
 import { setLookAtAxes } from './lookAt';
 
 /** 4×4 matrix stored as a Float32Array. */
-export class Matrix4x4 {
+export class Mat4 {
 
   private m: Float32Array;
-  private xAxis: Vector3 | undefined;
-  private yAxis: Vector3 | undefined;
-  private zAxis: Vector3 | undefined;
+  private xAxis: Vec3 | undefined;
+  private yAxis: Vec3 | undefined;
+  private zAxis: Vec3 | undefined;
 
   /** Identity if no arguments; otherwise the given sixteen entries. */
   constructor(  x1?:number, x2?:number, x3?:number, x4?:number,
@@ -54,7 +54,7 @@ export class Matrix4x4 {
   }
 
   /** Copy another matrix into this one. */
-  public copy(matrix4x4: Matrix4x4 ): Matrix4x4 {
+  public copy(matrix4x4: Mat4 ): Mat4 {
     matrixToArray(matrix4x4.m, this.m);
     return this;
   }
@@ -74,7 +74,7 @@ export class Matrix4x4 {
   }
 
   /** Set this matrix to identity. */
-  public identity(): Matrix4x4 {
+  public identity(): Mat4 {
     this.make(  1.0,  0.0,  0.0,  0.0,
                 0.0,  1.0,  0.0,  0.0,
                 0.0,  0.0,  1.0,  0.0,
@@ -84,7 +84,7 @@ export class Matrix4x4 {
   }
 
   /** Compose a 3D scale onto this matrix. */
-  public scale(vector3: Vector3): Matrix4x4 {
+  public scale(vector3: Vec3): Mat4 {
     const m = this.m;
     const sx = vector3.x;
     const sy = vector3.y;
@@ -96,7 +96,7 @@ export class Matrix4x4 {
   }
 
   /** Compose a rotation about X (radians). */
-  public rotateX(angle: number): Matrix4x4 {
+  public rotateX(angle: number): Mat4 {
     const m = this.m;
     const c = Math.cos(angle);
     const s = Math.sin(angle);
@@ -114,7 +114,7 @@ export class Matrix4x4 {
   }
 
   /** Compose a rotation about Y (radians). */
-  public rotateY(angle: number): Matrix4x4 {
+  public rotateY(angle: number): Mat4 {
     const m = this.m;
     const c = Math.cos(angle);
     const s = Math.sin(angle);
@@ -132,7 +132,7 @@ export class Matrix4x4 {
   }
 
   /** Compose a rotation about Z (radians). */
-  public rotateZ(angle: number): Matrix4x4 {
+  public rotateZ(angle: number): Mat4 {
     const m = this.m;
     const c = Math.cos(angle);
     const s = Math.sin(angle);
@@ -150,7 +150,7 @@ export class Matrix4x4 {
   }
 
   /** Compose a 3D translation onto this matrix. */
-  public translate(vector3: Vector3): Matrix4x4 {
+  public translate(vector3: Vec3): Mat4 {
     const m = this.m;
     const tx = vector3.x;
     const ty = vector3.y;
@@ -163,7 +163,7 @@ export class Matrix4x4 {
   }
 
   /** Multiply by another 4×4 matrix. */
-  public multiply(matrix4x4: Matrix4x4): Matrix4x4 {
+  public multiply(matrix4x4: Mat4): Mat4 {
     const a = this.m;
     const b = matrix4x4.m;
     const a00 = a[ 0], a01 = a[ 1], a02 = a[ 2], a03 = a[ 3];
@@ -194,8 +194,8 @@ export class Matrix4x4 {
   }
 
   /** Perspective projection; fovy is in degrees. */
-  public perspective(fovy:number, aspect:number, znear:number, zfar:number): Matrix4x4 {
-    let f = Math.tan(Trigonometry.halfpi - 0.5 * fovy * Trigonometry.pi / 180);
+  public perspective(fovy:number, aspect:number, znear:number, zfar:number): Mat4 {
+    let f = Math.tan(Trigo.halfpi - 0.5 * fovy * Trigo.pi / 180);
     let rangeInv = 1.0 / (znear - zfar);
 
     this.make( f/aspect, 0.0, 0.0, 0.0,
@@ -208,7 +208,7 @@ export class Matrix4x4 {
   }
 
   /** Orthographic projection. */
-  public orthographic(left:number, right:number, top:number, bottom:number, near:number, far:number ): Matrix4x4 {
+  public orthographic(left:number, right:number, top:number, bottom:number, near:number, far:number ): Mat4 {
 
     const w = right - left;
     const h = top - bottom;
@@ -229,7 +229,7 @@ export class Matrix4x4 {
   }
 
   /** Transpose in place. */
-  public transpose(): Matrix4x4 {
+  public transpose(): Mat4 {
     transpose4(this.m);
     return this;
   }
@@ -240,16 +240,16 @@ export class Matrix4x4 {
   }
 
   /** Invert in place; unchanged if singular. */
-  public invert(): Matrix4x4 {
+  public invert(): Mat4 {
     invert4(this.m);
     return this;
   }
 
   /** Right-handed look-at view matrix; identity if eye equals target. */
-  public lookAtRH(eye: Vector3, target: Vector3, up: Vector3): Matrix4x4 {
-    const zAxis = this.zAxis ??= new Vector3();
-    const xAxis = this.xAxis ??= new Vector3();
-    const yAxis = this.yAxis ??= new Vector3();
+  public lookAtRH(eye: Vec3, target: Vec3, up: Vec3): Mat4 {
+    const zAxis = this.zAxis ??= new Vec3();
+    const xAxis = this.xAxis ??= new Vec3();
+    const yAxis = this.yAxis ??= new Vec3();
     if (!setLookAtAxes(eye, target, up, xAxis, yAxis, zAxis))
       return this.identity();
 

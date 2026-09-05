@@ -1,8 +1,8 @@
-# Random
+# Rand
 
-Import with `import { Random } from '@1pizzateam/spockjs';`.
+Import with `import { Rand } from '@1pizzateam/spockjs';`.
 
-## Random.float()
+## Rand.float()
 
 Uniform float in [min, max).
 
@@ -22,13 +22,13 @@ float(min: number, max: number): number
 ### Example
 
 ```js
-import { Random } from '@1pizzateam/spockjs';
+import { Rand } from '@1pizzateam/spockjs';
 
 
-const result = Random.float(1, 1);
+const result = Rand.float(1, 1);
 ```
 
-## Random.integer()
+## Rand.integer()
 
 Uniform integer in [min, max].
 
@@ -48,13 +48,13 @@ integer(min: number, max: number): number
 ### Example
 
 ```js
-import { Random } from '@1pizzateam/spockjs';
+import { Rand } from '@1pizzateam/spockjs';
 
 
-const result = Random.integer(1, 1);
+const result = Rand.integer(1, 1);
 ```
 
-## Random.distribution()
+## Rand.distribution()
 
 Average of iterations uniform samples in [min, max).
 
@@ -75,13 +75,13 @@ distribution(min: number, max: number, iterations: number): number
 ### Example
 
 ```js
-import { Random } from '@1pizzateam/spockjs';
+import { Rand } from '@1pizzateam/spockjs';
 
 
-const result = Random.distribution(1, 1, 4);
+const result = Rand.distribution(1, 1, 4);
 ```
 
-## Random.pick()
+## Rand.pick()
 
 Pick value1 or value2 with equal chance.
 
@@ -101,13 +101,13 @@ pick(value1: number, value2: number): number
 ### Example
 
 ```js
-import { Random } from '@1pizzateam/spockjs';
+import { Rand } from '@1pizzateam/spockjs';
 
 
-const result = Random.pick(1, 1);
+const result = Rand.pick(1, 1);
 ```
 
-## Random.seed()
+## Rand.seed()
 
 Seed the default generator, or restore Math.random if omitted.
 
@@ -126,13 +126,13 @@ seed(value?: number): void
 ### Example
 
 ```js
-import { Random } from '@1pizzateam/spockjs';
+import { Rand } from '@1pizzateam/spockjs';
 
 
-const result = Random.seed(1);
+const result = Rand.seed(1);
 ```
 
-## Random.create()
+## Rand.create()
 
 Independent generator from seed.
 
@@ -151,9 +151,9 @@ create(seed: number): { float(min, max): number; integer(min, max): number; dist
 ### Example
 
 ```js
-import { Random } from '@1pizzateam/spockjs';
+import { Rand } from '@1pizzateam/spockjs';
 
 
-const result = Random.create(42);
+const result = Rand.create(42);
 ```
 

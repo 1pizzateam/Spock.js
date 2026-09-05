@@ -1,10 +1,10 @@
 <script setup>
-import { Trigonometry } from '@1pizzateam/spockjs';
+import { Trigo } from '@1pizzateam/spockjs';
 import DemoFrame from './DemoFrame.vue';
 import { dot, label, polyline } from '../canvas.js';
 
 const DOTS = 24;
-const SLICE = Trigonometry.twopi / DOTS;
+const SLICE = Trigo.twopi / DOTS;
 
 function draw(context, state, theme) {
   const { width, height } = state;
@@ -16,37 +16,37 @@ function draw(context, state, theme) {
   const ring = [];
   for (let i = 0; i <= DOTS; i++)
     ring.push([
-      Trigonometry.cosineEquation(radius, i * SLICE, 0, centerX),
-      Trigonometry.sineEquation(radius, i * SLICE, 0, centerY),
+      Trigo.cosineEquation(radius, i * SLICE, 0, centerX),
+      Trigo.sineEquation(radius, i * SLICE, 0, centerY),
     ]);
   polyline(context, ring, theme.grid, 1);
 
   for (let i = 0; i < DOTS; i++) {
     const angle = i * SLICE;
     // the lit dot sweeps around the ring, trailing a fade behind it
-    const behind = (phase - angle) % Trigonometry.twopi;
-    const trail = behind < 0 ? behind + Trigonometry.twopi : behind;
-    const glow = Math.max(0.18, 1 - (trail / Trigonometry.twopi) * 3);
+    const behind = (phase - angle) % Trigo.twopi;
+    const trail = behind < 0 ? behind + Trigo.twopi : behind;
+    const glow = Math.max(0.18, 1 - (trail / Trigo.twopi) * 3);
     context.globalAlpha = glow;
     dot(
       context,
-      Trigonometry.cosineEquation(radius, angle, 0, centerX),
-      Trigonometry.sineEquation(radius, angle, 0, centerY),
+      Trigo.cosineEquation(radius, angle, 0, centerX),
+      Trigo.sineEquation(radius, angle, 0, centerY),
       5,
       theme.fresh
     );
   }
   context.globalAlpha = 1;
 
-  const headX = Trigonometry.cosineEquation(radius, phase, 0, centerX);
-  const headY = Trigonometry.sineEquation(radius, phase, 0, centerY);
+  const headX = Trigo.cosineEquation(radius, phase, 0, centerX);
+  const headY = Trigo.sineEquation(radius, phase, 0, centerY);
 
   const plotLeft = centerX + radius + 26;
   const plotRight = width - 16;
   const wave = [];
   for (let x = plotLeft; x <= plotRight; x++) {
     const travelled = (x - plotLeft) * 0.02;
-    wave.push([x, Trigonometry.sineEquation(radius, phase - travelled, 0, centerY)]);
+    wave.push([x, Trigo.sineEquation(radius, phase - travelled, 0, centerY)]);
   }
   polyline(context, wave, theme.accent, 2.5);
 

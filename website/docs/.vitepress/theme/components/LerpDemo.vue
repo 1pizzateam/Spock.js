@@ -1,11 +1,11 @@
 <script setup>
-import { Utils, Vector2 } from '@1pizzateam/spockjs';
+import { Utils, Vec2 } from '@1pizzateam/spockjs';
 import DemoFrame from './DemoFrame.vue';
 import { dot, label, polyline } from '../canvas.js';
 
-const start = new Vector2();
-const end = new Vector2();
-const point = new Vector2();
+const start = new Vec2();
+const end = new Vec2();
+const point = new Vec2();
 
 function draw(context, state, theme) {
   const { width, height } = state;
@@ -42,7 +42,7 @@ function draw(context, state, theme) {
 
 <template>
   <DemoFrame :draw="draw">
-    <code>Vector2.lerp()</code> moves the disc between the two anchors while
+    <code>Vec2.lerp()</code> moves the disc between the two anchors while
     <code>Utils.lerp()</code> interpolates its radius and opacity from the same <code>t</code>.
   </DemoFrame>
 </template>

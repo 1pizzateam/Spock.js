@@ -1,48 +1,48 @@
-import { Vector2 } from '../vectors/vector2';
+import { Vec2 } from '../vectors/vec2';
 import { type Grid, fillGridCells, clearGridCells, GRID_EMPTY_CELL } from './grid';
 import { applyCanvasStyle } from './canvas';
 import { Utils }   from '../utils';
 
 /** Axis-aligned rectangle with optional grid occupancy. */
-export class Rectangle {
+export class Rect {
 
-  public position : Vector2;
-  public topLeftCorner : Vector2;
-  public bottomRightCorner : Vector2;
-  public size : Vector2;
-  public halfSize : Vector2;
+  public position : Vec2;
+  public topLeftCorner : Vec2;
+  public bottomRightCorner : Vec2;
+  public size : Vec2;
+  public halfSize : Vec2;
   public gridCells: number[] = [GRID_EMPTY_CELL];
   private grid: Grid | null;
   readonly shape: 'aabb' = 'aabb';
 
-  /** Rectangle of width × height centered at (positionX, positionY). */
+  /** Rect of width × height centered at (positionX, positionY). */
   constructor( width: number, height: number, positionX: number, positionY: number ) {
-    this.position = new Vector2(positionX, positionY);
-    this.size = new Vector2( width, height );
-    this.halfSize = new Vector2();
-    this.topLeftCorner = new Vector2();
-    this.bottomRightCorner = new Vector2();
+    this.position = new Vec2(positionX, positionY);
+    this.size = new Vec2( width, height );
+    this.halfSize = new Vec2();
+    this.topLeftCorner = new Vec2();
+    this.bottomRightCorner = new Vec2();
     this.grid = null;
     this.setHalfSize();
     this.setCorners();
   }
 
   /** Copy with the same grid. */
-  public clone(): Rectangle {
-    return new Rectangle(this.size.x, this.size.y, this.position.x, this.position.y).setGrid(this.grid);
+  public clone(): Rect {
+    return new Rect(this.size.x, this.size.y, this.position.x, this.position.y).setGrid(this.grid);
   }
 
   /** Copy size, position, and grid from another rectangle. */
-  public copy( rectangle: Rectangle ): Rectangle {
-    this.size.setScalar(rectangle.size.x, rectangle.size.y);
-    this.position.setScalar(rectangle.position.x, rectangle.position.y);
+  public copy( rect: Rect ): Rect {
+    this.size.setScalar(rect.size.x, rect.size.y);
+    this.position.setScalar(rect.position.x, rect.position.y);
     this.setHalfSize();
     this.setCorners();
-    return this.setGrid(rectangle.grid);
+    return this.setGrid(rect.grid);
   }
 
   /** Attach a grid for occupancy, or clear it. */
-  public setGrid(grid: Grid | null): Rectangle {
+  public setGrid(grid: Grid | null): Rect {
     this.grid = grid;
     if (grid)
       this.setGridPos();
@@ -52,7 +52,7 @@ export class Rectangle {
   }
 
   /** Move the center and refresh corners and occupancy. */
-  public setPosition(positionX: number, positionY: number): Rectangle {
+  public setPosition(positionX: number, positionY: number): Rect {
     this.position.setScalar( positionX, positionY );
     this.setCorners();
     this.setGridPos();
@@ -60,7 +60,7 @@ export class Rectangle {
   }
 
   /** Resize and refresh corners and occupancy. */
-  public setSize(width: number, height: number): Rectangle {
+  public setSize(width: number, height: number): Rect {
     this.size.setScalar(width, height);
     this.setHalfSize();
     this.setCorners();
@@ -69,7 +69,7 @@ export class Rectangle {
   }
 
   /** True if the point lies inside or on the rectangle. */
-  public isIn(vector: Vector2): boolean {
+  public isIn(vector: Vec2): boolean {
     return (Utils.isIn(vector.x, this.topLeftCorner.x, this.bottomRightCorner.x)
             && Utils.isIn(vector.y, this.topLeftCorner.y, this.bottomRightCorner.y));
   }

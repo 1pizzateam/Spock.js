@@ -3,7 +3,7 @@ window.onload = function() {
   var context = canvas.getContext("2d");
   var width   = canvas.width = window.innerWidth;
   var height  = canvas.height = window.innerHeight;
-  var circle  = new Spock.Circle( width * 0.5, height * 0.5, 20 );
+  var circle  = new Spock.Circ( width * 0.5, height * 0.5, 20 );
 
   circle.draw( context, 'rgba(0,0,0,1)', null, null );
   context.fill();

@@ -10,8 +10,8 @@ window.onload = function() {
     velocity: {},
     create : function( positionX, positionY, velocityX, velocityY ){
       var obj = Object.create(this);
-      obj.position = new Spock.Vector2( positionX, positionY );
-      obj.velocity = new Spock.Vector2( velocityX, velocityY );
+      obj.position = new Spock.Vec2( positionX, positionY );
+      obj.velocity = new Spock.Vec2( velocityX, velocityY );
       return obj;
     },
     update: function(){
@@ -23,12 +23,12 @@ window.onload = function() {
   var py = height * 0.5;
 
 	for (var i = 0; i < 200; i += 1) {
-    var radius    = Spock.Random.float(0, 3);
-    var angle     = Spock.Random.float(0, Spock.Trigonometry.twopi);
+    var radius    = Spock.Rand.float(0, 3);
+    var angle     = Spock.Rand.float(0, Spock.Trigo.twopi);
     particles[i]  = particle.create(
                       px, py,
-                      Spock.Trigonometry.cosineEquation( radius, angle, 0, 0 ),
-                      Spock.Trigonometry.sineEquation( radius, angle, 0, 0 )
+                      Spock.Trigo.cosineEquation( radius, angle, 0, 0 ),
+                      Spock.Trigo.sineEquation( radius, angle, 0, 0 )
                     );
   }
 
@@ -40,7 +40,7 @@ window.onload = function() {
       var p = particles[i];
       p.update();
       context.beginPath();
-      context.arc(p.position.x, p.position.y, 3, 0, Spock.Trigonometry.twopi, false);
+      context.arc(p.position.x, p.position.y, 3, 0, Spock.Trigo.twopi, false);
       context.fill();
     }
     requestAnimationFrame(update);

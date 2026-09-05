@@ -1,8 +1,8 @@
-# Trigonometry
+# Trigo
 
-Import with `import { Trigonometry } from '@1pizzateam/spockjs';`.
+Import with `import { Trigo } from '@1pizzateam/spockjs';`.
 
-## Trigonometry.degreeToRadian()
+## Trigo.degreeToRadian()
 
 Degrees to radians.
 
@@ -21,13 +21,13 @@ degreeToRadian(degree: number): number
 ### Example
 
 ```js
-import { Trigonometry } from '@1pizzateam/spockjs';
+import { Trigo } from '@1pizzateam/spockjs';
 
 
-const result = Trigonometry.degreeToRadian(1);
+const result = Trigo.degreeToRadian(1);
 ```
 
-## Trigonometry.radianToDegree()
+## Trigo.radianToDegree()
 
 Radians to degrees.
 
@@ -46,13 +46,13 @@ radianToDegree(radian: number): number
 ### Example
 
 ```js
-import { Trigonometry } from '@1pizzateam/spockjs';
+import { Trigo } from '@1pizzateam/spockjs';
 
 
-const result = Trigonometry.radianToDegree(Math.PI / 4);
+const result = Trigo.radianToDegree(Math.PI / 4);
 ```
 
-## Trigonometry.normalizeRadian()
+## Trigo.normalizeRadian()
 
 Wrap radians into (-π, π].
 
@@ -71,13 +71,13 @@ normalizeRadian(angle: number): number
 ### Example
 
 ```js
-import { Trigonometry } from '@1pizzateam/spockjs';
+import { Trigo } from '@1pizzateam/spockjs';
 
 
-const result = Trigonometry.normalizeRadian(Math.PI / 4);
+const result = Trigo.normalizeRadian(Math.PI / 4);
 ```
 
-## Trigonometry.sine()
+## Trigo.sine()
 
 Fast sine of angle in radians.
 
@@ -96,13 +96,13 @@ sine(angle: number): number
 ### Example
 
 ```js
-import { Trigonometry } from '@1pizzateam/spockjs';
+import { Trigo } from '@1pizzateam/spockjs';
 
 
-const result = Trigonometry.sine(Math.PI / 4);
+const result = Trigo.sine(Math.PI / 4);
 ```
 
-## Trigonometry.cosine()
+## Trigo.cosine()
 
 Fast cosine of angle in radians.
 
@@ -121,13 +121,13 @@ cosine(angle: number): number
 ### Example
 
 ```js
-import { Trigonometry } from '@1pizzateam/spockjs';
+import { Trigo } from '@1pizzateam/spockjs';
 
 
-const result = Trigonometry.cosine(Math.PI / 4);
+const result = Trigo.cosine(Math.PI / 4);
 ```
 
-## Trigonometry.arctan()
+## Trigo.arctan()
 
 Arctangent of angle (Math.atan).
 
@@ -146,13 +146,13 @@ arctan(angle: number): number
 ### Example
 
 ```js
-import { Trigonometry } from '@1pizzateam/spockjs';
+import { Trigo } from '@1pizzateam/spockjs';
 
 
-const result = Trigonometry.arctan(Math.PI / 4);
+const result = Trigo.arctan(Math.PI / 4);
 ```
 
-## Trigonometry.arctan2()
+## Trigo.arctan2()
 
 atan2(y, x), or false at the origin.
 
@@ -172,13 +172,13 @@ arctan2(y: number, x: number): number | false
 ### Example
 
 ```js
-import { Trigonometry } from '@1pizzateam/spockjs';
+import { Trigo } from '@1pizzateam/spockjs';
 
 
-const result = Trigonometry.arctan2(1, 1);
+const result = Trigo.arctan2(1, 1);
 ```
 
-## Trigonometry.sinePrecise()
+## Trigo.sinePrecise()
 
 Precise sine (Math.sin).
 
@@ -197,13 +197,13 @@ sinePrecise(angle: number): number
 ### Example
 
 ```js
-import { Trigonometry } from '@1pizzateam/spockjs';
+import { Trigo } from '@1pizzateam/spockjs';
 
 
-const result = Trigonometry.sinePrecise(Math.PI / 4);
+const result = Trigo.sinePrecise(Math.PI / 4);
 ```
 
-## Trigonometry.cosinePrecise()
+## Trigo.cosinePrecise()
 
 Precise cosine (Math.cos).
 
@@ -222,13 +222,13 @@ cosinePrecise(angle: number): number
 ### Example
 
 ```js
-import { Trigonometry } from '@1pizzateam/spockjs';
+import { Trigo } from '@1pizzateam/spockjs';
 
 
-const result = Trigonometry.cosinePrecise(Math.PI / 4);
+const result = Trigo.cosinePrecise(Math.PI / 4);
 ```
 
-## Trigonometry.sineEquation()
+## Trigo.sineEquation()
 
 amplitude * sin(period + shiftX) + shiftY.
 
@@ -250,13 +250,13 @@ sineEquation(amplitude: number, period: number, shiftX: number, shiftY: number):
 ### Example
 
 ```js
-import { Trigonometry } from '@1pizzateam/spockjs';
+import { Trigo } from '@1pizzateam/spockjs';
 
 
-const result = Trigonometry.sineEquation(1, 1, 1, 1);
+const result = Trigo.sineEquation(1, 1, 1, 1);
 ```
 
-## Trigonometry.cosineEquation()
+## Trigo.cosineEquation()
 
 amplitude * cos(period + shiftX) + shiftY.
 
@@ -278,13 +278,13 @@ cosineEquation(amplitude: number, period: number, shiftX: number, shiftY: number
 ### Example
 
 ```js
-import { Trigonometry } from '@1pizzateam/spockjs';
+import { Trigo } from '@1pizzateam/spockjs';
 
 
-const result = Trigonometry.cosineEquation(1, 1, 1, 1);
+const result = Trigo.cosineEquation(1, 1, 1, 1);
 ```
 
-## Trigonometry.arctanEquation()
+## Trigo.arctanEquation()
 
 amplitude * atan(period + shiftX) + shiftY.
 
@@ -306,9 +306,9 @@ arctanEquation(amplitude: number, period: number, shiftX: number, shiftY: number
 ### Example
 
 ```js
-import { Trigonometry } from '@1pizzateam/spockjs';
+import { Trigo } from '@1pizzateam/spockjs';
 
 
-const result = Trigonometry.arctanEquation(1, 1, 1, 1);
+const result = Trigo.arctanEquation(1, 1, 1, 1);
 ```
 

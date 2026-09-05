@@ -4,7 +4,7 @@ window.onload = function() {
   var width     = canvas.width = window.innerWidth;
   var height    = canvas.height = window.innerHeight;
   var gridSize  = 40;
-  var circle    = new Spock.Circle( 0, 0, 20 );
+  var circle    = new Spock.Circ( 0, 0, 20 );
 	drawGrid();
 
   document.body.addEventListener("mousemove", function(event) {

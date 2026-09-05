@@ -6,7 +6,7 @@ window.onload = function() {
 
   var bees    = [];
   var numBees = 30;
-  var center  = new Spock.Vector2(width, height).halve();
+  var center  = new Spock.Vec2(width, height).halve();
   var bee = {
     create: function() {
       var obj = Object.create(this);
@@ -15,22 +15,22 @@ window.onload = function() {
     },
 
     init: function() {
-      this.angle = new Spock.Vector2(
-        Spock.Random.float(0, Spock.Trigonometry.twopi),
-        Spock.Random.float(0, Spock.Trigonometry.twopi)
+      this.angle = new Spock.Vec2(
+        Spock.Rand.float(0, Spock.Trigo.twopi),
+        Spock.Rand.float(0, Spock.Trigo.twopi)
       );
-      this.speed = new Spock.Vector2(
+      this.speed = new Spock.Vec2(
         this.randomSpeedGenerator(),
         this.randomSpeedGenerator()
       );
-      this.circle = new Spock.Circle( 0, 0, Spock.Random.integer(100,200) );
+      this.circle = new Spock.Circ( 0, 0, Spock.Rand.integer(100,200) );
     },
 
     update: function() {
       var radius = this.circle.radius;
       this.circle.position.set(
-        Spock.Trigonometry.cosineEquation( radius, this.angle.x, 0, 0 ),
-        Spock.Trigonometry.sineEquation( radius, this.angle.y, 0, 0 )
+        Spock.Trigo.cosineEquation( radius, this.angle.x, 0, 0 ),
+        Spock.Trigo.sineEquation( radius, this.angle.y, 0, 0 )
       ).add(center);
       this.angle.add( this.speed );
       this.draw();
@@ -38,13 +38,13 @@ window.onload = function() {
 
     draw: function(){
       context.beginPath();
-      context.arc( this.circle.position.x, this.circle.position.y, 2, 0, Spock.Trigonometry.twopi, false );
+      context.arc( this.circle.position.x, this.circle.position.y, 2, 0, Spock.Trigo.twopi, false );
       context.fill();
     },
 
     randomSpeedGenerator: function(){
-      var sign = Spock.Random.pick(-1,1);
-      var randNumber = Spock.Random.float(0.0125, 0.05, 4);
+      var sign = Spock.Rand.pick(-1,1);
+      var randNumber = Spock.Rand.float(0.0125, 0.05, 4);
       return randNumber * sign;
     }
 

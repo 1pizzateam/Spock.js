@@ -1,17 +1,17 @@
 <script setup>
-import { Random } from '@1pizzateam/spockjs';
+import { Rand } from '@1pizzateam/spockjs';
 import DemoFrame from './DemoFrame.vue';
 import { label } from '../canvas.js';
 
 const BATCH = 90;
 const LIMIT = 9000;
 
-let generator = Random.create(20260904);
+let generator = Rand.create(20260904);
 let flat = [];
 let clustered = [];
 
 function reset() {
-  generator = Random.create(20260904);
+  generator = Rand.create(20260904);
   flat = [];
   clustered = [];
 }

@@ -4,36 +4,41 @@ Version 4.0.0 (September 4th 2026)
  * Breaking:
     * Published as `@1pizzateam/spockjs` (was `@lcluber/type6js`)
     * ESM-only package, Node.js 22+, no CommonJS or IIFE/old-browser build
-    * `new Matrix3x3()`, `new Matrix4x3()` and `new Matrix4x4()` with no arguments are identity, not all zeros
+    * `new Mat3()`, `new Mat4x3()` and `new Mat4()` with no arguments are identity, not all zeros
     * Published types are emitted by tsc (no hand-written spock.d.ts)
-    * `new Circle()` / `new Rectangle()` no longer take a Grid; call setGrid() after
+    * `new Circ()` / `new Rect()` no longer take a Grid; call setGrid() after
     * arctan2(y, x) matches Math.atan2(y, x); the old (x, y) order was cartesian, not Math
-    * Quaternion.toArray() is [w, x, y, z], matching its constructor (previously [x, y, z, w])
-    * Matrix4x3 transpose(), determinant() and invert() are renamed transposeLinear(), determinantLinear() and invertAffine()
+    * `Quat.toArray()` is [w, x, y, z], matching its constructor (previously [x, y, z, w])
+    * `Mat4x3` transpose(), determinant() and invert() are renamed transposeLinear(), determinantLinear() and invertAffine()
     * NumArray.average() no longer takes a separate length
- * Vector2:
+    * `Trigo` replaces the `Trigonometry` export
+    * `Vec2` / `Vec3` replace `Vector2` / `Vector3`; the shared type is `Vec`
+    * `Mat3` / `Mat4` / `Mat4x3` replace `Matrix3x3` / `Matrix4x4` / `Matrix4x3`
+    * `Quat` replaces the `Quaternion` export
+    * `Circ` / `Rect` replace `Circle` / `Rectangle`
+ * Vec2:
     * getAngle() no longer swaps x and y (a vector along +X is 0, not a quarter turn)
     * setRadian(0) and setDegree(0) actually set the heading instead of leaving the vector unchanged
     * toArray() can fill an array you pass in
     * Add equals() to compare two vectors; isEqualTo() still compares to a scalar
     * setRadian() uses Math.sin / Math.cos instead of the approximate lookup table
- * Vector3:
+ * Vec3:
     * toArray() can fill an array you pass in
     * getDistance() no longer changes either vector
     * Add getAngle() between two vectors, lerp(), clamp() to a min/max box, quadraticBezier() and cubicBezier()
     * Add equals() to compare two vectors; isEqualTo() still compares to a scalar
  * Bezier:
-    * Add derivatives, de Casteljau splits, sampled length and parameter-at-length (also on Vector2 and Vector3)
-    * Vector2 and Vector3 share one curve-length sampler
+    * Add derivatives, de Casteljau splits, sampled length and parameter-at-length (also on Vec2 and Vec3)
+    * Vec2 and Vec3 share one curve-length sampler
     * Vector splits create missing output vectors, so empty left/right arrays are accepted
- * Random:
+ * Rand:
     * seed() / create() use a replayable generator; unseeded calls still use Math.random()
  * Grid:
     * Divide a width × height space into cells of a given size
-    * draw() paints the lattice on a canvas like Circle and Rectangle
+    * draw() paints the lattice on a canvas like Circ and Rect
     * emptyCell is the occupancy sentinel; off-grid corners do not wrap into another cell
     * Shapes record every occupied AABB cell, not only the four corners
- * Circle / Rectangle:
+ * Circ / Rect:
     * Occupancy is opt-in via setGrid(); moving or resizing then updates cells
     * Unused occupancy slots and off-grid corners use Grid.emptyCell (-1); testCells ignores that sentinel
     * copy() and clone() take the source shape’s grid
@@ -44,24 +49,24 @@ Version 4.0.0 (September 4th 2026)
     * average() uses array.length
  * Utils:
     * getSign() matches Math.sign, including NaN
- * Matrix3x3, Matrix4x3 and Matrix4x4:
+ * Mat3, Mat4x3 and Mat4:
     * scale(), rotate() and translate() compose onto the current matrix instead of replacing it
-    * Rotations use Math.sin / Math.cos for the same precision as Quaternion
+    * Rotations use Math.sin / Math.cos for the same precision as Quat
     * toArray() with no argument is the matrix’s own Float32Array (for WebGL); pass an array to copy into it
     * Constructor arguments of 0 or NaN are kept instead of being treated as missing
     * Add transpose(), determinant() and invert() (a singular matrix is left unchanged)
- * Matrix4x4:
+ * Mat4:
     * multiply() no longer overwrites the last row of a perspective matrix
-    * Add lookAtRH(), matching Matrix4x3
+    * Add lookAtRH(), matching Mat4x3
     * lookAtRH() uses a fallback axis when up is parallel to the view, and identity when eye equals target
- * Trigonometry:
+ * Trigo:
     * arctan() and arctan2() use Math.atan / Math.atan2; arctan2(0, 0) still returns false
- * Quaternion:
+ * Quat:
     * Finish the implementation (w, x, y, z)
-    * Add identity(), set(), setAxisAngle(), setFromEuler(), getAxisAngle(), clone(), invert(), normalize(), dot(), premultiply(), rotateX|Y|Z(), slerp(), toArray(), toMatrix4x4() and toMatrix4x3()
+    * Add identity(), set(), setAxisAngle(), setFromEuler(), getAxisAngle(), clone(), invert(), normalize(), dot(), premultiply(), rotateX|Y|Z(), slerp(), toArray(), toMat4() and toMat4x3()
     * multiply() used the wrong sign on w
     * multiplyVector() no longer changes the input vector or hands back a shared temporary
-    * toMatrix4x4() / toMatrix4x3() write into the matrix you pass in
+    * toMat4() / toMat4x3() write into the matrix you pass in
     * toArray() can fill an array you pass in
     * toArray() uses the same [w, x, y, z] order as the constructor
 

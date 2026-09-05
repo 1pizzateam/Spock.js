@@ -6,9 +6,9 @@ window.onload = function() {
   var hWidth  = width  * 0.5;
   var hHeight = height * 0.5;
 
-  var circle    = new Spock.Circle( 0, 0, 40 );
-  var rect      = new Spock.Rectangle( hWidth, hHeight, hWidth, hHeight );
-  var innerRect = new Spock.Rectangle( hWidth, hHeight, hWidth - circle.diameter, hHeight - circle.diameter );
+  var circle    = new Spock.Circ( 0, 0, 40 );
+  var rect      = new Spock.Rect( hWidth, hHeight, hWidth, hHeight );
+  var innerRect = new Spock.Rect( hWidth, hHeight, hWidth - circle.diameter, hHeight - circle.diameter );
 
   //initial rendering
   drawRectangles();

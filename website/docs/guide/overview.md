@@ -15,22 +15,22 @@ Spock.js is an open-source mathematics library written in TypeScript. It provide
 ## Quick start
 
 ```js
-import { Vector2, Utils } from '@1pizzateam/spockjs';
+import { Vec2, Utils } from '@1pizzateam/spockjs';
 
-const position = new Vector2(10, 20)
-  .add(new Vector2(5, -2))
+const position = new Vec2(10, 20)
+  .add(new Vec2(5, -2))
   .scale(2);
 
 const opacity = Utils.clamp(1.25, 0, 1);
 ```
 
-Most vector, matrix, quaternion, circle, and rectangle operations mutate the instance and return it, making calls chainable. Methods that test or measure return a boolean or number instead.
+Most vector, matrix, quaternion, Circ, and Rect operations mutate the instance and return it, making calls chainable. Methods that test or measure return a boolean or number instead.
 
 ## API groups
 
-- [Vector2](/api/vector2) and [Vector3](/api/vector3)
-- [Matrix3x3](/api/matrix3x3), [Matrix4x3](/api/matrix4x3), and [Matrix4x4](/api/matrix4x4)
-- [Quaternion](/api/quaternion)
-- [Circle](/api/circle), [Rectangle](/api/rectangle), and [Grid](/api/grid)
-- [Trigonometry](/api/trigonometry), [Bezier](/api/bezier), and [Random](/api/random)
+- [Vec2](/api/vec2) and [Vec3](/api/vec3)
+- [Mat3](/api/mat3), [Mat4x3](/api/mat4x3), and [Mat4](/api/mat4)
+- [Quat](/api/quat)
+- [Circ](/api/circ), [Rect](/api/rect), and [Grid](/api/grid)
+- [Trigo](/api/trigo), [Bezier](/api/bezier), and [Rand](/api/rand)
 - [NumArray](/api/num-array), [Utils](/api/utils), and [Time](/api/time)

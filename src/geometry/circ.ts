@@ -1,21 +1,21 @@
-import {Trigonometry} from '../trigonometry';
+import {Trigo} from '../trigo';
 import { type Grid, fillGridCells, clearGridCells, GRID_EMPTY_CELL } from './grid';
 import { applyCanvasStyle } from './canvas';
-import {Vector2} from '../vectors/vector2';
+import {Vec2} from '../vectors/vec2';
 
-/** Circle with optional grid occupancy. */
-export class Circle {
+/** Circ with optional grid occupancy. */
+export class Circ {
 
-  public position: Vector2;
+  public position: Vec2;
   public gridCells: number[] = [GRID_EMPTY_CELL];
   private grid: Grid | null;
   private _radius: number;
   private _diameter: number;
   readonly shape: 'circle' = 'circle';
 
-  /** Circle of radius at (positionX, positionY). Occupancy is opt-in via setGrid(). */
+  /** Circ of radius at (positionX, positionY). Occupancy is opt-in via setGrid(). */
   constructor(radius: number, positionX: number, positionY: number) {
-    this.position = new Vector2(positionX, positionY);
+    this.position = new Vec2(positionX, positionY);
     this._radius = radius;
     this._diameter = radius * 2;
     this.grid = null;
@@ -46,20 +46,20 @@ export class Circle {
   }
 
   /** Copy with the same grid. */
-  public clone(): Circle {
-    return new Circle(this.radius, this.position.x, this.position.y).setGrid(this.grid);
+  public clone(): Circ {
+    return new Circ(this.radius, this.position.x, this.position.y).setGrid(this.grid);
   }
 
   /** Copy size, position, and grid from another circle. */
-  public copy( circle: Circle ): Circle {
-    this.position.copy(circle.position);
-    this._radius = circle.radius;
-    this._diameter = circle.diameter;
-    return this.setGrid(circle.grid);
+  public copy( circ: Circ ): Circ {
+    this.position.copy(circ.position);
+    this._radius = circ.radius;
+    this._diameter = circ.diameter;
+    return this.setGrid(circ.grid);
   }
 
   /** Attach a grid for occupancy, or clear it. */
-  public setGrid(grid: Grid | null): Circle {
+  public setGrid(grid: Grid | null): Circ {
     this.grid = grid;
     if (grid)
       this.setGridPos();
@@ -69,7 +69,7 @@ export class Circle {
   }
 
   /** Move the center and refresh occupancy. */
-  public setPosition( positionX: number, positionY: number ): Circle {
+  public setPosition( positionX: number, positionY: number ): Circ {
     this.position.setScalar(positionX, positionY);
     this.setGridPos();
     return this;
@@ -88,13 +88,13 @@ export class Circle {
   }
 
   /** Multiply radius by scalar. */
-  public scale(scalar: number): Circle {
+  public scale(scalar: number): Circ {
     this.radius *= scalar;
     return this;
   }
 
   /** True if the point lies inside or on the circle. */
-  public isIn(v: Vector2): boolean {
+  public isIn(v: Vec2): boolean {
     return v.getDistance(this.position, true) <= this.radius * this.radius;
   }
 
@@ -105,7 +105,7 @@ export class Circle {
                   this.position.y,
                   this.radius,
                   0,
-                  Trigonometry.twopi,
+                  Trigo.twopi,
                   false
                 );
     applyCanvasStyle(context, fillColor, strokeColor, strokeWidth);

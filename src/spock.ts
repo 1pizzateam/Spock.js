@@ -1,17 +1,17 @@
 
-export { Trigonometry } from './trigonometry';
+export { Trigo } from './trigo';
 export { Utils }        from './utils';
 export { Time }         from './time';
-export { Random }       from './random';
+export { Rand }       from './rand';
 export { NumArray }     from './array';
 export { Bezier }       from './bezier';
-export { Circle }       from './geometry/circle';
-export { Rectangle }    from './geometry/rectangle';
+export { Circ }       from './geometry/circ';
+export { Rect }    from './geometry/rect';
 export { Grid, GRID_EMPTY_CELL } from './geometry/grid';
-export { Vector2 }      from './vectors/vector2';
-export { Vector3 }      from './vectors/vector3';
-export type { Vector }  from './vectors/vector';
-export { Matrix3x3 }    from './matrices/matrix3x3';
-export { Matrix4x3 }    from './matrices/matrix4x3';
-export { Matrix4x4 }    from './matrices/matrix4x4';
-export { Quaternion }   from './quaternion';
+export { Vec2 }      from './vectors/vec2';
+export { Vec3 }      from './vectors/vec3';
+export type { Vec }  from './vectors/vec';
+export { Mat3 }    from './matrices/mat3';
+export { Mat4x3 }    from './matrices/mat4x3';
+export { Mat4 }    from './matrices/mat4';
+export { Quat }   from './quat';

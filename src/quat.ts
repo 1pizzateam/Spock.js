@@ -1,33 +1,33 @@
-import { Vector3 } from './vectors/vector3';
-import { Matrix4x3 } from './matrices/matrix4x3';
-import { Matrix4x4 } from './matrices/matrix4x4';
+import { Vec3 } from './vectors/vec3';
+import { Mat4x3 } from './matrices/mat4x3';
+import { Mat4 } from './matrices/mat4';
 import { Utils } from './utils';
 
 /** Unit quaternion as w plus a vector (x, y, z). */
-export class Quaternion {
+export class Quat {
   public w: number;
-  public vector: Vector3;
+  public vector: Vec3;
 
   /** Identity by default: (1, 0, 0, 0). */
   constructor(w: number = 1, x: number = 0, y: number = 0, z: number = 0) {
-    this.vector = new Vector3(x, y, z);
+    this.vector = new Vec3(x, y, z);
     this.w = w;
   }
 
   /** Set w, x, y, z. */
-  public set(w: number, x: number, y: number, z: number): Quaternion {
+  public set(w: number, x: number, y: number, z: number): Quat {
     this.w = w;
     this.vector.setScalar(x, y, z);
     return this;
   }
 
   /** Set to identity. */
-  public identity(): Quaternion {
+  public identity(): Quat {
     return this.set(1, 0, 0, 0);
   }
 
   /** Rotation of angle radians about a (possibly unnormalized) axis. */
-  public setAxisAngle(axis: Vector3, angle: number): Quaternion {
+  public setAxisAngle(axis: Vec3, angle: number): Quat {
     this.vector.copy(axis);
     const length = this.vector.getMagnitude();
     if (!length) {
@@ -40,7 +40,7 @@ export class Quaternion {
   }
 
   /** Set from x, y, and z Euler angles in radians. */
-  public setFromEuler(x: number, y: number, z: number): Quaternion {
+  public setFromEuler(x: number, y: number, z: number): Quat {
     const hx = x * 0.5;
     const hy = y * 0.5;
     const hz = z * 0.5;
@@ -58,7 +58,7 @@ export class Quaternion {
   }
 
   /** Write the rotation axis into axis; return the angle in radians. */
-  public getAxisAngle(axis: Vector3): number {
+  public getAxisAngle(axis: Vec3): number {
     const length = this.vector.getMagnitude();
     if (length < 1e-8) {
       axis.setScalar(1, 0, 0);
@@ -69,12 +69,12 @@ export class Quaternion {
   }
 
   /** Independent copy. */
-  public clone(): Quaternion {
-    return new Quaternion(this.w, this.vector.x, this.vector.y, this.vector.z);
+  public clone(): Quat {
+    return new Quat(this.w, this.vector.x, this.vector.y, this.vector.z);
   }
 
   /** Copy another quaternion into this one. */
-  public copy(q: Quaternion): Quaternion {
+  public copy(q: Quat): Quat {
     this.w = q.w;
     this.vector.copy(q.vector);
     return this;
@@ -102,7 +102,7 @@ export class Quaternion {
   }
 
   /** Scale to unit length. */
-  public normalize(): Quaternion {
+  public normalize(): Quat {
     const length = this.getMagnitude();
     if (length && length !== 1) {
       const inv = 1 / length;
@@ -113,13 +113,13 @@ export class Quaternion {
   }
 
   /** Negate the vector part. */
-  public conjugate(): Quaternion {
+  public conjugate(): Quat {
     this.vector.opposite();
     return this;
   }
 
   /** Invert in place; unchanged if zero. */
-  public invert(): Quaternion {
+  public invert(): Quat {
     const squared = this.getMagnitude(true);
     if (!squared) {
       return this;
@@ -134,12 +134,12 @@ export class Quaternion {
   }
 
   /** Dot product with q. */
-  public dot(q: Quaternion): number {
+  public dot(q: Quat): number {
     return this.w * q.w + this.vector.dotProduct(q.vector);
   }
 
   /** Hamilton product this *= q. */
-  public multiply(q: Quaternion): Quaternion {
+  public multiply(q: Quat): Quat {
     return this.setProduct(
       this.vector.x, this.vector.y, this.vector.z, this.w,
       q.vector.x, q.vector.y, q.vector.z, q.w
@@ -147,7 +147,7 @@ export class Quaternion {
   }
 
   /** Hamilton product this = q * this. */
-  public premultiply(q: Quaternion): Quaternion {
+  public premultiply(q: Quat): Quat {
     return this.setProduct(
       q.vector.x, q.vector.y, q.vector.z, q.w,
       this.vector.x, this.vector.y, this.vector.z, this.w
@@ -155,7 +155,7 @@ export class Quaternion {
   }
 
   /** Compose a rotation about X (radians). */
-  public rotateX(angle: number): Quaternion {
+  public rotateX(angle: number): Quat {
     const half = angle * 0.5;
     const bx = Math.sin(half);
     const bw = Math.cos(half);
@@ -168,7 +168,7 @@ export class Quaternion {
   }
 
   /** Compose a rotation about Y (radians). */
-  public rotateY(angle: number): Quaternion {
+  public rotateY(angle: number): Quat {
     const half = angle * 0.5;
     const by = Math.sin(half);
     const bw = Math.cos(half);
@@ -181,7 +181,7 @@ export class Quaternion {
   }
 
   /** Compose a rotation about Z (radians). */
-  public rotateZ(angle: number): Quaternion {
+  public rotateZ(angle: number): Quat {
     const half = angle * 0.5;
     const bz = Math.sin(half);
     const bw = Math.cos(half);
@@ -194,7 +194,7 @@ export class Quaternion {
   }
 
   /** Spherical interpolate toward q by t in [0, 1]. */
-  public slerp(q: Quaternion, t: number): Quaternion {
+  public slerp(q: Quat, t: number): Quat {
     if (t === 0) {
       return this;
     }
@@ -238,7 +238,7 @@ export class Quaternion {
   }
 
   /** Rotate vector; write the result into target. */
-  public multiplyVector(vector: Vector3, target: Vector3 = new Vector3()): Vector3 {
+  public multiplyVector(vector: Vec3, target: Vec3 = new Vec3()): Vec3 {
     const ux = this.vector.x, uy = this.vector.y, uz = this.vector.z, w = this.w;
     const vx = vector.x, vy = vector.y, vz = vector.z;
     const cx = uy * vz - uz * vy;
@@ -251,13 +251,13 @@ export class Quaternion {
   }
 
   /** Write this rotation into a 4×4 matrix. */
-  public toMatrix4x4(target: Matrix4x4 = new Matrix4x4()): Matrix4x4 {
+  public toMat4(target: Mat4 = new Mat4()): Mat4 {
     this.writeRotation(target.toArray());
     return target;
   }
 
   /** Write this rotation into a 4×3 matrix. */
-  public toMatrix4x3(target: Matrix4x3 = new Matrix4x3()): Matrix4x3 {
+  public toMat4x3(target: Mat4x3 = new Mat4x3()): Mat4x3 {
     this.writeRotation(target.toArray());
     return target;
   }
@@ -271,7 +271,7 @@ export class Quaternion {
   private setProduct(
     ax: number, ay: number, az: number, aw: number,
     bx: number, by: number, bz: number, bw: number
-  ): Quaternion {
+  ): Quat {
     this.vector.x = ax * bw + aw * bx + ay * bz - az * by;
     this.vector.y = ay * bw + aw * by + az * bx - ax * bz;
     this.vector.z = az * bw + aw * bz + ax * by - ay * bx;

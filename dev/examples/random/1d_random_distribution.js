@@ -19,7 +19,7 @@ window.onload = function() {
   }
 
   function addResult() {
-    var randX = Math.floor(Spock.Random.distribution(0, slice, 3));
+    var randX = Math.floor(Spock.Rand.distribution(0, slice, 3));
     results[randX]++;
   }
 

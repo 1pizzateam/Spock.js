@@ -1,5 +1,5 @@
 <script setup>
-import { Random } from '@1pizzateam/spockjs';
+import { Rand } from '@1pizzateam/spockjs';
 import DemoFrame from './DemoFrame.vue';
 import { label } from '../canvas.js';
 
@@ -7,7 +7,7 @@ const BUCKETS = 32;
 const BATCH = 24;
 const LIMIT = 6000;
 
-let generator = Random.create(1337);
+let generator = Rand.create(1337);
 let uniform = new Array(BUCKETS).fill(0);
 let bell = new Array(BUCKETS).fill(0);
 let drawn = 0;
@@ -17,7 +17,7 @@ function bucket(value) {
 }
 
 function reset() {
-  generator = Random.create(1337);
+  generator = Rand.create(1337);
   uniform = new Array(BUCKETS).fill(0);
   bell = new Array(BUCKETS).fill(0);
   drawn = 0;
@@ -56,7 +56,7 @@ function draw(context, state, theme) {
 
 <template>
   <DemoFrame :draw="draw">
-    Both histograms come from one seeded generator via <code>Random.create(1337)</code>, so the
+    Both histograms come from one seeded generator via <code>Rand.create(1337)</code>, so the
     shape is identical on every reload. <code>float()</code> is flat;
     <code>distribution()</code> averages five samples and converges toward the middle.
   </DemoFrame>

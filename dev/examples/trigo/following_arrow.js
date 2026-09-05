@@ -4,8 +4,8 @@ window.onload = function() {
   var width   = canvas.width = window.innerWidth;
   var height  = canvas.height = window.innerHeight;
 
-  var arrowPosition = new Spock.Vector2(width, height).halve();
-  var mousePosition = new Spock.Vector2();
+  var arrowPosition = new Spock.Vec2(width, height).halve();
+  var mousePosition = new Spock.Vec2();
   var angle = 0.0;
   var a = 0.0;
 
@@ -39,7 +39,7 @@ window.onload = function() {
       event.clientY
     );
     mousePosition.subtract(arrowPosition);
-    angle = Spock.Trigonometry.arctan2(mousePosition.y, mousePosition.x);
+    angle = Spock.Trigo.arctan2(mousePosition.y, mousePosition.x);
   });
 
 

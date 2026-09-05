@@ -3,12 +3,12 @@ window.onload = function() {
   var context   = canvas.getContext("2d");
   var width     = canvas.width = window.innerWidth;
   var height    = canvas.height = window.innerHeight;
-  var p0        = new Spock.Vector2(100, 500);
-  var p1        = new Spock.Vector2(200, 100);
-  var p2        = new Spock.Vector2(1000,400);
-  var pA        = new Spock.Vector2();
-  var pB        = new Spock.Vector2();
-  var pFinal    = new Spock.Vector2();
+  var p0        = new Spock.Vec2(100, 500);
+  var p1        = new Spock.Vec2(200, 100);
+  var p2        = new Spock.Vec2(1000,400);
+  var pA        = new Spock.Vec2();
+  var pB        = new Spock.Vec2();
+  var pFinal    = new Spock.Vec2();
   var t         = 0;
   var maxT      = 0;
   var step      = 0.1;
@@ -28,15 +28,15 @@ window.onload = function() {
     context.stroke();
 
     context.beginPath();
-    context.arc(p0.x, p0.y, 4, 0, Spock.Trigonometry.twopi, false);
+    context.arc(p0.x, p0.y, 4, 0, Spock.Trigo.twopi, false);
     context.fill();
 
     context.beginPath();
-    context.arc(p1.x, p1.y, 4, 0, Spock.Trigonometry.twopi, false);
+    context.arc(p1.x, p1.y, 4, 0, Spock.Trigo.twopi, false);
     context.fill();
 
     context.beginPath();
-    context.arc(p2.x, p2.y, 4, 0, Spock.Trigonometry.twopi, false);
+    context.arc(p2.x, p2.y, 4, 0, Spock.Trigo.twopi, false);
     context.fill();
 
     context.strokeStyle = "red";
@@ -59,16 +59,16 @@ window.onload = function() {
     context.stroke();
 
     context.beginPath();
-    context.arc(pA.x, pA.y, 4, 0, Spock.Trigonometry.twopi, false);
+    context.arc(pA.x, pA.y, 4, 0, Spock.Trigo.twopi, false);
     context.fill();
 
     context.beginPath();
-    context.arc(pB.x, pB.y, 4, 0, Spock.Trigonometry.twopi, false);
+    context.arc(pB.x, pB.y, 4, 0, Spock.Trigo.twopi, false);
     context.fill();
 
     context.fillStyle = "red";
     context.beginPath();
-    context.arc(pFinal.x, pFinal.y, 4, 0, Spock.Trigonometry.twopi, false);
+    context.arc(pFinal.x, pFinal.y, 4, 0, Spock.Trigo.twopi, false);
     context.fill();
     context.fillStyle = "black";
 

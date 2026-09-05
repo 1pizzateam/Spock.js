@@ -1,16 +1,16 @@
 <script setup>
-import { Vector2 } from '@1pizzateam/spockjs';
+import { Vec2 } from '@1pizzateam/spockjs';
 import DemoFrame from './DemoFrame.vue';
 import { dot, label, polyline } from '../canvas.js';
 
 const MARKERS = 12;
 
-const p0 = new Vector2();
-const p1 = new Vector2();
-const p2 = new Vector2();
-const p3 = new Vector2();
-const scratch = new Vector2();
-const tangent = new Vector2();
+const p0 = new Vec2();
+const p1 = new Vec2();
+const p2 = new Vec2();
+const p3 = new Vec2();
+const scratch = new Vec2();
+const tangent = new Vec2();
 
 function draw(context, state, theme) {
   const { width, height } = state;

@@ -1,19 +1,17 @@
 # Examples
 
-Every demo on this page runs the real library in your browser — the site imports the built
-`@1pizzateam/spockjs` bundle rather than reimplementing the maths. The complete canvas demos are
-also available in [`dev/examples`](https://github.com/1pizzateam/Spock.js/tree/main/dev/examples).
+Every demo on this page runs the library in your browser, capped at 30 fps to keep your CPU cold.
 
 ## Interpolation
 
 <LerpDemo />
 
 ```js
-import { Utils, Vector2 } from '@1pizzateam/spockjs';
+import { Utils, Vec2 } from '@1pizzateam/spockjs';
 
-const start = new Vector2(0, 20);
-const end = new Vector2(100, 80);
-const point = new Vector2().lerp(start, end, 0.35);
+const start = new Vec2(0, 20);
+const end = new Vec2(100, 80);
+const point = new Vec2().lerp(start, end, 0.35);
 
 const radius = Utils.lerp(8, 30, 0.35);
 ```
@@ -23,15 +21,15 @@ const radius = Utils.lerp(8, 30, 0.35);
 <BezierDemo />
 
 ```js
-import { Vector2 } from '@1pizzateam/spockjs';
+import { Vec2 } from '@1pizzateam/spockjs';
 
-const p0 = new Vector2(20, 200);
-const p1 = new Vector2(160, 20);
-const p2 = new Vector2(300, 200);
+const p0 = new Vec2(20, 200);
+const p1 = new Vec2(160, 20);
+const p2 = new Vec2(300, 200);
 
-const point = new Vector2().quadraticBezier(p0, p1, p2, 0.5);
-const tangent = new Vector2().quadraticBezierDerivative(p0, p1, p2, 0.5);
-const length = new Vector2().quadraticBezierLength(p0, p1, p2);
+const point = new Vec2().quadraticBezier(p0, p1, p2, 0.5);
+const tangent = new Vec2().quadraticBezierDerivative(p0, p1, p2, 0.5);
+const length = new Vec2().quadraticBezierLength(p0, p1, p2);
 ```
 
 ## Cubic Bézier
@@ -39,20 +37,20 @@ const length = new Vector2().quadraticBezierLength(p0, p1, p2);
 <CubicBezierDemo />
 
 ```js
-import { Vector2 } from '@1pizzateam/spockjs';
+import { Vec2 } from '@1pizzateam/spockjs';
 
-const p0 = new Vector2(20, 220);
-const p1 = new Vector2(90, 40);
-const p2 = new Vector2(240, 60);
-const p3 = new Vector2(320, 220);
+const p0 = new Vec2(20, 220);
+const p1 = new Vec2(90, 40);
+const p2 = new Vec2(240, 60);
+const p3 = new Vec2(320, 220);
 
-const point = new Vector2().cubicBezier(p0, p1, p2, p3, 0.5);
-const length = new Vector2().cubicBezierLength(p0, p1, p2, p3);
+const point = new Vec2().cubicBezier(p0, p1, p2, p3, 0.5);
+const length = new Vec2().cubicBezierLength(p0, p1, p2, p3);
 
 // the t that sits halfway along the curve, which is not t = 0.5
-const t = new Vector2()
+const t = new Vec2()
   .cubicBezierParameterAtLength(p0, p1, p2, p3, length * 0.5);
-const halfway = new Vector2().cubicBezier(p0, p1, p2, p3, t);
+const halfway = new Vec2().cubicBezier(p0, p1, p2, p3, t);
 ```
 
 ## 2D transform
@@ -60,26 +58,26 @@ const halfway = new Vector2().cubicBezier(p0, p1, p2, p3, t);
 <TransformDemo />
 
 ```js
-import { Matrix3x3, Vector2 } from '@1pizzateam/spockjs';
+import { Mat3, Vec2 } from '@1pizzateam/spockjs';
 
-const transform = new Matrix3x3()
-  .translate(new Vector2(100, 50))
+const transform = new Mat3()
+  .translate(new Vec2(100, 50))
   .rotate(Math.PI / 4)
-  .scale(new Vector2(2, 2));
+  .scale(new Vec2(2, 2));
 
 const buffer = transform.toArray();
 ```
 
-## Trigonometry
+## Trigo
 
-<TrigonometryDemo />
+<TrigoDemo />
 
 ```js
-import { Trigonometry } from '@1pizzateam/spockjs';
+import { Trigo } from '@1pizzateam/spockjs';
 
-const wrapped = Trigonometry.normalizeRadian(7.5);
-const y = Trigonometry.sine(wrapped);
-const heading = Trigonometry.arctan2(dy, dx);
+const wrapped = Trigo.normalizeRadian(7.5);
+const y = Trigo.sine(wrapped);
+const heading = Trigo.arctan2(dy, dx);
 ```
 
 ## Wave equations
@@ -87,13 +85,13 @@ const heading = Trigonometry.arctan2(dy, dx);
 <WaveDemo />
 
 ```js
-import { Trigonometry } from '@1pizzateam/spockjs';
+import { Trigo } from '@1pizzateam/spockjs';
 
-const slice = Trigonometry.twopi / 24;
+const slice = Trigo.twopi / 24;
 
 // amplitude * cos(period + shiftX) + shiftY
-const x = Trigonometry.cosineEquation(200, slice * i, 0, centerX);
-const y = Trigonometry.sineEquation(200, slice * i, 0, centerY);
+const x = Trigo.cosineEquation(200, slice * i, 0, centerX);
+const y = Trigo.sineEquation(200, slice * i, 0, centerY);
 ```
 
 ## Ranges and rounding
@@ -110,24 +108,24 @@ const snapped = Utils.roundToNearest(celsius, 2.5);
 
 ## Seeded random distribution
 
-<RandomDemo />
+<RandDemo />
 
 ```js
-import { Random } from '@1pizzateam/spockjs';
+import { Rand } from '@1pizzateam/spockjs';
 
-const random = Random.create(1337);
+const random = Rand.create(1337);
 const flat = random.float(0, 1);
 const centered = random.distribution(0, 1, 5);
 ```
 
 ## Random points in 2D
 
-<RandomScatterDemo />
+<RandScatterDemo />
 
 ```js
-import { Random } from '@1pizzateam/spockjs';
+import { Rand } from '@1pizzateam/spockjs';
 
-const random = Random.create(20260904);
+const random = Rand.create(20260904);
 
 for (let i = 0; i < 9000; i++) {
   const x = random.distribution(0, width, 5);
@@ -141,27 +139,27 @@ for (let i = 0; i < 9000; i++) {
 <GridDemo />
 
 ```js
-import { Circle, Grid } from '@1pizzateam/spockjs';
+import { Circ, Grid } from '@1pizzateam/spockjs';
 
 const grid = new Grid(800, 600, 32);
-const circle = new Circle(38, 400, 300).setGrid(grid);
+const circle = new Circ(38, 400, 300).setGrid(grid);
 
 circle.setPosition(120, 240);
 const occupied = circle.gridCells.filter(cell => cell !== Grid.emptyCell);
 ```
 
-## Quaternion rotation
+## Quat rotation
 
-<QuaternionDemo />
+<QuatDemo />
 
 ```js
-import { Quaternion, Vector3 } from '@1pizzateam/spockjs';
+import { Quat, Vec3 } from '@1pizzateam/spockjs';
 
-const rotation = new Quaternion()
-  .setAxisAngle(new Vector3(0.4, 1, 0.25), Math.PI / 2);
+const rotation = new Quat()
+  .setAxisAngle(new Vec3(0.4, 1, 0.25), Math.PI / 2);
 
-const target = new Vector3();
-rotation.multiplyVector(new Vector3(0, 0, 1), target);
+const target = new Vec3();
+rotation.multiplyVector(new Vec3(0, 0, 1), target);
 ```
 
 ## Distance and clamping
@@ -169,9 +167,9 @@ rotation.multiplyVector(new Vector3(0, 0, 1), target);
 <ClampDemo />
 
 ```js
-import { Rectangle, Vector2 } from '@1pizzateam/spockjs';
+import { Rect, Vec2 } from '@1pizzateam/spockjs';
 
-const bounds = new Rectangle(640, 360, 320, 180);
-const pointer = new Vector2(700, -20).clamp(bounds);
+const bounds = new Rect(640, 360, 320, 180);
+const pointer = new Vec2(700, -20).clamp(bounds);
 const distance = pointer.getDistance(bounds.position);
 ```

@@ -1,4 +1,4 @@
-import { Quaternion, Vector3 } from '@1pizzateam/spockjs';
+import { Quat, Vec3 } from '@1pizzateam/spockjs';
 
 const PHI = (1 + Math.sqrt(5)) / 2;
 const RADIUS = Math.sqrt(1 + PHI * PHI);
@@ -9,7 +9,7 @@ const CORNERS = [
   [0, 1, PHI], [0, -1, PHI], [0, 1, -PHI], [0, -1, -PHI],
   [1, PHI, 0], [-1, PHI, 0], [1, -PHI, 0], [-1, -PHI, 0],
   [PHI, 0, 1], [-PHI, 0, 1], [PHI, 0, -1], [-PHI, 0, -1],
-].map(([x, y, z]) => new Vector3(x / RADIUS, y / RADIUS, z / RADIUS));
+].map(([x, y, z]) => new Vec3(x / RADIUS, y / RADIUS, z / RADIUS));
 
 // every corner pair one edge length apart, which is the shortest distance on the solid
 const EDGE_LENGTH = 2 / RADIUS;
@@ -19,15 +19,15 @@ for (let a = 0; a < CORNERS.length; a++)
     if (Math.abs(CORNERS[a].getDistance(CORNERS[b]) - EDGE_LENGTH) < 0.001)
       EDGES.push([a, b]);
 
-const SPIN_AXIS = new Vector3(0, 1, 0);
+const SPIN_AXIS = new Vec3(0, 1, 0);
 const SPEED = 0.4;
 
 // a fixed lean so the solid is never seen straight on, applied once
-const TILT = new Quaternion().setAxisAngle(new Vector3(1, 0, 0), 0.34);
+const TILT = new Quat().setAxisAngle(new Vec3(1, 0, 0), 0.34);
 
-const spin = new Quaternion();
-const orientation = new Quaternion();
-const rotated = new Vector3();
+const spin = new Quat();
+const orientation = new Quat();
+const rotated = new Vec3();
 
 function reducedMotion() {
   return typeof window !== 'undefined'

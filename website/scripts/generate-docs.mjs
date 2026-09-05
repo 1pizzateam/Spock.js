@@ -10,18 +10,18 @@ const docsRoot = path.resolve(root, 'website/docs/api');
 const legacyTree = JSON.parse(fs.readFileSync(path.join(legacyRoot, 'web/tree.json'), 'utf8'));
 
 const modules = [
-  ['Vector2', 'vectors/vector2.ts', 'vector2.md'],
-  ['Vector3', 'vectors/vector3.ts', 'vector3.md'],
-  ['Matrix3x3', 'matrices/matrix3x3.ts', 'matrix3x3.md'],
-  ['Matrix4x3', 'matrices/matrix4x3.ts', 'matrix4x3.md'],
-  ['Matrix4x4', 'matrices/matrix4x4.ts', 'matrix4x4.md'],
-  ['Quaternion', 'quaternion.ts', 'quaternion.md'],
-  ['Circle', 'geometry/circle.ts', 'circle.md'],
-  ['Rectangle', 'geometry/rectangle.ts', 'rectangle.md'],
+  ['Vec2', 'vectors/vec2.ts', 'vec2.md'],
+  ['Vec3', 'vectors/vec3.ts', 'vec3.md'],
+  ['Mat3', 'matrices/mat3.ts', 'mat3.md'],
+  ['Mat4x3', 'matrices/mat4x3.ts', 'mat4x3.md'],
+  ['Mat4', 'matrices/mat4.ts', 'mat4.md'],
+  ['Quat', 'quat.ts', 'quat.md'],
+  ['Circ', 'geometry/circ.ts', 'circ.md'],
+  ['Rect', 'geometry/rect.ts', 'rect.md'],
   ['Grid', 'geometry/grid.ts', 'grid.md'],
-  ['Trigonometry', 'trigonometry.ts', 'trigonometry.md'],
+  ['Trigo', 'trigo.ts', 'trigo.md'],
   ['Bezier', 'bezier.ts', 'bezier.md'],
-  ['Random', 'random.ts', 'random.md'],
+  ['Rand', 'rand.ts', 'rand.md'],
   ['NumArray', 'array.ts', 'num-array.md'],
   ['Utils', 'utils.ts', 'utils.md'],
   ['Time', 'time.ts', 'time.md'],
@@ -32,7 +32,7 @@ const aliases = {
 };
 
 const callableAliases = {
-  Random: {
+  Rand: {
     float: { params: [['min', 'number'], ['max', 'number']], returns: 'number' },
     integer: { params: [['min', 'number'], ['max', 'number']], returns: 'number' },
     distribution: { params: [['min', 'number'], ['max', 'number'], ['iterations', 'number']], returns: 'number' },
@@ -48,9 +48,9 @@ const callableAliases = {
 };
 
 const returnOverrides = {
-  'Circle.setRadius': 'this',
-  'Circle.setDiameter': 'this',
-  'Random.create': '{ float(min, max): number; integer(min, max): number; distribution(min, max, iterations): number; pick(value1, value2): number }',
+  'Circ.setRadius': 'this',
+  'Circ.setDiameter': 'this',
+  'Rand.create': '{ float(min, max): number; integer(min, max): number; distribution(min, max, iterations): number; pick(value1, value2): number }',
 };
 
 const legacy = new Map();
@@ -185,17 +185,17 @@ function valueFor(type, name) {
     aspect: '16 / 9',
   };
   if (clean === 'number' && namedValues[name]) return namedValues[name];
-  if (clean.includes('Vector2')) return 'new Vector2(1, 2)';
-  if (clean.includes('Vector3')) return 'new Vector3(1, 2, 3)';
-  if (clean.includes('Rectangle')) return 'new Rectangle(10, 10, 0, 0)';
+  if (clean.includes('Vec2')) return 'new Vec2(1, 2)';
+  if (clean.includes('Vec3')) return 'new Vec3(1, 2, 3)';
+  if (clean.includes('Rect')) return 'new Rect(10, 10, 0, 0)';
   if (clean.includes('Grid')) return 'new Grid(100, 100, 10)';
-  if (clean.includes('Matrix3x3')) return 'new Matrix3x3()';
-  if (clean.includes('Matrix4x3')) return 'new Matrix4x3()';
-  if (clean.includes('Matrix4x4')) return 'new Matrix4x4()';
-  if (clean.includes('Quaternion')) return 'new Quaternion()';
+  if (clean.includes('Mat3')) return 'new Mat3()';
+  if (clean.includes('Mat4x3')) return 'new Mat4x3()';
+  if (clean.includes('Mat4')) return 'new Mat4()';
+  if (clean.includes('Quat')) return 'new Quat()';
   if (clean.includes('Float32Array')) return 'new Float32Array(16)';
   if (clean.includes('number[]')) return '[1, 2, 3]';
-  if (clean.includes('Vector2[]') || clean.includes('Vector3[]')) return '[]';
+  if (clean.includes('Vec2[]') || clean.includes('Vec3[]')) return '[]';
   if (clean.includes("'x' | 'y'")) return "'x'";
   if (clean.includes('CanvasRenderingContext2D')) return 'context';
   if (clean === 'string') return name.toLowerCase().includes('color') ? "'#5b8cff'" : "'value'";
@@ -211,7 +211,7 @@ function valueFor(type, name) {
 function fallbackUsage(exportName, entry) {
   const imports = new Set([exportName]);
   for (const param of entry.params) {
-    for (const type of ['Vector2', 'Vector3', 'Rectangle', 'Grid', 'Matrix3x3', 'Matrix4x3', 'Matrix4x4', 'Quaternion']) {
+    for (const type of ['Vec2', 'Vec3', 'Circ', 'Rect', 'Grid', 'Mat3', 'Mat4x3', 'Mat4', 'Quat']) {
       if (param.type.includes(type)) imports.add(type);
     }
   }
@@ -221,10 +221,10 @@ function fallbackUsage(exportName, entry) {
     return `${importLine}\n\nconst value = new ${exportName}(${args.join(', ')});`;
   }
   const args = entry.params.map(p => valueFor(p.type, p.name));
-  const objectStyle = ['Trigonometry', 'Bezier', 'Random', 'NumArray', 'Utils', 'Time'].includes(exportName);
+  const objectStyle = ['Trigo', 'Bezier', 'Rand', 'NumArray', 'Utils', 'Time'].includes(exportName);
   const constructors = {
-    Circle: 'new Circle(10, 0, 0)',
-    Rectangle: 'new Rectangle(20, 10, 0, 0)',
+    Circ: 'new Circ(10, 0, 0)',
+    Rect: 'new Rect(20, 10, 0, 0)',
     Grid: 'new Grid(100, 100, 10)',
   };
   const receiver = objectStyle ? exportName : (constructors[exportName] ?? `new ${exportName}()`);

@@ -1,13 +1,13 @@
-# Rectangle
+# Rect
 
-Import with `import { Rectangle } from '@1pizzateam/spockjs';`.
+Import with `import { Rect } from '@1pizzateam/spockjs';`.
 
 ## Constructor
 
-Rectangle of width × height centered at (positionX, positionY).
+Rect of width × height centered at (positionX, positionY).
 
 ```ts
-new Rectangle(width: number, height: number, positionX: number, positionY: number)
+new Rect(width: number, height: number, positionX: number, positionY: number)
 ```
 
 ### Parameters
@@ -19,22 +19,22 @@ new Rectangle(width: number, height: number, positionX: number, positionY: numbe
 
 ### Returns
 
-`Rectangle`
+`Rect`
 
 ### Example
 
 ```js
-import { Rectangle } from '@1pizzateam/spockjs';
+import { Rect } from '@1pizzateam/spockjs';
 
-const value = new Rectangle(100, 100, 1, 1);
+const value = new Rect(100, 100, 1, 1);
 ```
 
-## Rectangle.clone()
+## Rect.clone()
 
 Copy with the same grid.
 
 ```ts
-clone(): Rectangle
+clone(): Rect
 ```
 
 ### Parameters
@@ -43,48 +43,48 @@ None.
 
 ### Returns
 
-`Rectangle` — the new rectangle
+`Rect` — the new rectangle
 
 ### Example
 
 ```js
-import { Rectangle } from '@1pizzateam/spockjs';
+import { Rect } from '@1pizzateam/spockjs';
 
 
-const result = new Rectangle(20, 10, 0, 0).clone();
+const result = new Rect(20, 10, 0, 0).clone();
 ```
 
-## Rectangle.copy()
+## Rect.copy()
 
 Copy size, position, and grid from another rectangle.
 
 ```ts
-copy(rectangle: Rectangle): Rectangle
+copy(rect: Rect): Rect
 ```
 
 ### Parameters
 
-- `rectangle` — `Rectangle`.
+- `rect` — `Rect`.
 
 ### Returns
 
-`Rectangle` — the rectangle with its new values
+`Rect` — the rectangle with its new values
 
 ### Example
 
 ```js
-import { Rectangle } from '@1pizzateam/spockjs';
+import { Rect } from '@1pizzateam/spockjs';
 
 
-const result = new Rectangle(20, 10, 0, 0).copy(new Rectangle(10, 10, 0, 0));
+const result = new Rect(20, 10, 0, 0).copy(new Rect(10, 10, 0, 0));
 ```
 
-## Rectangle.setGrid()
+## Rect.setGrid()
 
 Attach a grid for occupancy, or clear it.
 
 ```ts
-setGrid(grid: Grid | null): Rectangle
+setGrid(grid: Grid | null): Rect
 ```
 
 ### Parameters
@@ -93,23 +93,23 @@ setGrid(grid: Grid | null): Rectangle
 
 ### Returns
 
-`Rectangle`
+`Rect`
 
 ### Example
 
 ```js
-import { Rectangle, Grid } from '@1pizzateam/spockjs';
+import { Rect, Grid } from '@1pizzateam/spockjs';
 
 
-const result = new Rectangle(20, 10, 0, 0).setGrid(new Grid(100, 100, 10));
+const result = new Rect(20, 10, 0, 0).setGrid(new Grid(100, 100, 10));
 ```
 
-## Rectangle.setPosition()
+## Rect.setPosition()
 
 Move the center and refresh corners and occupancy.
 
 ```ts
-setPosition(positionX: number, positionY: number): Rectangle
+setPosition(positionX: number, positionY: number): Rect
 ```
 
 ### Parameters
@@ -119,23 +119,23 @@ setPosition(positionX: number, positionY: number): Rectangle
 
 ### Returns
 
-`Rectangle` — the rectangle with its new values
+`Rect` — the rectangle with its new values
 
 ### Example
 
 ```js
-import { Rectangle } from '@1pizzateam/spockjs';
+import { Rect } from '@1pizzateam/spockjs';
 
 
-const result = new Rectangle(20, 10, 0, 0).setPosition(1, 1);
+const result = new Rect(20, 10, 0, 0).setPosition(1, 1);
 ```
 
-## Rectangle.setSize()
+## Rect.setSize()
 
 Resize and refresh corners and occupancy.
 
 ```ts
-setSize(width: number, height: number): Rectangle
+setSize(width: number, height: number): Rect
 ```
 
 ### Parameters
@@ -145,28 +145,28 @@ setSize(width: number, height: number): Rectangle
 
 ### Returns
 
-`Rectangle` — the rectangle with its new values
+`Rect` — the rectangle with its new values
 
 ### Example
 
 ```js
-import { Rectangle } from '@1pizzateam/spockjs';
+import { Rect } from '@1pizzateam/spockjs';
 
 
-const result = new Rectangle(20, 10, 0, 0).setSize(100, 100);
+const result = new Rect(20, 10, 0, 0).setSize(100, 100);
 ```
 
-## Rectangle.isIn()
+## Rect.isIn()
 
 True if the point lies inside or on the rectangle.
 
 ```ts
-isIn(vector: Vector2): boolean
+isIn(vector: Vec2): boolean
 ```
 
 ### Parameters
 
-- `vector` — `Vector2`.
+- `vector` — `Vec2`.
 
 ### Returns
 
@@ -175,13 +175,13 @@ isIn(vector: Vector2): boolean
 ### Example
 
 ```js
-import { Rectangle, Vector2 } from '@1pizzateam/spockjs';
+import { Rect, Vec2 } from '@1pizzateam/spockjs';
 
 
-const result = new Rectangle(20, 10, 0, 0).isIn(new Vector2(1, 2));
+const result = new Rect(20, 10, 0, 0).isIn(new Vec2(1, 2));
 ```
 
-## Rectangle.draw()
+## Rect.draw()
 
 Draw the rectangle on a canvas.
 
@@ -203,10 +203,10 @@ draw(context: CanvasRenderingContext2D, fillColor: string, strokeColor: string, 
 ### Example
 
 ```js
-import { Rectangle } from '@1pizzateam/spockjs';
+import { Rect } from '@1pizzateam/spockjs';
 
 const context = document.querySelector('canvas').getContext('2d');
 
-const result = new Rectangle(20, 10, 0, 0).draw(context, '#5b8cff', '#5b8cff', 1);
+const result = new Rect(20, 10, 0, 0).draw(context, '#5b8cff', '#5b8cff', 1);
 ```
 

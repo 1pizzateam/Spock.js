@@ -1,11 +1,11 @@
 <script setup>
-import { Matrix3x3, Trigonometry, Vector2 } from '@1pizzateam/spockjs';
+import { Mat3, Trigo, Vec2 } from '@1pizzateam/spockjs';
 import DemoFrame from './DemoFrame.vue';
 import { dot, label, polyline } from '../canvas.js';
 
-const matrix = new Matrix3x3();
-const translation = new Vector2();
-const scaling = new Vector2();
+const matrix = new Mat3();
+const translation = new Vec2();
+const scaling = new Vec2();
 const corners = [[-40, -40], [40, -40], [40, 40], [-40, 40]];
 
 /** Apply the row-major affine matrix to a local point. */
@@ -39,7 +39,7 @@ function draw(context, state, theme) {
 
   label(
     context,
-    `rotate ${Math.round(Trigonometry.radianToDegree(angle) % 360)}°   scale ${scale.toFixed(2)}`,
+    `rotate ${Math.round(Trigo.radianToDegree(angle) % 360)}°   scale ${scale.toFixed(2)}`,
     theme.text
   );
 }
@@ -47,7 +47,7 @@ function draw(context, state, theme) {
 
 <template>
   <DemoFrame :draw="draw">
-    One <code>Matrix3x3</code> composed each frame with <code>translate()</code>,
+    One <code>Mat3</code> composed each frame with <code>translate()</code>,
     <code>rotate()</code>, and <code>scale()</code>. The orange and green arms are the
     transformed local X and Y axes read from <code>toArray()</code>.
   </DemoFrame>

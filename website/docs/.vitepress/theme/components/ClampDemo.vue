@@ -1,11 +1,11 @@
 <script setup>
-import { Circle, Rectangle, Vector2 } from '@1pizzateam/spockjs';
+import { Circ, Rect, Vec2 } from '@1pizzateam/spockjs';
 import DemoFrame from './DemoFrame.vue';
 import { dot, label, polyline } from '../canvas.js';
 
 const RADIUS = 22;
-const pointer = new Vector2();
-const clamped = new Vector2();
+const pointer = new Vec2();
+const clamped = new Vec2();
 let bounds = null;
 let inner = null;
 let circle = null;
@@ -16,14 +16,14 @@ function draw(context, state, theme) {
   if (state.width !== width || state.height !== height) {
     width = state.width;
     height = state.height;
-    bounds = new Rectangle(width * 0.58, height * 0.58, width * 0.5, height * 0.54);
-    inner = new Rectangle(
+    bounds = new Rect(width * 0.58, height * 0.58, width * 0.5, height * 0.54);
+    inner = new Rect(
       bounds.size.x - RADIUS * 2,
       bounds.size.y - RADIUS * 2,
       bounds.position.x,
       bounds.position.y
     );
-    circle = new Circle(RADIUS, bounds.position.x, bounds.position.y);
+    circle = new Circ(RADIUS, bounds.position.x, bounds.position.y);
   }
   if (!bounds) return;
 
@@ -68,7 +68,7 @@ function draw(context, state, theme) {
 <template>
   <DemoFrame :draw="draw">
     Move the pointer around the rectangle. The ghost is the unconstrained point; the filled
-    circle is that same <code>Vector2</code> after <code>clamp()</code> against the inner box,
+    circle is that same <code>Vec2</code> after <code>clamp()</code> against the inner box,
     so the disc never crosses the outer edge. The caption is
     <code>getDistance()</code> from the pointer to the rectangle centre.
   </DemoFrame>

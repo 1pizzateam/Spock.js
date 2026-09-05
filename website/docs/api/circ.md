@@ -1,13 +1,13 @@
-# Circle
+# Circ
 
-Import with `import { Circle } from '@1pizzateam/spockjs';`.
+Import with `import { Circ } from '@1pizzateam/spockjs';`.
 
 ## Constructor
 
-Circle of radius at (positionX, positionY). Occupancy is opt-in via setGrid().
+Circ of radius at (positionX, positionY). Occupancy is opt-in via setGrid().
 
 ```ts
-new Circle(radius: number, positionX: number, positionY: number)
+new Circ(radius: number, positionX: number, positionY: number)
 ```
 
 ### Parameters
@@ -18,22 +18,22 @@ new Circle(radius: number, positionX: number, positionY: number)
 
 ### Returns
 
-`Circle`
+`Circ`
 
 ### Example
 
 ```js
-import { Circle } from '@1pizzateam/spockjs';
+import { Circ } from '@1pizzateam/spockjs';
 
-const value = new Circle(10, 1, 1);
+const value = new Circ(10, 1, 1);
 ```
 
-## Circle.clone()
+## Circ.clone()
 
 Copy with the same grid.
 
 ```ts
-clone(): Circle
+clone(): Circ
 ```
 
 ### Parameters
@@ -42,48 +42,48 @@ None.
 
 ### Returns
 
-`Circle` — the new circle
+`Circ` — the new circle
 
 ### Example
 
 ```js
-import { Circle } from '@1pizzateam/spockjs';
+import { Circ } from '@1pizzateam/spockjs';
 
 
-const result = new Circle(10, 0, 0).clone();
+const result = new Circ(10, 0, 0).clone();
 ```
 
-## Circle.copy()
+## Circ.copy()
 
 Copy size, position, and grid from another circle.
 
 ```ts
-copy(circle: Circle): Circle
+copy(circ: Circ): Circ
 ```
 
 ### Parameters
 
-- `circle` — `Circle`.
+- `circ` — `Circ`.
 
 ### Returns
 
-`Circle` — the Circle with its new values
+`Circ` — the Circ with its new values
 
 ### Example
 
 ```js
-import { Circle } from '@1pizzateam/spockjs';
+import { Circ } from '@1pizzateam/spockjs';
 
 
-const result = new Circle(10, 0, 0).copy(undefined);
+const result = new Circ(10, 0, 0).copy(undefined);
 ```
 
-## Circle.setGrid()
+## Circ.setGrid()
 
 Attach a grid for occupancy, or clear it.
 
 ```ts
-setGrid(grid: Grid | null): Circle
+setGrid(grid: Grid | null): Circ
 ```
 
 ### Parameters
@@ -92,23 +92,23 @@ setGrid(grid: Grid | null): Circle
 
 ### Returns
 
-`Circle`
+`Circ`
 
 ### Example
 
 ```js
-import { Circle, Grid } from '@1pizzateam/spockjs';
+import { Circ, Grid } from '@1pizzateam/spockjs';
 
 
-const result = new Circle(10, 0, 0).setGrid(new Grid(100, 100, 10));
+const result = new Circ(10, 0, 0).setGrid(new Grid(100, 100, 10));
 ```
 
-## Circle.setPosition()
+## Circ.setPosition()
 
 Move the center and refresh occupancy.
 
 ```ts
-setPosition(positionX: number, positionY: number): Circle
+setPosition(positionX: number, positionY: number): Circ
 ```
 
 ### Parameters
@@ -118,18 +118,18 @@ setPosition(positionX: number, positionY: number): Circle
 
 ### Returns
 
-`Circle` — the Circle with its new values
+`Circ` — the Circ with its new values
 
 ### Example
 
 ```js
-import { Circle } from '@1pizzateam/spockjs';
+import { Circ } from '@1pizzateam/spockjs';
 
 
-const result = new Circle(10, 0, 0).setPosition(1, 1);
+const result = new Circ(10, 0, 0).setPosition(1, 1);
 ```
 
-## Circle.setRadius()
+## Circ.setRadius()
 
 Set radius.
 
@@ -143,18 +143,18 @@ setRadius(radius: number): this
 
 ### Returns
 
-`this` — the Circle with its new values
+`this` — the Circ with its new values
 
 ### Example
 
 ```js
-import { Circle } from '@1pizzateam/spockjs';
+import { Circ } from '@1pizzateam/spockjs';
 
 
-const result = new Circle(10, 0, 0).setRadius(10);
+const result = new Circ(10, 0, 0).setRadius(10);
 ```
 
-## Circle.setDiameter()
+## Circ.setDiameter()
 
 Set diameter.
 
@@ -168,23 +168,23 @@ setDiameter(diameter: number): this
 
 ### Returns
 
-`this` — the Circle with its new values
+`this` — the Circ with its new values
 
 ### Example
 
 ```js
-import { Circle } from '@1pizzateam/spockjs';
+import { Circ } from '@1pizzateam/spockjs';
 
 
-const result = new Circle(10, 0, 0).setDiameter(20);
+const result = new Circ(10, 0, 0).setDiameter(20);
 ```
 
-## Circle.scale()
+## Circ.scale()
 
 Multiply radius by scalar.
 
 ```ts
-scale(scalar: number): Circle
+scale(scalar: number): Circ
 ```
 
 ### Parameters
@@ -193,28 +193,28 @@ scale(scalar: number): Circle
 
 ### Returns
 
-`Circle` — the Circle with its new values
+`Circ` — the Circ with its new values
 
 ### Example
 
 ```js
-import { Circle } from '@1pizzateam/spockjs';
+import { Circ } from '@1pizzateam/spockjs';
 
 
-const result = new Circle(10, 0, 0).scale(1);
+const result = new Circ(10, 0, 0).scale(1);
 ```
 
-## Circle.isIn()
+## Circ.isIn()
 
 True if the point lies inside or on the circle.
 
 ```ts
-isIn(v: Vector2): boolean
+isIn(v: Vec2): boolean
 ```
 
 ### Parameters
 
-- `v` — `Vector2`.
+- `v` — `Vec2`.
 
 ### Returns
 
@@ -223,13 +223,13 @@ isIn(v: Vector2): boolean
 ### Example
 
 ```js
-import { Circle, Vector2 } from '@1pizzateam/spockjs';
+import { Circ, Vec2 } from '@1pizzateam/spockjs';
 
 
-const result = new Circle(10, 0, 0).isIn(new Vector2(1, 2));
+const result = new Circ(10, 0, 0).isIn(new Vec2(1, 2));
 ```
 
-## Circle.draw()
+## Circ.draw()
 
 Draw the circle on a canvas.
 
@@ -251,10 +251,10 @@ draw(context: CanvasRenderingContext2D, fillColor: string, strokeColor: string, 
 ### Example
 
 ```js
-import { Circle } from '@1pizzateam/spockjs';
+import { Circ } from '@1pizzateam/spockjs';
 
 const context = document.querySelector('canvas').getContext('2d');
 
-const result = new Circle(10, 0, 0).draw(context, '#5b8cff', '#5b8cff', 1);
+const result = new Circ(10, 0, 0).draw(context, '#5b8cff', '#5b8cff', 1);
 ```
 

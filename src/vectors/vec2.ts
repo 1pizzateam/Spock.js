@@ -1,10 +1,10 @@
-import { Trigonometry, applySineCosine } from '../trigonometry';
+import { Trigo, applySineCosine } from '../trigo';
 import { Bezier, sampleCurveLength, sampleCurveParameterAtLength } from '../bezier';
-import type { Rectangle } from '../geometry/rectangle';
+import type { Rect } from '../geometry/rect';
 import { Utils } from '../utils';
 
 /** Mutable 2D vector. */
-export class Vector2 {
+export class Vec2 {
   public x: number;
   public y: number;
 
@@ -15,21 +15,21 @@ export class Vector2 {
   }
 
   /** Set x and/or y; omitted axes are unchanged. */
-  public setScalar(x?: number | null, y?: number | null): Vector2 {
+  public setScalar(x?: number | null, y?: number | null): Vec2 {
     this.x = x ?? this.x;
     this.y = y ?? this.y;
     return this;
   }
 
   /** Set x, y from array at offset. */
-  public setArray(array: number[], offset: number = 0): Vector2 {
+  public setArray(array: number[], offset: number = 0): Vec2 {
     this.x = array[offset] ?? this.x;
     this.y = array[offset + 1] ?? this.y;
     return this;
   }
 
   /** Copy another vector into this one. */
-  public copy(vector: Vector2): Vector2 {
+  public copy(vector: Vec2): Vec2 {
     this.x = vector.x;
     this.y = vector.y;
     return this;
@@ -46,7 +46,7 @@ export class Vector2 {
   }
 
   /** True if both components match the other vector. */
-  public equals(vector: Vector2): boolean {
+  public equals(vector: Vec2): boolean {
     return this.x === vector.x && this.y === vector.y;
   }
 
@@ -69,7 +69,7 @@ export class Vector2 {
   }
 
   /** Set both components to 0. */
-  public origin(): Vector2 {
+  public origin(): Vec2 {
     this.x = 0;
     this.y = 0;
     return this;
@@ -82,7 +82,7 @@ export class Vector2 {
   }
 
   /** Distance to vector; squared if square is true. */
-  public getDistance(vector: Vector2, square: boolean = false): number {
+  public getDistance(vector: Vec2, square: boolean = false): number {
     const dx = this.x - vector.x;
     const dy = this.y - vector.y;
     const squared = dx * dx + dy * dy;
@@ -90,21 +90,21 @@ export class Vector2 {
   }
 
   /** Add vector in place. */
-  public add(vector: Vector2): Vector2 {
+  public add(vector: Vec2): Vec2 {
     this.x += vector.x;
     this.y += vector.y;
     return this;
   }
 
   /** Add vector scaled by scalar. */
-  public addScaledVector(vector: Vector2, scalar: number): Vector2 {
+  public addScaledVector(vector: Vec2, scalar: number): Vec2 {
     this.x += vector.x * scalar;
     this.y += vector.y * scalar;
     return this;
   }
 
   /** Add scalar to both components. */
-  public addScalar(scalar: number): Vector2 {
+  public addScalar(scalar: number): Vec2 {
     this.x += scalar;
     this.y += scalar;
     return this;
@@ -116,42 +116,42 @@ export class Vector2 {
   }
 
   /** Subtract vector in place. */
-  public subtract(vector: Vector2): Vector2 {
+  public subtract(vector: Vec2): Vec2 {
     this.x -= vector.x;
     this.y -= vector.y;
     return this;
   }
 
   /** Subtract vector scaled by scalar. */
-  public subtractScaledVector(vector: Vector2, scalar: number): Vector2 {
+  public subtractScaledVector(vector: Vec2, scalar: number): Vec2 {
     this.x -= vector.x * scalar;
     this.y -= vector.y * scalar;
     return this;
   }
 
   /** Subtract scalar from both components. */
-  public subtractScalar(scalar: number): Vector2 {
+  public subtractScalar(scalar: number): Vec2 {
     this.x -= scalar;
     this.y -= scalar;
     return this;
   }
 
   /** Component-wise multiply. */
-  public multiply(vector: Vector2): Vector2 {
+  public multiply(vector: Vec2): Vec2 {
     this.x *= vector.x;
     this.y *= vector.y;
     return this;
   }
 
   /** Component-wise multiply by vector * scalar. */
-  public multiplyScaledVector(vector: Vector2, scalar: number): Vector2 {
+  public multiplyScaledVector(vector: Vec2, scalar: number): Vec2 {
     this.x *= vector.x * scalar;
     this.y *= vector.y * scalar;
     return this;
   }
 
   /** Multiply by scalar, optionally on one axis. */
-  public scale(scalar: number, axis?: 'x' | 'y'): Vector2 {
+  public scale(scalar: number, axis?: 'x' | 'y'): Vec2 {
     if (!axis) {
       this.x *= scalar;
       this.y *= scalar;
@@ -165,63 +165,63 @@ export class Vector2 {
   }
 
   /** Component-wise divide. */
-  public divide(vector: Vector2): Vector2 {
+  public divide(vector: Vec2): Vec2 {
     this.x /= vector.x;
     this.y /= vector.y;
     return this;
   }
 
   /** Component-wise divide by vector * scalar. */
-  public divideScaledVector(vector: Vector2, scalar: number): Vector2 {
+  public divideScaledVector(vector: Vec2, scalar: number): Vec2 {
     this.x /= vector.x * scalar;
     this.y /= vector.y * scalar;
     return this;
   }
 
   /** Divide both components by scalar. */
-  public divideScalar(scalar: number): Vector2 {
+  public divideScalar(scalar: number): Vec2 {
     this.x /= scalar;
     this.y /= scalar;
     return this;
   }
 
   /** Scale by 1/2. */
-  public halve(): Vector2 {
+  public halve(): Vec2 {
     this.x *= 0.5;
     this.y *= 0.5;
     return this;
   }
 
   /** Component-wise maximum with vector. */
-  public max(vector: Vector2): Vector2 {
+  public max(vector: Vec2): Vec2 {
     this.x = Math.max(this.x, vector.x);
     this.y = Math.max(this.y, vector.y);
     return this;
   }
 
   /** Component-wise minimum with vector. */
-  public min(vector: Vector2): Vector2 {
+  public min(vector: Vec2): Vec2 {
     this.x = Math.min(this.x, vector.x);
     this.y = Math.min(this.y, vector.y);
     return this;
   }
 
   /** Raise each component to at least scalar. */
-  public maxScalar(scalar: number): Vector2 {
+  public maxScalar(scalar: number): Vec2 {
     this.x = Math.max(this.x, scalar);
     this.y = Math.max(this.y, scalar);
     return this;
   }
 
   /** Lower each component to at most scalar. */
-  public minScalar(scalar: number): Vector2 {
+  public minScalar(scalar: number): Vec2 {
     this.x = Math.min(this.x, scalar);
     this.y = Math.min(this.y, scalar);
     return this;
   }
 
   /** Scale to unit length. */
-  public normalize(): Vector2 {
+  public normalize(): Vec2 {
     const length = Math.sqrt(this.x * this.x + this.y * this.y);
     if (length && length !== 1) {
       const inv = 1 / length;
@@ -232,7 +232,7 @@ export class Vector2 {
   }
 
   /** Absolute value, optionally on one axis. */
-  public absolute(axis?: 'x' | 'y'): Vector2 {
+  public absolute(axis?: 'x' | 'y'): Vec2 {
     if (!axis) {
       this.x = Math.abs(this.x);
       this.y = Math.abs(this.y);
@@ -246,7 +246,7 @@ export class Vector2 {
   }
 
   /** Negate, optionally on one axis. */
-  public opposite(axis?: 'x' | 'y'): Vector2 {
+  public opposite(axis?: 'x' | 'y'): Vec2 {
     if (!axis) {
       this.x = -this.x;
       this.y = -this.y;
@@ -260,7 +260,7 @@ export class Vector2 {
   }
 
   /** Floor, optionally on one axis. */
-  public floor(axis?: 'x' | 'y'): Vector2 {
+  public floor(axis?: 'x' | 'y'): Vec2 {
     if (!axis) {
       this.x = Math.floor(this.x);
       this.y = Math.floor(this.y);
@@ -274,7 +274,7 @@ export class Vector2 {
   }
 
   /** Ceil, optionally on one axis. */
-  public ceil(axis?: 'x' | 'y'): Vector2 {
+  public ceil(axis?: 'x' | 'y'): Vec2 {
     if (!axis) {
       this.x = Math.ceil(this.x);
       this.y = Math.ceil(this.y);
@@ -288,23 +288,23 @@ export class Vector2 {
   }
 
   /** Dot product with vector. */
-  public dotProduct(vector: Vector2): number {
+  public dotProduct(vector: Vec2): number {
     return this.x * vector.x + this.y * vector.y;
   }
 
   /** Keep length; set heading in radians. */
-  public setRadian(angle: number): Vector2 {
+  public setRadian(angle: number): Vec2 {
     applySineCosine(this, angle, Math.sqrt(this.x * this.x + this.y * this.y));
     return this;
   }
 
   /** Keep length; set heading in degrees. */
-  public setDegree(angle: number): Vector2 {
-    return this.setRadian(Trigonometry.degreeToRadian(angle));
+  public setDegree(angle: number): Vec2 {
+    return this.setRadian(Trigo.degreeToRadian(angle));
   }
 
   /** Set the smaller component to scalar. */
-  public setMinAxis(scalar: number): Vector2 {
+  public setMinAxis(scalar: number): Vec2 {
     if (this.y < this.x)
       this.y = scalar;
     else
@@ -313,7 +313,7 @@ export class Vector2 {
   }
 
   /** Set the larger component to scalar. */
-  public setMaxAxis(scalar: number): Vector2 {
+  public setMaxAxis(scalar: number): Vec2 {
     if (this.y > this.x)
       this.y = scalar;
     else
@@ -322,7 +322,7 @@ export class Vector2 {
   }
 
   /** Set the other axis to value. */
-  public setOppositeAxis(axis: 'x' | 'y', value: number): Vector2 {
+  public setOppositeAxis(axis: 'x' | 'y', value: number): Vec2 {
     if (axis === 'y')
       this.x = value;
     else
@@ -331,45 +331,45 @@ export class Vector2 {
   }
 
   /** Independent copy. */
-  public clone(): Vector2 {
-    return new Vector2(this.x, this.y);
+  public clone(): Vec2 {
+    return new Vec2(this.x, this.y);
   }
 
   /** Heading in radians, or false at the origin. */
   public getAngle(): number | false {
-    return Trigonometry.arctan2(this.y, this.x);
+    return Trigo.arctan2(this.y, this.x);
   }
 
   /** Evaluate a quadratic Bézier at t into this vector. */
-  public quadraticBezier(p0: Vector2, p1: Vector2, p2: Vector2, t: number): Vector2 {
+  public quadraticBezier(p0: Vec2, p1: Vec2, p2: Vec2, t: number): Vec2 {
     this.x = Bezier.quadratic(p0.x, p1.x, p2.x, t);
     this.y = Bezier.quadratic(p0.y, p1.y, p2.y, t);
     return this;
   }
 
   /** Evaluate a cubic Bézier at t into this vector. */
-  public cubicBezier(p0: Vector2, p1: Vector2, p2: Vector2, p3: Vector2, t: number): Vector2 {
+  public cubicBezier(p0: Vec2, p1: Vec2, p2: Vec2, p3: Vec2, t: number): Vec2 {
     this.x = Bezier.cubic(p0.x, p1.x, p2.x, p3.x, t);
     this.y = Bezier.cubic(p0.y, p1.y, p2.y, p3.y, t);
     return this;
   }
 
   /** Quadratic Bézier tangent at t. */
-  public quadraticBezierDerivative(p0: Vector2, p1: Vector2, p2: Vector2, t: number): Vector2 {
+  public quadraticBezierDerivative(p0: Vec2, p1: Vec2, p2: Vec2, t: number): Vec2 {
     this.x = Bezier.quadraticDerivative(p0.x, p1.x, p2.x, t);
     this.y = Bezier.quadraticDerivative(p0.y, p1.y, p2.y, t);
     return this;
   }
 
   /** Cubic Bézier tangent at t. */
-  public cubicBezierDerivative(p0: Vector2, p1: Vector2, p2: Vector2, p3: Vector2, t: number): Vector2 {
+  public cubicBezierDerivative(p0: Vec2, p1: Vec2, p2: Vec2, p3: Vec2, t: number): Vec2 {
     this.x = Bezier.cubicDerivative(p0.x, p1.x, p2.x, p3.x, t);
     this.y = Bezier.cubicDerivative(p0.y, p1.y, p2.y, p3.y, t);
     return this;
   }
 
   /** Split a quadratic at t into left and right. */
-  public quadraticBezierSplit(p0: Vector2, p1: Vector2, p2: Vector2, t: number, left: Vector2[], right: Vector2[]): void {
+  public quadraticBezierSplit(p0: Vec2, p1: Vec2, p2: Vec2, t: number, left: Vec2[], right: Vec2[]): void {
     const lx: number[] = [];
     const ly: number[] = [];
     const rx: number[] = [];
@@ -377,8 +377,8 @@ export class Vector2 {
     Bezier.quadraticSplit(p0.x, p1.x, p2.x, t, lx, rx);
     Bezier.quadraticSplit(p0.y, p1.y, p2.y, t, ly, ry);
     for (let i = 0; i < 3; i++) {
-      left[i] ??= new Vector2();
-      right[i] ??= new Vector2();
+      left[i] ??= new Vec2();
+      right[i] ??= new Vec2();
       left[i].setScalar(lx[i], ly[i]);
       right[i].setScalar(rx[i], ry[i]);
     }
@@ -386,7 +386,7 @@ export class Vector2 {
   }
 
   /** Split a cubic at t into left and right. */
-  public cubicBezierSplit(p0: Vector2, p1: Vector2, p2: Vector2, p3: Vector2, t: number, left: Vector2[], right: Vector2[]): void {
+  public cubicBezierSplit(p0: Vec2, p1: Vec2, p2: Vec2, p3: Vec2, t: number, left: Vec2[], right: Vec2[]): void {
     const lx: number[] = [];
     const ly: number[] = [];
     const rx: number[] = [];
@@ -394,8 +394,8 @@ export class Vector2 {
     Bezier.cubicSplit(p0.x, p1.x, p2.x, p3.x, t, lx, rx);
     Bezier.cubicSplit(p0.y, p1.y, p2.y, p3.y, t, ly, ry);
     for (let i = 0; i < 4; i++) {
-      left[i] ??= new Vector2();
-      right[i] ??= new Vector2();
+      left[i] ??= new Vec2();
+      right[i] ??= new Vec2();
       left[i].setScalar(lx[i], ly[i]);
       right[i].setScalar(rx[i], ry[i]);
     }
@@ -403,7 +403,7 @@ export class Vector2 {
   }
 
   /** Sampled arc length of a quadratic. */
-  public quadraticBezierLength(p0: Vector2, p1: Vector2, p2: Vector2, samples?: number): number {
+  public quadraticBezierLength(p0: Vec2, p1: Vec2, p2: Vec2, samples?: number): number {
     return sampleCurveLength(
       t => Bezier.quadratic(p0.x, p1.x, p2.x, t),
       t => Bezier.quadratic(p0.y, p1.y, p2.y, t),
@@ -413,7 +413,7 @@ export class Vector2 {
   }
 
   /** Sampled arc length of a cubic. */
-  public cubicBezierLength(p0: Vector2, p1: Vector2, p2: Vector2, p3: Vector2, samples?: number): number {
+  public cubicBezierLength(p0: Vec2, p1: Vec2, p2: Vec2, p3: Vec2, samples?: number): number {
     return sampleCurveLength(
       t => Bezier.cubic(p0.x, p1.x, p2.x, p3.x, t),
       t => Bezier.cubic(p0.y, p1.y, p2.y, p3.y, t),
@@ -423,7 +423,7 @@ export class Vector2 {
   }
 
   /** Parameter t at the given quadratic arc length. */
-  public quadraticBezierParameterAtLength(p0: Vector2, p1: Vector2, p2: Vector2, distance: number, samples?: number): number {
+  public quadraticBezierParameterAtLength(p0: Vec2, p1: Vec2, p2: Vec2, distance: number, samples?: number): number {
     return sampleCurveParameterAtLength(
       t => Bezier.quadratic(p0.x, p1.x, p2.x, t),
       t => Bezier.quadratic(p0.y, p1.y, p2.y, t),
@@ -434,7 +434,7 @@ export class Vector2 {
   }
 
   /** Parameter t at the given cubic arc length. */
-  public cubicBezierParameterAtLength(p0: Vector2, p1: Vector2, p2: Vector2, p3: Vector2, distance: number, samples?: number): number {
+  public cubicBezierParameterAtLength(p0: Vec2, p1: Vec2, p2: Vec2, p3: Vec2, distance: number, samples?: number): number {
     return sampleCurveParameterAtLength(
       t => Bezier.cubic(p0.x, p1.x, p2.x, p3.x, t),
       t => Bezier.cubic(p0.y, p1.y, p2.y, p3.y, t),
@@ -455,14 +455,14 @@ export class Vector2 {
   }
 
   /** Clamp this point inside a rectangle. */
-  public clamp(rectangle: Rectangle): Vector2 {
-    this.x = Utils.clamp(this.x, rectangle.topLeftCorner.x, rectangle.bottomRightCorner.x);
-    this.y = Utils.clamp(this.y, rectangle.topLeftCorner.y, rectangle.bottomRightCorner.y);
+  public clamp(rect: Rect): Vec2 {
+    this.x = Utils.clamp(this.x, rect.topLeftCorner.x, rect.bottomRightCorner.x);
+    this.y = Utils.clamp(this.y, rect.topLeftCorner.y, rect.bottomRightCorner.y);
     return this;
   }
 
   /** Linear interpolate from min to max by amount. */
-  public lerp(min: Vector2, max: Vector2, amount: number): Vector2 {
+  public lerp(min: Vec2, max: Vec2, amount: number): Vec2 {
     this.x = Utils.lerp(min.x, max.x, amount);
     this.y = Utils.lerp(min.y, max.y, amount);
     return this;

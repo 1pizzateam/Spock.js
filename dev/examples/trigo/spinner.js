@@ -5,17 +5,17 @@ window.onload = function() {
   var width   = canvas.width = window.innerWidth;
   var height  = canvas.height = window.innerHeight;
 
-  var mainCircle   = new Spock.Circle( width * 0.5, height * 0.5, 200 );
+  var mainCircle   = new Spock.Circ( width * 0.5, height * 0.5, 200 );
   var smallCircles = [];
   var angle        = 0;
   var numObjects   = 24;
   var step         = 0;
-  var slice        = Spock.Trigonometry.twopi / numObjects;
+  var slice        = Spock.Trigo.twopi / numObjects;
   var radius       = 20;
-  //var circlePosition  = Spock.Vector2.create();
+  //var circlePosition  = Spock.Vec2.create();
 
   function smallCircle(posX,posY) {
-    this.circle = new Spock.Circle(posX, posY, 20);
+    this.circle = new Spock.Circ(posX, posY, 20);
     this.alpha = 0.2;
     this.minAlpha = 0.2;
     this.setAlpha = function() {
@@ -28,8 +28,8 @@ window.onload = function() {
   for(var i = 0; i < numObjects; i += 1) {
     angle = i * slice;
     smallCircles[i] = new smallCircle(
-      Spock.Trigonometry.cosineEquation( mainCircle.radius, angle, 0, mainCircle.position.x ),
-      Spock.Trigonometry.sineEquation( mainCircle.radius, angle, 0, mainCircle.position.y )
+      Spock.Trigo.cosineEquation( mainCircle.radius, angle, 0, mainCircle.position.x ),
+      Spock.Trigo.sineEquation( mainCircle.radius, angle, 0, mainCircle.position.y )
     );
   }
 

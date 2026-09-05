@@ -1,5 +1,5 @@
 <script setup>
-import { Circle, Grid } from '@1pizzateam/spockjs';
+import { Circ, Grid } from '@1pizzateam/spockjs';
 import DemoFrame from './DemoFrame.vue';
 import { label } from '../canvas.js';
 
@@ -14,7 +14,7 @@ function draw(context, state, theme) {
     width = state.width;
     height = state.height;
     grid = new Grid(width, height, CELL);
-    circle = new Circle(38, width * 0.5, height * 0.5).setGrid(grid);
+    circle = new Circ(38, width * 0.5, height * 0.5).setGrid(grid);
   }
   if (!grid) return;
 

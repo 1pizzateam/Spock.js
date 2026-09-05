@@ -4,10 +4,10 @@ window.onload = function() {
   var width   = canvas.width = window.innerWidth;
   var height  = canvas.height = window.innerHeight;
 
-  var p0      = new Spock.Vector2(Spock.Random.integer(0, width), Spock.Random.integer(0, height));
-  var p1      = new Spock.Vector2(Spock.Random.integer(0, width), Spock.Random.integer(0, height));
-  var p3      = new Spock.Vector2(Spock.Random.integer(0, width), Spock.Random.integer(0, height));
-  var pFinal  = new Spock.Vector2();
+  var p0      = new Spock.Vec2(Spock.Rand.integer(0, width), Spock.Rand.integer(0, height));
+  var p1      = new Spock.Vec2(Spock.Rand.integer(0, width), Spock.Rand.integer(0, height));
+  var p3      = new Spock.Vec2(Spock.Rand.integer(0, width), Spock.Rand.integer(0, height));
+  var pFinal  = new Spock.Vec2();
   var t       = 0;
   var t2      = 0;
   //var maxT    = 0;
@@ -24,17 +24,17 @@ window.onload = function() {
     context.fillStyle = "black";
 
     context.beginPath();
-    context.arc(p0.x, p0.y, 4, 0, Spock.Trigonometry.twopi, false);
+    context.arc(p0.x, p0.y, 4, 0, Spock.Trigo.twopi, false);
     context.fill();
 
     context.beginPath();
-    context.arc(p3.x, p3.y, 4, 0, Spock.Trigonometry.twopi, false);
+    context.arc(p3.x, p3.y, 4, 0, Spock.Trigo.twopi, false);
     context.fill();
 
     context.fillStyle = "grey";
 
     context.beginPath();
-    context.arc(p1.x, p1.y, 4, 0, Spock.Trigonometry.twopi, false);
+    context.arc(p1.x, p1.y, 4, 0, Spock.Trigo.twopi, false);
     context.fill();
 
     context.beginPath();
@@ -50,7 +50,7 @@ window.onload = function() {
 
     context.fillStyle = "red";
     context.beginPath();
-    context.arc(pFinal.x, pFinal.y, 10, 0, Spock.Trigonometry.twopi, false);
+    context.arc(pFinal.x, pFinal.y, 10, 0, Spock.Trigo.twopi, false);
     context.fill();
 
     t2 += step * sign;

@@ -1,4 +1,4 @@
-import { Vector3 } from '../vectors/vector3';
+import { Vec3 } from '../vectors/vec3';
 
 const PARALLEL = 1e-16;
 
@@ -7,12 +7,12 @@ const PARALLEL = 1e-16;
  * Returns false when eye equals target.
  */
 export function setLookAtAxes(
-  eye: Vector3,
-  target: Vector3,
-  up: Vector3,
-  xAxis: Vector3,
-  yAxis: Vector3,
-  zAxis: Vector3
+  eye: Vec3,
+  target: Vec3,
+  up: Vec3,
+  xAxis: Vec3,
+  yAxis: Vec3,
+  zAxis: Vec3
 ): boolean {
   zAxis.copy(eye).subtract(target);
   const zLength = zAxis.getMagnitude();

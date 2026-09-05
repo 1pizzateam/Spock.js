@@ -3,8 +3,8 @@ window.onload = function() {
   var context       = canvas.getContext("2d");
   var width         = canvas.width = window.innerWidth;
   var height        = canvas.height = window.innerHeight;
-  var circle        = new Spock.Circle( width * 0.5, height * 0.5, 100 );
-  var mousePosition = new Spock.Vector2();
+  var circle        = new Spock.Circ( width * 0.5, height * 0.5, 100 );
+  var mousePosition = new Spock.Vec2();
 
   context.fillStyle = "#66FF66";
   drawCircle();
@@ -25,7 +25,7 @@ window.onload = function() {
 
   function drawCircle(){
     context.beginPath();
-    context.arc(circle.position.x, circle.position.y, circle.radius, 0, Spock.Trigonometry.twopi, false);
+    context.arc(circle.position.x, circle.position.y, circle.radius, 0, Spock.Trigo.twopi, false);
   }
 
 };

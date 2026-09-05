@@ -20,23 +20,23 @@ Import only the APIs you need:
 
 ```js
 import {
-  Vector2,
-  Matrix3x3,
-  Trigonometry,
+  Vec2,
+  Mat3,
+  Trigo,
 } from '@1pizzateam/spockjs';
 
-const position = new Vector2(4, 5);
-const transform = new Matrix3x3()
+const position = new Vec2(4, 5);
+const transform = new Mat3()
   .translate(position)
-  .rotate(Trigonometry.halfpi);
+  .rotate(Trigo.halfpi);
 ```
 
 Spock.js 4 has no CommonJS or IIFE build. Browser projects should load it through an ESM-aware bundler or use a module script.
 
 ```html
 <script type="module">
-  import { Vector2 } from './node_modules/@1pizzateam/spockjs/dist/spock.js';
+  import { Vec2 } from './node_modules/@1pizzateam/spockjs/dist/spock.js';
 
-  console.log(new Vector2(3, 4).getMagnitude());
+  console.log(new Vec2(3, 4).getMagnitude());
 </script>
 ```

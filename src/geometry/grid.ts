@@ -1,4 +1,4 @@
-import { Vector2 } from '../vectors/vector2';
+import { Vec2 } from '../vectors/vec2';
 
 export const GRID_EMPTY_CELL = -1;
 
@@ -45,12 +45,12 @@ export class Grid {
   static readonly emptyCell = GRID_EMPTY_CELL;
 
   cellSize: number;
-  len: Vector2;
+  len: Vec2;
 
   /** Divide width × height into cells of cellSize. */
   constructor(width: number, height: number, cellSize: number) {
     this.cellSize = cellSize;
-    this.len = new Vector2(
+    this.len = new Vec2(
       Math.ceil(width / cellSize),
       Math.ceil(height / cellSize)
     );
