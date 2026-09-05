@@ -39,7 +39,7 @@
     "build": "npm run build:lib && npm run test",
     "build:lib": "node ./scripts/clear.js && tsc && npm run rollup && node ./scripts/copy.js",
     "rollup": "rollup --config rollup.config.mjs",
-    "test": "jest --coverage"
+    "test": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js --coverage"
   },
   "files": [
     "dist/"
@@ -51,15 +51,11 @@
     "node": ">= 22"
   },
   "devDependencies": {
-    "@babel/core": "7.26.0",
-    "@babel/preset-env": "7.26.0",
     "@types/jest": "29.5.14",
-    "@types/node": "25.6.0",
-    "babel-jest": "29.7.0",
-    "core-js": "3.33.0",
+    "@types/node": "26.4.1",
     "jest": "29.7.0",
-    "rollup": "4.24.0",
-    "rollup-plugin-dts": "^6.5.1",
+    "rollup": "4.63.1",
+    "rollup-plugin-dts": "6.5.1",
     "typescript": "6.0.3"
   }
 }

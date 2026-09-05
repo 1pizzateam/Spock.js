@@ -167,10 +167,8 @@ export default {
   // Setting this value to "fake" allows the use of fake timers for functions such as "setTimeout"
   // timers: "real",
 
-  // A map from regular expressions to paths to transformers
-  transform: {
-    "^.+\\.jsx?$": "babel-jest",
-  },
+  // Native ESM: tests and compiled sources are loaded by Node, not Babel.
+  transform: {},
 
   // An array of regexp pattern strings that are matched against all source file paths, matched files will skip transformation
   transformIgnorePatterns: [
