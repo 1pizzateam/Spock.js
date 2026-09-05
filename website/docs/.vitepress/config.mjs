@@ -57,10 +57,13 @@ export default defineConfig({
         ],
       },
       {
+        text: 'API overview',
+        link: '/api/',
+      },
+      {
         text: 'Vectors',
         collapsed: false,
         items: [
-          { text: 'API overview', link: '/api/' },
           { text: 'Vec2', link: '/api/vec2' },
           { text: 'Vec3', link: '/api/vec3' },
         ],
@@ -104,7 +107,7 @@ export default defineConfig({
     },
     footer: {
       message: 'Released under the MIT License.',
-      copyright: 'Copyright © 2011-present Ludovic Cluber',
+      copyright: 'Copyright © 2011-present 1 Pizza Team',
     },
   },
 });

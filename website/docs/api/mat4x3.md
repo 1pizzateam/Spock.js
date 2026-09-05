@@ -1,10 +1,30 @@
 # Mat4x3
 
-Import with `import { Mat4x3 } from '@1pizzateam/spockjs';`.
+A 4×3 affine transform for 3D — rotation, scale, and translation, but no projection — stored in a 4×4 `Float32Array`.
+
+Reach for it when a transform will never need perspective: object placement, node hierarchies, and camera views. Leaving out the projection row makes inversion cheaper and keeps the last column fixed at (0, 0, 0, 1).
+
+Because the matrix is affine by construction, the linear-only operations are named for it: `transposeLinear()`, `determinantLinear()`, and `invertAffine()`. Use `Mat4` instead when you need `perspective()` or `orthographic()`.
+
+```js
+import { Mat4x3, Vec3 } from '@1pizzateam/spockjs';
+
+const view = new Mat4x3().lookAtRH(
+  new Vec3(0, 2, 6), // eye
+  new Vec3(0, 0, 0), // target
+  new Vec3(0, 1, 0)  // up
+);
+
+const model = new Mat4x3()
+  .translate(new Vec3(1, 0, 0))
+  .rotateY(Math.PI / 4);
+```
 
 ## Constructor
 
 Identity if no arguments; otherwise the given affine entries.
+
+No arguments gives the identity transform. Pass the twelve affine entries to set them; the last column stays (0, 0, 0, 1) because this type cannot hold a projection.
 
 ```ts
 new Mat4x3(x1?:number, x2?:number, x3?:number, y1?:number, y2?:number, y3?:number, z1?:number, z2?:number, z3?:number, t1?:number, t2?:number, t3?:number)
@@ -41,6 +61,8 @@ const value = new Mat4x3(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
 
 Copy another matrix into this one.
 
+Overwrites this transform from another one, reusing the buffer.
+
 ```ts
 copy(matrix4x3: Mat4x3): Mat4x3
 ```
@@ -65,6 +87,8 @@ const result = new Mat4x3().copy(new Mat4x3());
 ## Mat4x3.toArray()
 
 Live buffer, or a copy into target.
+
+Returns the live 4×4 `Float32Array` behind the transform, padded so it uploads to WebGL as a `mat4`. Pass a target array to copy instead.
 
 ```ts
 toArray(target?: Float32Array): Float32Array
@@ -91,6 +115,8 @@ const result = new Mat4x3().toArray(new Float32Array(16));
 
 Human-readable row string.
 
+A readable dump of the entries for debugging.
+
 ```ts
 toString(): string
 ```
@@ -115,6 +141,8 @@ const result = new Mat4x3().toString();
 ## Mat4x3.identity()
 
 Set this matrix to identity.
+
+Resets to the identity transform.
 
 ```ts
 identity(): Mat4x3
@@ -141,6 +169,8 @@ const result = new Mat4x3().identity();
 
 Compose a 3D scale onto this matrix.
 
+Composes a scale onto the current transform rather than replacing it.
+
 ```ts
 scale(vector3: Vec3): Mat4x3
 ```
@@ -165,6 +195,8 @@ const result = new Mat4x3().scale(new Vec3(1, 2, 3));
 ## Mat4x3.rotateX()
 
 Compose a rotation about X (radians).
+
+Composes a rotation about the X axis, in radians, onto the current transform.
 
 ```ts
 rotateX(angle: number): Mat4x3
@@ -191,6 +223,8 @@ const result = new Mat4x3().rotateX(Math.PI / 4);
 
 Compose a rotation about Y (radians).
 
+Composes a rotation about the Y axis onto the current transform.
+
 ```ts
 rotateY(angle: number): Mat4x3
 ```
@@ -215,6 +249,8 @@ const result = new Mat4x3().rotateY(Math.PI / 4);
 ## Mat4x3.rotateZ()
 
 Compose a rotation about Z (radians).
+
+Composes a rotation about the Z axis onto the current transform.
 
 ```ts
 rotateZ(angle: number): Mat4x3
@@ -241,6 +277,8 @@ const result = new Mat4x3().rotateZ(Math.PI / 4);
 
 Compose a 3D translation onto this matrix.
 
+Composes a translation onto the current transform, so any rotation already applied also rotates this movement.
+
 ```ts
 translate(vector3: Vec3): Mat4x3
 ```
@@ -266,6 +304,8 @@ const result = new Mat4x3().translate(new Vec3(1, 2, 3));
 
 Multiply by another affine 4×3 matrix.
 
+Multiplies this transform by another in place. Order matters, and the affine last column is preserved.
+
 ```ts
 multiply(matrix4x3: Mat4x3): Mat4x3
 ```
@@ -290,6 +330,8 @@ const result = new Mat4x3().multiply(new Mat4x3());
 ## Mat4x3.lookAtRH()
 
 Right-handed look-at view matrix; identity if eye equals target.
+
+Builds a right-handed view transform placing the camera at `eye` looking toward `target`. If `up` is parallel to the view direction a fallback axis is used, and when `eye` equals `target` the result is identity, so neither case produces `NaN`.
 
 ```ts
 lookAtRH(eye: Vec3, target: Vec3, up: Vec3): Mat4x3
@@ -318,6 +360,8 @@ const result = new Mat4x3().lookAtRH(new Vec3(1, 2, 3), new Vec3(1, 2, 3), new V
 
 Transpose the linear 3×3 part.
 
+Transposes only the 3×3 rotation and scale part, leaving the translation column alone. For a pure rotation that transpose is also its inverse.
+
 ```ts
 transposeLinear(): Mat4x3
 ```
@@ -343,6 +387,8 @@ const result = new Mat4x3().transposeLinear();
 
 Determinant of the linear 3×3 part.
 
+Determinant of the 3×3 linear part, describing how the transform scales volume. Zero means it cannot be inverted.
+
 ```ts
 determinantLinear(): number
 ```
@@ -367,6 +413,8 @@ const result = new Mat4x3().determinantLinear();
 ## Mat4x3.invertAffine()
 
 Invert as an affine transform; unchanged if the linear part is singular.
+
+Inverts using the fact that the transform is affine, which is cheaper than a general 4×4 inversion. A singular matrix is left unchanged.
 
 ```ts
 invertAffine(): Mat4x3
