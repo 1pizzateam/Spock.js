@@ -20,6 +20,7 @@ function lerp(min: number, max: number, amount: number): number {
 
 /** Map x from [min, max] into [0, 1]. */
 function normalize(x: number, min: number, max: number): number {
+  if (min === max) return 0;
   return (x - min) / (max - min);
 }
 

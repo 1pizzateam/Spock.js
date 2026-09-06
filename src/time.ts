@@ -13,11 +13,13 @@ export const Time = {
 
   /** Frame duration in ms to frames per second. */
   millisecToFps(millisecond: number): number {
+    if (millisecond === 0) return 0;
     return 1000 / millisecond;
   },
 
   /** Frames per second to frame duration in ms. */
   fpsToMillisec(refreshRate: number): number {
+    if (refreshRate === 0) return 0;
     return 1000 / refreshRate;
   },
 
