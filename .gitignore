@@ -10,3 +10,7 @@ website/docs/.vitepress/cache/
 website/docs/.vitepress/dist/
 .size-snapshot.json
 .npmrc
+
+
+# APM dependencies
+apm_modules/
