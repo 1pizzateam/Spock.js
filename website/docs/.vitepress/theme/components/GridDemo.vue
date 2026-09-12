@@ -1,5 +1,5 @@
 <script setup>
-import { Circ, Grid } from '@1pizzateam/spockjs';
+import { Circ, Grid } from '@1pizzateam/spock';
 import DemoFrame from './DemoFrame.vue';
 import { label } from '../canvas.js';
 

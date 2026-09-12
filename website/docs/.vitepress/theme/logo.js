@@ -1,4 +1,4 @@
-import { Quat, Vec3 } from '@1pizzateam/spockjs';
+import { Quat, Vec3 } from '@1pizzateam/spock';
 
 const PHI = (1 + Math.sqrt(5)) / 2;
 const RADIUS = Math.sqrt(1 + PHI * PHI);

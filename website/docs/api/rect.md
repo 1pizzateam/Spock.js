@@ -7,7 +7,7 @@ The constructor takes width and height first, then the centre. `topLeftCorner` a
 As with `Circ`, occupancy is opt-in through `setGrid()`, after which `gridCells` lists every cell the rectangle covers. `Vec2.clamp()` takes a `Rect`, which makes it the natural type for bounds.
 
 ```js
-import { Rect, Vec2 } from '@1pizzateam/spockjs';
+import { Rect, Vec2 } from '@1pizzateam/spock';
 
 const bounds = new Rect(640, 360, 320, 180);
 
@@ -39,7 +39,7 @@ new Rect(width: number, height: number, positionX: number, positionY: number)
 ### Example
 
 ```js
-import { Rect } from '@1pizzateam/spockjs';
+import { Rect } from '@1pizzateam/spock';
 
 const value = new Rect(100, 100, 1, 1);
 ```
@@ -65,7 +65,7 @@ None.
 ### Example
 
 ```js
-import { Rect } from '@1pizzateam/spockjs';
+import { Rect } from '@1pizzateam/spock';
 
 
 const result = new Rect(20, 10, 0, 0).clone();
@@ -92,7 +92,7 @@ copy(rect: Rect): Rect
 ### Example
 
 ```js
-import { Rect } from '@1pizzateam/spockjs';
+import { Rect } from '@1pizzateam/spock';
 
 
 const result = new Rect(20, 10, 0, 0).copy(new Rect(10, 10, 0, 0));
@@ -119,7 +119,7 @@ setGrid(grid: Grid | null): Rect
 ### Example
 
 ```js
-import { Rect, Grid } from '@1pizzateam/spockjs';
+import { Rect, Grid } from '@1pizzateam/spock';
 
 
 const result = new Rect(20, 10, 0, 0).setGrid(new Grid(100, 100, 10));
@@ -147,7 +147,7 @@ setPosition(positionX: number, positionY: number): Rect
 ### Example
 
 ```js
-import { Rect } from '@1pizzateam/spockjs';
+import { Rect } from '@1pizzateam/spock';
 
 
 const result = new Rect(20, 10, 0, 0).setPosition(1, 1);
@@ -175,7 +175,7 @@ setSize(width: number, height: number): Rect
 ### Example
 
 ```js
-import { Rect } from '@1pizzateam/spockjs';
+import { Rect } from '@1pizzateam/spock';
 
 
 const result = new Rect(20, 10, 0, 0).setSize(100, 100);
@@ -202,7 +202,7 @@ isIn(vector: Vec2): boolean
 ### Example
 
 ```js
-import { Rect, Vec2 } from '@1pizzateam/spockjs';
+import { Rect, Vec2 } from '@1pizzateam/spock';
 
 
 const result = new Rect(20, 10, 0, 0).isIn(new Vec2(1, 2));
@@ -232,7 +232,7 @@ draw(context: CanvasRenderingContext2D, fillColor: string, strokeColor: string, 
 ### Example
 
 ```js
-import { Rect } from '@1pizzateam/spockjs';
+import { Rect } from '@1pizzateam/spock';
 
 const context = document.querySelector('canvas').getContext('2d');
 

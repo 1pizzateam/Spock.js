@@ -7,7 +7,7 @@ It covers the reductions that come up constantly — `min()`, `max()`, `sum()`, 
 `min()`, `max()`, and `average()` return `NaN` for an empty array. `sum()` returns 0 and `multiply()` returns 1, their identity values.
 
 ```js
-import { NumArray } from '@1pizzateam/spockjs';
+import { NumArray } from '@1pizzateam/spock';
 
 const frameTimes = [16.7, 16.9, 33.1, 16.6];
 
@@ -36,7 +36,7 @@ min(array: number[]): number
 ### Example
 
 ```js
-import { NumArray } from '@1pizzateam/spockjs';
+import { NumArray } from '@1pizzateam/spock';
 
 
 const result = NumArray.min([1, 2, 3]);
@@ -63,7 +63,7 @@ max(array: number[]): number
 ### Example
 
 ```js
-import { NumArray } from '@1pizzateam/spockjs';
+import { NumArray } from '@1pizzateam/spock';
 
 
 const result = NumArray.max([1, 2, 3]);
@@ -90,7 +90,7 @@ sum(array: number[]): number
 ### Example
 
 ```js
-import { NumArray } from '@1pizzateam/spockjs';
+import { NumArray } from '@1pizzateam/spock';
 
 
 const result = NumArray.sum([1, 2, 3]);
@@ -117,7 +117,7 @@ multiply(array: number[]): number
 ### Example
 
 ```js
-import { NumArray } from '@1pizzateam/spockjs';
+import { NumArray } from '@1pizzateam/spock';
 
 
 const result = NumArray.multiply([1, 2, 3]);
@@ -144,7 +144,7 @@ average(array: number[]): number
 ### Example
 
 ```js
-import { NumArray } from '@1pizzateam/spockjs';
+import { NumArray } from '@1pizzateam/spock';
 
 
 const result = NumArray.average([1, 2, 3]);

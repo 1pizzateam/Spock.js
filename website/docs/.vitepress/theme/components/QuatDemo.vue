@@ -1,5 +1,5 @@
 <script setup>
-import { Quat, Trigo, Vec3 } from '@1pizzateam/spockjs';
+import { Quat, Trigo, Vec3 } from '@1pizzateam/spock';
 import DemoFrame from './DemoFrame.vue';
 import { label, polyline } from '../canvas.js';
 

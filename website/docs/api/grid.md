@@ -7,7 +7,7 @@ This is the spatial index behind `Circ` and `Rect` occupancy. Construct it with 
 `testCells()` then answers whether two shapes share a cell, a cheap broad-phase check to run before any exact collision maths. Unused and off-grid slots use the `Grid.emptyCell` sentinel (`-1`), which `testCells()` ignores. `draw()` paints the lattice for debugging.
 
 ```js
-import { Circ, Grid } from '@1pizzateam/spockjs';
+import { Circ, Grid } from '@1pizzateam/spock';
 
 const grid = new Grid(800, 600, 32); // 25 × 19 cells
 const a = new Circ(20, 100, 100).setGrid(grid);
@@ -41,7 +41,7 @@ new Grid(width: number, height: number, cellSize: number)
 ### Example
 
 ```js
-import { Grid } from '@1pizzateam/spockjs';
+import { Grid } from '@1pizzateam/spock';
 
 const value = new Grid(100, 100, 10);
 ```
@@ -68,7 +68,7 @@ testCells(aCells: number[], bCells: number[]): boolean
 ### Example
 
 ```js
-import { Grid } from '@1pizzateam/spockjs';
+import { Grid } from '@1pizzateam/spock';
 
 
 const result = new Grid(100, 100, 10).testCells([1, 2, 3], [1, 2, 3]);
@@ -98,7 +98,7 @@ draw(context: CanvasRenderingContext2D, fillColor: string, strokeColor: string, 
 ### Example
 
 ```js
-import { Grid } from '@1pizzateam/spockjs';
+import { Grid } from '@1pizzateam/spock';
 
 const context = document.querySelector('canvas').getContext('2d');
 

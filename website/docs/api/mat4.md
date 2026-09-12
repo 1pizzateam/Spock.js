@@ -7,7 +7,7 @@ It covers everything `Mat4x3` does — translate, scale, rotate about each axis,
 Entries live in a `Float32Array`. `toArray()` with no argument returns that live buffer for a WebGL upload; pass a target to copy instead. `multiply()` preserves the last row, so composing with a perspective matrix behaves.
 
 ```js
-import { Mat4, Vec3 } from '@1pizzateam/spockjs';
+import { Mat4, Vec3 } from '@1pizzateam/spock';
 
 const projection = new Mat4().perspective(Math.PI / 4, 16 / 9, 0.1, 100);
 const view = new Mat4().lookAtRH(
@@ -55,7 +55,7 @@ new Mat4(x1?:number, x2?:number, x3?:number, x4?:number, y1?:number, y2?:number,
 ### Example
 
 ```js
-import { Mat4 } from '@1pizzateam/spockjs';
+import { Mat4 } from '@1pizzateam/spock';
 
 const value = new Mat4(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
 ```
@@ -81,7 +81,7 @@ copy(matrix4x4: Mat4): Mat4
 ### Example
 
 ```js
-import { Mat4 } from '@1pizzateam/spockjs';
+import { Mat4 } from '@1pizzateam/spock';
 
 
 const result = new Mat4().copy(new Mat4());
@@ -108,7 +108,7 @@ toArray(target?: Float32Array): Float32Array
 ### Example
 
 ```js
-import { Mat4 } from '@1pizzateam/spockjs';
+import { Mat4 } from '@1pizzateam/spock';
 
 
 const result = new Mat4().toArray(new Float32Array(16));
@@ -135,7 +135,7 @@ None.
 ### Example
 
 ```js
-import { Mat4 } from '@1pizzateam/spockjs';
+import { Mat4 } from '@1pizzateam/spock';
 
 
 const result = new Mat4().toString();
@@ -162,7 +162,7 @@ None.
 ### Example
 
 ```js
-import { Mat4 } from '@1pizzateam/spockjs';
+import { Mat4 } from '@1pizzateam/spock';
 
 
 const result = new Mat4().identity();
@@ -189,7 +189,7 @@ scale(vector3: Vec3): Mat4
 ### Example
 
 ```js
-import { Mat4, Vec3 } from '@1pizzateam/spockjs';
+import { Mat4, Vec3 } from '@1pizzateam/spock';
 
 
 const result = new Mat4().scale(new Vec3(1, 2, 3));
@@ -216,7 +216,7 @@ rotateX(angle: number): Mat4
 ### Example
 
 ```js
-import { Mat4 } from '@1pizzateam/spockjs';
+import { Mat4 } from '@1pizzateam/spock';
 
 
 const result = new Mat4().rotateX(Math.PI / 4);
@@ -243,7 +243,7 @@ rotateY(angle: number): Mat4
 ### Example
 
 ```js
-import { Mat4 } from '@1pizzateam/spockjs';
+import { Mat4 } from '@1pizzateam/spock';
 
 
 const result = new Mat4().rotateY(Math.PI / 4);
@@ -270,7 +270,7 @@ rotateZ(angle: number): Mat4
 ### Example
 
 ```js
-import { Mat4 } from '@1pizzateam/spockjs';
+import { Mat4 } from '@1pizzateam/spock';
 
 
 const result = new Mat4().rotateZ(Math.PI / 4);
@@ -297,7 +297,7 @@ translate(vector3: Vec3): Mat4
 ### Example
 
 ```js
-import { Mat4, Vec3 } from '@1pizzateam/spockjs';
+import { Mat4, Vec3 } from '@1pizzateam/spock';
 
 
 const result = new Mat4().translate(new Vec3(1, 2, 3));
@@ -324,7 +324,7 @@ multiply(matrix4x4: Mat4): Mat4
 ### Example
 
 ```js
-import { Mat4 } from '@1pizzateam/spockjs';
+import { Mat4 } from '@1pizzateam/spock';
 
 
 const result = new Mat4().multiply(new Mat4());
@@ -354,7 +354,7 @@ perspective(fovy:number, aspect:number, znear:number, zfar:number): Mat4
 ### Example
 
 ```js
-import { Mat4 } from '@1pizzateam/spockjs';
+import { Mat4 } from '@1pizzateam/spock';
 
 
 const result = new Mat4().perspective(Math.PI / 4, 16 / 9, 0.1, 100);
@@ -386,7 +386,7 @@ orthographic(left:number, right:number, top:number, bottom:number, near:number, 
 ### Example
 
 ```js
-import { Mat4 } from '@1pizzateam/spockjs';
+import { Mat4 } from '@1pizzateam/spock';
 
 
 const result = new Mat4().orthographic(-1, 1, 1, -1, 0.1, 100);
@@ -413,7 +413,7 @@ None.
 ### Example
 
 ```js
-import { Mat4 } from '@1pizzateam/spockjs';
+import { Mat4 } from '@1pizzateam/spock';
 
 
 const result = new Mat4().transpose();
@@ -440,7 +440,7 @@ None.
 ### Example
 
 ```js
-import { Mat4 } from '@1pizzateam/spockjs';
+import { Mat4 } from '@1pizzateam/spock';
 
 
 const result = new Mat4().determinant();
@@ -467,7 +467,7 @@ None.
 ### Example
 
 ```js
-import { Mat4 } from '@1pizzateam/spockjs';
+import { Mat4 } from '@1pizzateam/spock';
 
 
 const result = new Mat4().invert();
@@ -496,7 +496,7 @@ lookAtRH(eye: Vec3, target: Vec3, up: Vec3): Mat4
 ### Example
 
 ```js
-import { Mat4, Vec3 } from '@1pizzateam/spockjs';
+import { Mat4, Vec3 } from '@1pizzateam/spock';
 
 
 const result = new Mat4().lookAtRH(new Vec3(1, 2, 3), new Vec3(1, 2, 3), new Vec3(1, 2, 3));

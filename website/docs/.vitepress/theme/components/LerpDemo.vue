@@ -1,5 +1,5 @@
 <script setup>
-import { Utils, Vec2 } from '@1pizzateam/spockjs';
+import { Utils, Vec2 } from '@1pizzateam/spock';
 import DemoFrame from './DemoFrame.vue';
 import { dot, label, polyline } from '../canvas.js';
 

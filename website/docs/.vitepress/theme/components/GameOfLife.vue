@@ -1,7 +1,7 @@
 <script setup>
 import { onBeforeUnmount, onMounted, ref } from 'vue';
 import { withBase } from 'vitepress';
-import { Grid, NumArray, Rand, Rect, Time, Utils } from '@1pizzateam/spockjs';
+import { Grid, NumArray, Rand, Rect, Time, Utils } from '@1pizzateam/spock';
 import { startCanvas } from '../canvas.js';
 
 const CELL_SIZE = 8;

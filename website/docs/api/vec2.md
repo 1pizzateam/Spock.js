@@ -7,7 +7,7 @@ Use it for positions, directions, velocities, sizes, and any other 2D pair. Near
 On top of arithmetic it carries magnitude and distance queries, normalization, per-axis rounding, angle helpers that read and write the vector's heading, interpolation with `lerp()`, clamping into a `Rect`, and Bézier evaluation, so curve sampling stays in vector space.
 
 ```js
-import { Vec2 } from '@1pizzateam/spockjs';
+import { Vec2 } from '@1pizzateam/spock';
 
 const velocity = new Vec2(3, 4).normalize().scale(10);
 
@@ -38,7 +38,7 @@ new Vec2(x: number = 0, y: number = 0)
 ### Example
 
 ```js
-import { Vec2 } from '@1pizzateam/spockjs';
+import { Vec2 } from '@1pizzateam/spock';
 
 const value = new Vec2(1, 1);
 ```
@@ -65,7 +65,7 @@ setScalar(x?: number | null, y?: number | null): Vec2
 ### Example
 
 ```js
-import { Vec2 } from '@1pizzateam/spockjs';
+import { Vec2 } from '@1pizzateam/spock';
 
 
 const result = new Vec2().setScalar(1, 1);
@@ -93,7 +93,7 @@ setArray(array: number[], offset: number = 0): Vec2
 ### Example
 
 ```js
-import { Vec2 } from '@1pizzateam/spockjs';
+import { Vec2 } from '@1pizzateam/spock';
 
 
 const result = new Vec2().setArray([1, 2, 3], 0);
@@ -120,7 +120,7 @@ copy(vector: Vec2): Vec2
 ### Example
 
 ```js
-import { Vec2 } from '@1pizzateam/spockjs';
+import { Vec2 } from '@1pizzateam/spock';
 
 
 const result = new Vec2().copy(new Vec2(1, 2));
@@ -147,7 +147,7 @@ None.
 ### Example
 
 ```js
-import { Vec2 } from '@1pizzateam/spockjs';
+import { Vec2 } from '@1pizzateam/spock';
 
 
 const result = new Vec2().isPositive();
@@ -174,7 +174,7 @@ isEqualTo(scalar: number): boolean
 ### Example
 
 ```js
-import { Vec2 } from '@1pizzateam/spockjs';
+import { Vec2 } from '@1pizzateam/spock';
 
 
 const result = new Vec2().isEqualTo(1);
@@ -201,7 +201,7 @@ equals(vector: Vec2): boolean
 ### Example
 
 ```js
-import { Vec2 } from '@1pizzateam/spockjs';
+import { Vec2 } from '@1pizzateam/spock';
 
 
 const result = new Vec2().equals(new Vec2(1, 2));
@@ -228,7 +228,7 @@ None.
 ### Example
 
 ```js
-import { Vec2 } from '@1pizzateam/spockjs';
+import { Vec2 } from '@1pizzateam/spock';
 
 
 const result = new Vec2().isOrigin();
@@ -255,7 +255,7 @@ toArray(target: number[] = []): number[]
 ### Example
 
 ```js
-import { Vec2 } from '@1pizzateam/spockjs';
+import { Vec2 } from '@1pizzateam/spock';
 
 
 const result = new Vec2().toArray([1, 2, 3]);
@@ -282,7 +282,7 @@ None.
 ### Example
 
 ```js
-import { Vec2 } from '@1pizzateam/spockjs';
+import { Vec2 } from '@1pizzateam/spock';
 
 
 const result = new Vec2().toString();
@@ -309,7 +309,7 @@ None.
 ### Example
 
 ```js
-import { Vec2 } from '@1pizzateam/spockjs';
+import { Vec2 } from '@1pizzateam/spock';
 
 
 const result = new Vec2().origin();
@@ -336,7 +336,7 @@ getMagnitude(square: boolean = false): number
 ### Example
 
 ```js
-import { Vec2 } from '@1pizzateam/spockjs';
+import { Vec2 } from '@1pizzateam/spock';
 
 
 const result = new Vec2().getMagnitude(false);
@@ -364,7 +364,7 @@ getDistance(vector: Vec2, square: boolean = false): number
 ### Example
 
 ```js
-import { Vec2 } from '@1pizzateam/spockjs';
+import { Vec2 } from '@1pizzateam/spock';
 
 
 const result = new Vec2().getDistance(new Vec2(1, 2), false);
@@ -391,7 +391,7 @@ add(vector: Vec2): Vec2
 ### Example
 
 ```js
-import { Vec2 } from '@1pizzateam/spockjs';
+import { Vec2 } from '@1pizzateam/spock';
 
 
 const result = new Vec2().add(new Vec2(1, 2));
@@ -419,7 +419,7 @@ addScaledVector(vector: Vec2, scalar: number): Vec2
 ### Example
 
 ```js
-import { Vec2 } from '@1pizzateam/spockjs';
+import { Vec2 } from '@1pizzateam/spock';
 
 
 const result = new Vec2().addScaledVector(new Vec2(1, 2), 1);
@@ -446,7 +446,7 @@ addScalar(scalar: number): Vec2
 ### Example
 
 ```js
-import { Vec2 } from '@1pizzateam/spockjs';
+import { Vec2 } from '@1pizzateam/spock';
 
 
 const result = new Vec2().addScalar(1);
@@ -473,7 +473,7 @@ None.
 ### Example
 
 ```js
-import { Vec2 } from '@1pizzateam/spockjs';
+import { Vec2 } from '@1pizzateam/spock';
 
 
 const result = new Vec2().addComponents();
@@ -500,7 +500,7 @@ subtract(vector: Vec2): Vec2
 ### Example
 
 ```js
-import { Vec2 } from '@1pizzateam/spockjs';
+import { Vec2 } from '@1pizzateam/spock';
 
 
 const result = new Vec2().subtract(new Vec2(1, 2));
@@ -528,7 +528,7 @@ subtractScaledVector(vector: Vec2, scalar: number): Vec2
 ### Example
 
 ```js
-import { Vec2 } from '@1pizzateam/spockjs';
+import { Vec2 } from '@1pizzateam/spock';
 
 
 const result = new Vec2().subtractScaledVector(new Vec2(1, 2), 1);
@@ -555,7 +555,7 @@ subtractScalar(scalar: number): Vec2
 ### Example
 
 ```js
-import { Vec2 } from '@1pizzateam/spockjs';
+import { Vec2 } from '@1pizzateam/spock';
 
 
 const result = new Vec2().subtractScalar(1);
@@ -582,7 +582,7 @@ multiply(vector: Vec2): Vec2
 ### Example
 
 ```js
-import { Vec2 } from '@1pizzateam/spockjs';
+import { Vec2 } from '@1pizzateam/spock';
 
 
 const result = new Vec2().multiply(new Vec2(1, 2));
@@ -610,7 +610,7 @@ multiplyScaledVector(vector: Vec2, scalar: number): Vec2
 ### Example
 
 ```js
-import { Vec2 } from '@1pizzateam/spockjs';
+import { Vec2 } from '@1pizzateam/spock';
 
 
 const result = new Vec2().multiplyScaledVector(new Vec2(1, 2), 1);
@@ -638,7 +638,7 @@ scale(scalar: number, axis?: 'x' | 'y'): Vec2
 ### Example
 
 ```js
-import { Vec2 } from '@1pizzateam/spockjs';
+import { Vec2 } from '@1pizzateam/spock';
 
 
 const result = new Vec2().scale(1, 'x');
@@ -665,7 +665,7 @@ divide(vector: Vec2): Vec2
 ### Example
 
 ```js
-import { Vec2 } from '@1pizzateam/spockjs';
+import { Vec2 } from '@1pizzateam/spock';
 
 
 const result = new Vec2().divide(new Vec2(1, 2));
@@ -693,7 +693,7 @@ divideScaledVector(vector: Vec2, scalar: number): Vec2
 ### Example
 
 ```js
-import { Vec2 } from '@1pizzateam/spockjs';
+import { Vec2 } from '@1pizzateam/spock';
 
 
 const result = new Vec2().divideScaledVector(new Vec2(1, 2), 1);
@@ -720,7 +720,7 @@ divideScalar(scalar: number): Vec2
 ### Example
 
 ```js
-import { Vec2 } from '@1pizzateam/spockjs';
+import { Vec2 } from '@1pizzateam/spock';
 
 
 const result = new Vec2().divideScalar(1);
@@ -747,7 +747,7 @@ None.
 ### Example
 
 ```js
-import { Vec2 } from '@1pizzateam/spockjs';
+import { Vec2 } from '@1pizzateam/spock';
 
 
 const result = new Vec2().halve();
@@ -774,7 +774,7 @@ max(vector: Vec2): Vec2
 ### Example
 
 ```js
-import { Vec2 } from '@1pizzateam/spockjs';
+import { Vec2 } from '@1pizzateam/spock';
 
 
 const result = new Vec2().max(new Vec2(1, 2));
@@ -801,7 +801,7 @@ min(vector: Vec2): Vec2
 ### Example
 
 ```js
-import { Vec2 } from '@1pizzateam/spockjs';
+import { Vec2 } from '@1pizzateam/spock';
 
 
 const result = new Vec2().min(new Vec2(1, 2));
@@ -828,7 +828,7 @@ maxScalar(scalar: number): Vec2
 ### Example
 
 ```js
-import { Vec2 } from '@1pizzateam/spockjs';
+import { Vec2 } from '@1pizzateam/spock';
 
 
 const result = new Vec2().maxScalar(1);
@@ -855,7 +855,7 @@ minScalar(scalar: number): Vec2
 ### Example
 
 ```js
-import { Vec2 } from '@1pizzateam/spockjs';
+import { Vec2 } from '@1pizzateam/spock';
 
 
 const result = new Vec2().minScalar(1);
@@ -882,7 +882,7 @@ None.
 ### Example
 
 ```js
-import { Vec2 } from '@1pizzateam/spockjs';
+import { Vec2 } from '@1pizzateam/spock';
 
 
 const result = new Vec2().normalize();
@@ -909,7 +909,7 @@ absolute(axis?: 'x' | 'y'): Vec2
 ### Example
 
 ```js
-import { Vec2 } from '@1pizzateam/spockjs';
+import { Vec2 } from '@1pizzateam/spock';
 
 
 const result = new Vec2().absolute('x');
@@ -936,7 +936,7 @@ opposite(axis?: 'x' | 'y'): Vec2
 ### Example
 
 ```js
-import { Vec2 } from '@1pizzateam/spockjs';
+import { Vec2 } from '@1pizzateam/spock';
 
 
 const result = new Vec2().opposite('x');
@@ -963,7 +963,7 @@ floor(axis?: 'x' | 'y'): Vec2
 ### Example
 
 ```js
-import { Vec2 } from '@1pizzateam/spockjs';
+import { Vec2 } from '@1pizzateam/spock';
 
 
 const result = new Vec2().floor('x');
@@ -990,7 +990,7 @@ ceil(axis?: 'x' | 'y'): Vec2
 ### Example
 
 ```js
-import { Vec2 } from '@1pizzateam/spockjs';
+import { Vec2 } from '@1pizzateam/spock';
 
 
 const result = new Vec2().ceil('x');
@@ -1017,7 +1017,7 @@ dotProduct(vector: Vec2): number
 ### Example
 
 ```js
-import { Vec2 } from '@1pizzateam/spockjs';
+import { Vec2 } from '@1pizzateam/spock';
 
 
 const result = new Vec2().dotProduct(new Vec2(1, 2));
@@ -1044,7 +1044,7 @@ setRadian(angle: number): Vec2
 ### Example
 
 ```js
-import { Vec2 } from '@1pizzateam/spockjs';
+import { Vec2 } from '@1pizzateam/spock';
 
 
 const result = new Vec2().setRadian(Math.PI / 4);
@@ -1071,7 +1071,7 @@ setDegree(angle: number): Vec2
 ### Example
 
 ```js
-import { Vec2 } from '@1pizzateam/spockjs';
+import { Vec2 } from '@1pizzateam/spock';
 
 
 const result = new Vec2().setDegree(Math.PI / 4);
@@ -1098,7 +1098,7 @@ setMinAxis(scalar: number): Vec2
 ### Example
 
 ```js
-import { Vec2 } from '@1pizzateam/spockjs';
+import { Vec2 } from '@1pizzateam/spock';
 
 
 const result = new Vec2().setMinAxis(1);
@@ -1125,7 +1125,7 @@ setMaxAxis(scalar: number): Vec2
 ### Example
 
 ```js
-import { Vec2 } from '@1pizzateam/spockjs';
+import { Vec2 } from '@1pizzateam/spock';
 
 
 const result = new Vec2().setMaxAxis(1);
@@ -1153,7 +1153,7 @@ setOppositeAxis(axis: 'x' | 'y', value: number): Vec2
 ### Example
 
 ```js
-import { Vec2 } from '@1pizzateam/spockjs';
+import { Vec2 } from '@1pizzateam/spock';
 
 
 const result = new Vec2().setOppositeAxis('x', 1);
@@ -1180,7 +1180,7 @@ None.
 ### Example
 
 ```js
-import { Vec2 } from '@1pizzateam/spockjs';
+import { Vec2 } from '@1pizzateam/spock';
 
 
 const result = new Vec2().clone();
@@ -1207,7 +1207,7 @@ None.
 ### Example
 
 ```js
-import { Vec2 } from '@1pizzateam/spockjs';
+import { Vec2 } from '@1pizzateam/spock';
 
 
 const result = new Vec2().getAngle();
@@ -1237,7 +1237,7 @@ quadraticBezier(p0: Vec2, p1: Vec2, p2: Vec2, t: number): Vec2
 ### Example
 
 ```js
-import { Vec2 } from '@1pizzateam/spockjs';
+import { Vec2 } from '@1pizzateam/spock';
 
 
 const result = new Vec2().quadraticBezier(new Vec2(1, 2), new Vec2(1, 2), new Vec2(1, 2), 0.5);
@@ -1268,7 +1268,7 @@ cubicBezier(p0: Vec2, p1: Vec2, p2: Vec2, p3: Vec2, t: number): Vec2
 ### Example
 
 ```js
-import { Vec2 } from '@1pizzateam/spockjs';
+import { Vec2 } from '@1pizzateam/spock';
 
 
 const result = new Vec2().cubicBezier(new Vec2(1, 2), new Vec2(1, 2), new Vec2(1, 2), new Vec2(1, 2), 0.5);
@@ -1298,7 +1298,7 @@ quadraticBezierDerivative(p0: Vec2, p1: Vec2, p2: Vec2, t: number): Vec2
 ### Example
 
 ```js
-import { Vec2 } from '@1pizzateam/spockjs';
+import { Vec2 } from '@1pizzateam/spock';
 
 
 const result = new Vec2().quadraticBezierDerivative(new Vec2(1, 2), new Vec2(1, 2), new Vec2(1, 2), 0.5);
@@ -1329,7 +1329,7 @@ cubicBezierDerivative(p0: Vec2, p1: Vec2, p2: Vec2, p3: Vec2, t: number): Vec2
 ### Example
 
 ```js
-import { Vec2 } from '@1pizzateam/spockjs';
+import { Vec2 } from '@1pizzateam/spock';
 
 
 const result = new Vec2().cubicBezierDerivative(new Vec2(1, 2), new Vec2(1, 2), new Vec2(1, 2), new Vec2(1, 2), 0.5);
@@ -1361,7 +1361,7 @@ quadraticBezierSplit(p0: Vec2, p1: Vec2, p2: Vec2, t: number, left: Vec2[], righ
 ### Example
 
 ```js
-import { Vec2 } from '@1pizzateam/spockjs';
+import { Vec2 } from '@1pizzateam/spock';
 
 
 const result = new Vec2().quadraticBezierSplit(new Vec2(1, 2), new Vec2(1, 2), new Vec2(1, 2), 0.5, new Vec2(1, 2), new Vec2(1, 2));
@@ -1394,7 +1394,7 @@ cubicBezierSplit(p0: Vec2, p1: Vec2, p2: Vec2, p3: Vec2, t: number, left: Vec2[]
 ### Example
 
 ```js
-import { Vec2 } from '@1pizzateam/spockjs';
+import { Vec2 } from '@1pizzateam/spock';
 
 
 const result = new Vec2().cubicBezierSplit(new Vec2(1, 2), new Vec2(1, 2), new Vec2(1, 2), new Vec2(1, 2), 0.5, new Vec2(1, 2), new Vec2(1, 2));
@@ -1424,7 +1424,7 @@ quadraticBezierLength(p0: Vec2, p1: Vec2, p2: Vec2, samples?: number): number
 ### Example
 
 ```js
-import { Vec2 } from '@1pizzateam/spockjs';
+import { Vec2 } from '@1pizzateam/spock';
 
 
 const result = new Vec2().quadraticBezierLength(new Vec2(1, 2), new Vec2(1, 2), new Vec2(1, 2), 16);
@@ -1455,7 +1455,7 @@ cubicBezierLength(p0: Vec2, p1: Vec2, p2: Vec2, p3: Vec2, samples?: number): num
 ### Example
 
 ```js
-import { Vec2 } from '@1pizzateam/spockjs';
+import { Vec2 } from '@1pizzateam/spock';
 
 
 const result = new Vec2().cubicBezierLength(new Vec2(1, 2), new Vec2(1, 2), new Vec2(1, 2), new Vec2(1, 2), 16);
@@ -1486,7 +1486,7 @@ quadraticBezierParameterAtLength(p0: Vec2, p1: Vec2, p2: Vec2, distance: number,
 ### Example
 
 ```js
-import { Vec2 } from '@1pizzateam/spockjs';
+import { Vec2 } from '@1pizzateam/spock';
 
 
 const result = new Vec2().quadraticBezierParameterAtLength(new Vec2(1, 2), new Vec2(1, 2), new Vec2(1, 2), 10, 16);
@@ -1518,7 +1518,7 @@ cubicBezierParameterAtLength(p0: Vec2, p1: Vec2, p2: Vec2, p3: Vec2, distance: n
 ### Example
 
 ```js
-import { Vec2 } from '@1pizzateam/spockjs';
+import { Vec2 } from '@1pizzateam/spock';
 
 
 const result = new Vec2().cubicBezierParameterAtLength(new Vec2(1, 2), new Vec2(1, 2), new Vec2(1, 2), new Vec2(1, 2), 10, 16);
@@ -1545,7 +1545,7 @@ None.
 ### Example
 
 ```js
-import { Vec2 } from '@1pizzateam/spockjs';
+import { Vec2 } from '@1pizzateam/spock';
 
 
 const result = new Vec2().getMaxAxis();
@@ -1572,7 +1572,7 @@ None.
 ### Example
 
 ```js
-import { Vec2 } from '@1pizzateam/spockjs';
+import { Vec2 } from '@1pizzateam/spock';
 
 
 const result = new Vec2().getMinAxis();
@@ -1599,7 +1599,7 @@ clamp(rect: Rect): Vec2
 ### Example
 
 ```js
-import { Vec2, Rect } from '@1pizzateam/spockjs';
+import { Vec2, Rect } from '@1pizzateam/spock';
 
 
 const result = new Vec2().clamp(new Rect(10, 10, 0, 0));
@@ -1628,7 +1628,7 @@ lerp(min: Vec2, max: Vec2, amount: number): Vec2
 ### Example
 
 ```js
-import { Vec2 } from '@1pizzateam/spockjs';
+import { Vec2 } from '@1pizzateam/spock';
 
 
 const result = new Vec2().lerp(new Vec2(1, 2), new Vec2(1, 2), 0.5);

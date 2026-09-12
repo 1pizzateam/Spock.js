@@ -7,7 +7,7 @@ Angle constants, conversions, and wave equations, with both fast and precise sin
 The constants `pi`, `twopi`, and `halfpi` save recomputing them, `degreeToRadian()` and `radianToDegree()` convert, and `normalizeRadian()` wraps an angle into (-π, π]. The `*Equation` helpers evaluate `amplitude * f(period + shiftX) + shiftY` in one call, which is the shape most oscillations take.
 
 ```js
-import { Trigo } from '@1pizzateam/spockjs';
+import { Trigo } from '@1pizzateam/spock';
 
 const angle = Trigo.degreeToRadian(45);
 const wrapped = Trigo.normalizeRadian(angle + Trigo.twopi);
@@ -37,7 +37,7 @@ degreeToRadian(degree: number): number
 ### Example
 
 ```js
-import { Trigo } from '@1pizzateam/spockjs';
+import { Trigo } from '@1pizzateam/spock';
 
 
 const result = Trigo.degreeToRadian(1);
@@ -64,7 +64,7 @@ radianToDegree(radian: number): number
 ### Example
 
 ```js
-import { Trigo } from '@1pizzateam/spockjs';
+import { Trigo } from '@1pizzateam/spock';
 
 
 const result = Trigo.radianToDegree(Math.PI / 4);
@@ -91,7 +91,7 @@ normalizeRadian(angle: number): number
 ### Example
 
 ```js
-import { Trigo } from '@1pizzateam/spockjs';
+import { Trigo } from '@1pizzateam/spock';
 
 
 const result = Trigo.normalizeRadian(Math.PI / 4);
@@ -118,7 +118,7 @@ sine(angle: number): number
 ### Example
 
 ```js
-import { Trigo } from '@1pizzateam/spockjs';
+import { Trigo } from '@1pizzateam/spock';
 
 
 const result = Trigo.sine(Math.PI / 4);
@@ -145,7 +145,7 @@ cosine(angle: number): number
 ### Example
 
 ```js
-import { Trigo } from '@1pizzateam/spockjs';
+import { Trigo } from '@1pizzateam/spock';
 
 
 const result = Trigo.cosine(Math.PI / 4);
@@ -172,7 +172,7 @@ arctan(angle: number): number
 ### Example
 
 ```js
-import { Trigo } from '@1pizzateam/spockjs';
+import { Trigo } from '@1pizzateam/spock';
 
 
 const result = Trigo.arctan(Math.PI / 4);
@@ -200,7 +200,7 @@ arctan2(y: number, x: number): number | false
 ### Example
 
 ```js
-import { Trigo } from '@1pizzateam/spockjs';
+import { Trigo } from '@1pizzateam/spock';
 
 
 const result = Trigo.arctan2(1, 1);
@@ -227,7 +227,7 @@ sinePrecise(angle: number): number
 ### Example
 
 ```js
-import { Trigo } from '@1pizzateam/spockjs';
+import { Trigo } from '@1pizzateam/spock';
 
 
 const result = Trigo.sinePrecise(Math.PI / 4);
@@ -254,7 +254,7 @@ cosinePrecise(angle: number): number
 ### Example
 
 ```js
-import { Trigo } from '@1pizzateam/spockjs';
+import { Trigo } from '@1pizzateam/spock';
 
 
 const result = Trigo.cosinePrecise(Math.PI / 4);
@@ -284,7 +284,7 @@ sineEquation(amplitude: number, period: number, shiftX: number, shiftY: number):
 ### Example
 
 ```js
-import { Trigo } from '@1pizzateam/spockjs';
+import { Trigo } from '@1pizzateam/spock';
 
 
 const result = Trigo.sineEquation(1, 1, 1, 1);
@@ -314,7 +314,7 @@ cosineEquation(amplitude: number, period: number, shiftX: number, shiftY: number
 ### Example
 
 ```js
-import { Trigo } from '@1pizzateam/spockjs';
+import { Trigo } from '@1pizzateam/spock';
 
 
 const result = Trigo.cosineEquation(1, 1, 1, 1);
@@ -344,7 +344,7 @@ arctanEquation(amplitude: number, period: number, shiftX: number, shiftY: number
 ### Example
 
 ```js
-import { Trigo } from '@1pizzateam/spockjs';
+import { Trigo } from '@1pizzateam/spock';
 
 
 const result = Trigo.arctanEquation(1, 1, 1, 1);

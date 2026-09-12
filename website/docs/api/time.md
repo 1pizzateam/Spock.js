@@ -7,7 +7,7 @@ Four one-line conversions that keep the ×1000 and 1000÷ constants out of anima
 The common use is turning a target rate into the duration you compare against elapsed time, so the constant reads as a rate instead of an unexplained decimal.
 
 ```js
-import { Time } from '@1pizzateam/spockjs';
+import { Time } from '@1pizzateam/spock';
 
 const frameBudget = Time.fpsToMillisec(60); // 16.67 ms
 const actualFps = Time.millisecToFps(20);   // 50
@@ -37,7 +37,7 @@ millisecToSec(millisecond: number): number
 ### Example
 
 ```js
-import { Time } from '@1pizzateam/spockjs';
+import { Time } from '@1pizzateam/spock';
 
 
 const result = Time.millisecToSec(1);
@@ -64,7 +64,7 @@ secToMillisec(second: number): number
 ### Example
 
 ```js
-import { Time } from '@1pizzateam/spockjs';
+import { Time } from '@1pizzateam/spock';
 
 
 const result = Time.secToMillisec(1);
@@ -91,7 +91,7 @@ millisecToFps(millisecond: number): number
 ### Example
 
 ```js
-import { Time } from '@1pizzateam/spockjs';
+import { Time } from '@1pizzateam/spock';
 
 
 const result = Time.millisecToFps(1);
@@ -118,7 +118,7 @@ fpsToMillisec(refreshRate: number): number
 ### Example
 
 ```js
-import { Time } from '@1pizzateam/spockjs';
+import { Time } from '@1pizzateam/spock';
 
 
 const result = Time.fpsToMillisec(1);

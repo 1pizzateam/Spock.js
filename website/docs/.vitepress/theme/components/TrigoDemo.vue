@@ -1,5 +1,5 @@
 <script setup>
-import { Trigo } from '@1pizzateam/spockjs';
+import { Trigo } from '@1pizzateam/spock';
 import DemoFrame from './DemoFrame.vue';
 import { dot, label, polyline } from '../canvas.js';
 

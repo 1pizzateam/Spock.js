@@ -1,5 +1,5 @@
 <script setup>
-import { Rand } from '@1pizzateam/spockjs';
+import { Rand } from '@1pizzateam/spock';
 import DemoFrame from './DemoFrame.vue';
 import { label } from '../canvas.js';
 

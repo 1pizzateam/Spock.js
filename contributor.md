@@ -16,7 +16,7 @@
   That builds the library (`spock`), then starts the VitePress docs site (`website`)
   once the build succeeds. Open **http://localhost:5173/docs/**.
 
-  The docs demos import `@1pizzateam/spockjs`, which always resolves to `dist/`,
+  The docs demos import `@1pizzateam/spock`, which always resolves to `dist/`,
   so rebuild the library to see source changes on the site.
 
 OR

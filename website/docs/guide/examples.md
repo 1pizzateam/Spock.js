@@ -7,7 +7,7 @@ Every demo on this page runs the library in your browser, capped at 30 fps to ke
 <LerpDemo />
 
 ```js
-import { Utils, Vec2 } from '@1pizzateam/spockjs';
+import { Utils, Vec2 } from '@1pizzateam/spock';
 
 const start = new Vec2(0, 20);
 const end = new Vec2(100, 80);
@@ -21,7 +21,7 @@ const radius = Utils.lerp(8, 30, 0.35);
 <BezierDemo />
 
 ```js
-import { Vec2 } from '@1pizzateam/spockjs';
+import { Vec2 } from '@1pizzateam/spock';
 
 const p0 = new Vec2(20, 200);
 const p1 = new Vec2(160, 20);
@@ -37,7 +37,7 @@ const length = new Vec2().quadraticBezierLength(p0, p1, p2);
 <CubicBezierDemo />
 
 ```js
-import { Vec2 } from '@1pizzateam/spockjs';
+import { Vec2 } from '@1pizzateam/spock';
 
 const p0 = new Vec2(20, 220);
 const p1 = new Vec2(90, 40);
@@ -58,7 +58,7 @@ const halfway = new Vec2().cubicBezier(p0, p1, p2, p3, t);
 <TransformDemo />
 
 ```js
-import { Mat3, Vec2 } from '@1pizzateam/spockjs';
+import { Mat3, Vec2 } from '@1pizzateam/spock';
 
 const transform = new Mat3()
   .translate(new Vec2(100, 50))
@@ -73,7 +73,7 @@ const buffer = transform.toArray();
 <TrigoDemo />
 
 ```js
-import { Trigo } from '@1pizzateam/spockjs';
+import { Trigo } from '@1pizzateam/spock';
 
 const wrapped = Trigo.normalizeRadian(7.5);
 const y = Trigo.sine(wrapped);
@@ -85,7 +85,7 @@ const heading = Trigo.arctan2(dy, dx);
 <WaveDemo />
 
 ```js
-import { Trigo } from '@1pizzateam/spockjs';
+import { Trigo } from '@1pizzateam/spock';
 
 const slice = Trigo.twopi / 24;
 
@@ -99,7 +99,7 @@ const y = Trigo.sineEquation(200, slice * i, 0, centerY);
 <UtilsDemo />
 
 ```js
-import { Utils } from '@1pizzateam/spockjs';
+import { Utils } from '@1pizzateam/spock';
 
 const celsius = Utils.map(pixelX, 0, 600, -20, 40);
 const ratio = Utils.normalize(celsius, -20, 40);
@@ -111,7 +111,7 @@ const snapped = Utils.roundToNearest(celsius, 2.5);
 <RandDemo />
 
 ```js
-import { Rand } from '@1pizzateam/spockjs';
+import { Rand } from '@1pizzateam/spock';
 
 const random = Rand.create(1337);
 const flat = random.float(0, 1);
@@ -123,7 +123,7 @@ const centered = random.distribution(0, 1, 5);
 <RandScatterDemo />
 
 ```js
-import { Rand } from '@1pizzateam/spockjs';
+import { Rand } from '@1pizzateam/spock';
 
 const random = Rand.create(20260904);
 
@@ -139,7 +139,7 @@ for (let i = 0; i < 9000; i++) {
 <GridDemo />
 
 ```js
-import { Circ, Grid } from '@1pizzateam/spockjs';
+import { Circ, Grid } from '@1pizzateam/spock';
 
 const grid = new Grid(800, 600, 32);
 const circle = new Circ(38, 400, 300).setGrid(grid);
@@ -153,7 +153,7 @@ const occupied = circle.gridCells.filter(cell => cell !== Grid.emptyCell);
 <QuatDemo />
 
 ```js
-import { Quat, Vec3 } from '@1pizzateam/spockjs';
+import { Quat, Vec3 } from '@1pizzateam/spock';
 
 const rotation = new Quat()
   .setAxisAngle(new Vec3(0.4, 1, 0.25), Math.PI / 2);
@@ -167,7 +167,7 @@ rotation.multiplyVector(new Vec3(0, 0, 1), target);
 <ClampDemo />
 
 ```js
-import { Rect, Vec2 } from '@1pizzateam/spockjs';
+import { Rect, Vec2 } from '@1pizzateam/spock';
 
 const bounds = new Rect(640, 360, 320, 180);
 const pointer = new Vec2(700, -20).clamp(bounds);

@@ -7,7 +7,7 @@ Quaternions are the compact way to hold and blend 3D rotations. They avoid gimba
 `new Quat()` is the identity rotation. Build one from an axis and angle with `setAxisAngle()`, or from Euler angles with `setFromEuler()`. At render time `toMat4()` or `toMat4x3()` writes the rotation into a matrix. Component order is `[w, x, y, z]` in both the constructor and `toArray()`.
 
 ```js
-import { Quat, Vec3 } from '@1pizzateam/spockjs';
+import { Quat, Vec3 } from '@1pizzateam/spock';
 
 const start = new Quat();
 const end = new Quat().setAxisAngle(new Vec3(0, 1, 0), Math.PI / 2);
@@ -40,7 +40,7 @@ new Quat(w: number = 1, x: number = 0, y: number = 0, z: number = 0)
 ### Example
 
 ```js
-import { Quat } from '@1pizzateam/spockjs';
+import { Quat } from '@1pizzateam/spock';
 
 const value = new Quat(1, 1, 1, 1);
 ```
@@ -69,7 +69,7 @@ set(w: number, x: number, y: number, z: number): Quat
 ### Example
 
 ```js
-import { Quat } from '@1pizzateam/spockjs';
+import { Quat } from '@1pizzateam/spock';
 
 
 const result = new Quat().set(1, 1, 1, 1);
@@ -96,7 +96,7 @@ None.
 ### Example
 
 ```js
-import { Quat } from '@1pizzateam/spockjs';
+import { Quat } from '@1pizzateam/spock';
 
 
 const result = new Quat().identity();
@@ -124,7 +124,7 @@ setAxisAngle(axis: Vec3, angle: number): Quat
 ### Example
 
 ```js
-import { Quat, Vec3 } from '@1pizzateam/spockjs';
+import { Quat, Vec3 } from '@1pizzateam/spock';
 
 
 const result = new Quat().setAxisAngle(new Vec3(1, 2, 3), Math.PI / 4);
@@ -153,7 +153,7 @@ setFromEuler(x: number, y: number, z: number): Quat
 ### Example
 
 ```js
-import { Quat } from '@1pizzateam/spockjs';
+import { Quat } from '@1pizzateam/spock';
 
 
 const result = new Quat().setFromEuler(1, 1, 1);
@@ -180,7 +180,7 @@ getAxisAngle(axis: Vec3): number
 ### Example
 
 ```js
-import { Quat, Vec3 } from '@1pizzateam/spockjs';
+import { Quat, Vec3 } from '@1pizzateam/spock';
 
 
 const result = new Quat().getAxisAngle(new Vec3(1, 2, 3));
@@ -207,7 +207,7 @@ None.
 ### Example
 
 ```js
-import { Quat } from '@1pizzateam/spockjs';
+import { Quat } from '@1pizzateam/spock';
 
 
 const result = new Quat().clone();
@@ -234,7 +234,7 @@ copy(q: Quat): Quat
 ### Example
 
 ```js
-import { Quat } from '@1pizzateam/spockjs';
+import { Quat } from '@1pizzateam/spock';
 
 
 const result = new Quat().copy(new Quat());
@@ -261,7 +261,7 @@ toArray(target: number[] = []): number[]
 ### Example
 
 ```js
-import { Quat } from '@1pizzateam/spockjs';
+import { Quat } from '@1pizzateam/spock';
 
 
 const result = new Quat().toArray([1, 2, 3]);
@@ -288,7 +288,7 @@ None.
 ### Example
 
 ```js
-import { Quat } from '@1pizzateam/spockjs';
+import { Quat } from '@1pizzateam/spock';
 
 
 const result = new Quat().toString();
@@ -315,7 +315,7 @@ getMagnitude(square: boolean = false): number
 ### Example
 
 ```js
-import { Quat } from '@1pizzateam/spockjs';
+import { Quat } from '@1pizzateam/spock';
 
 
 const result = new Quat().getMagnitude(false);
@@ -342,7 +342,7 @@ None.
 ### Example
 
 ```js
-import { Quat } from '@1pizzateam/spockjs';
+import { Quat } from '@1pizzateam/spock';
 
 
 const result = new Quat().normalize();
@@ -369,7 +369,7 @@ None.
 ### Example
 
 ```js
-import { Quat } from '@1pizzateam/spockjs';
+import { Quat } from '@1pizzateam/spock';
 
 
 const result = new Quat().conjugate();
@@ -396,7 +396,7 @@ None.
 ### Example
 
 ```js
-import { Quat } from '@1pizzateam/spockjs';
+import { Quat } from '@1pizzateam/spock';
 
 
 const result = new Quat().invert();
@@ -423,7 +423,7 @@ dot(q: Quat): number
 ### Example
 
 ```js
-import { Quat } from '@1pizzateam/spockjs';
+import { Quat } from '@1pizzateam/spock';
 
 
 const result = new Quat().dot(new Quat());
@@ -450,7 +450,7 @@ multiply(q: Quat): Quat
 ### Example
 
 ```js
-import { Quat } from '@1pizzateam/spockjs';
+import { Quat } from '@1pizzateam/spock';
 
 
 const result = new Quat().multiply(new Quat());
@@ -477,7 +477,7 @@ premultiply(q: Quat): Quat
 ### Example
 
 ```js
-import { Quat } from '@1pizzateam/spockjs';
+import { Quat } from '@1pizzateam/spock';
 
 
 const result = new Quat().premultiply(new Quat());
@@ -504,7 +504,7 @@ rotateX(angle: number): Quat
 ### Example
 
 ```js
-import { Quat } from '@1pizzateam/spockjs';
+import { Quat } from '@1pizzateam/spock';
 
 
 const result = new Quat().rotateX(Math.PI / 4);
@@ -531,7 +531,7 @@ rotateY(angle: number): Quat
 ### Example
 
 ```js
-import { Quat } from '@1pizzateam/spockjs';
+import { Quat } from '@1pizzateam/spock';
 
 
 const result = new Quat().rotateY(Math.PI / 4);
@@ -558,7 +558,7 @@ rotateZ(angle: number): Quat
 ### Example
 
 ```js
-import { Quat } from '@1pizzateam/spockjs';
+import { Quat } from '@1pizzateam/spock';
 
 
 const result = new Quat().rotateZ(Math.PI / 4);
@@ -586,7 +586,7 @@ slerp(q: Quat, t: number): Quat
 ### Example
 
 ```js
-import { Quat } from '@1pizzateam/spockjs';
+import { Quat } from '@1pizzateam/spock';
 
 
 const result = new Quat().slerp(new Quat(), 0.5);
@@ -614,7 +614,7 @@ multiplyVector(vector: Vec3, target: Vec3 = new Vec3()): Vec3
 ### Example
 
 ```js
-import { Quat, Vec3 } from '@1pizzateam/spockjs';
+import { Quat, Vec3 } from '@1pizzateam/spock';
 
 
 const result = new Quat().multiplyVector(new Vec3(1, 2, 3), new Vec3(1, 2, 3));
@@ -641,7 +641,7 @@ toMat4(target: Mat4 = new Mat4()): Mat4
 ### Example
 
 ```js
-import { Quat, Mat4 } from '@1pizzateam/spockjs';
+import { Quat, Mat4 } from '@1pizzateam/spock';
 
 
 const result = new Quat().toMat4(new Mat4());
@@ -668,7 +668,7 @@ toMat4x3(target: Mat4x3 = new Mat4x3()): Mat4x3
 ### Example
 
 ```js
-import { Quat, Mat4x3 } from '@1pizzateam/spockjs';
+import { Quat, Mat4x3 } from '@1pizzateam/spock';
 
 
 const result = new Quat().toMat4x3(new Mat4x3());
@@ -695,7 +695,7 @@ None.
 ### Example
 
 ```js
-import { Quat } from '@1pizzateam/spockjs';
+import { Quat } from '@1pizzateam/spock';
 
 
 const result = new Quat().isIdentity();

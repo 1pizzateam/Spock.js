@@ -7,7 +7,7 @@ Scalar helpers that sit between `Math` and your own code: rounding, mixing, clam
 The rounding group — `round()`, `floor()`, `ceil()`, and `trunc()` — takes a decimal count, so you can snap to two decimals without the usual multiply-and-divide dance. `roundToNearest()` snaps to an arbitrary step instead. `isIn()` and `isOut()` are readable range tests.
 
 ```js
-import { Utils } from '@1pizzateam/spockjs';
+import { Utils } from '@1pizzateam/spock';
 
 const opacity = Utils.clamp(1.25, 0, 1);       // 1
 const eased = Utils.lerp(0, 100, 0.25);        // 25
@@ -37,7 +37,7 @@ round(x: number, decimals: number): number
 ### Example
 
 ```js
-import { Utils } from '@1pizzateam/spockjs';
+import { Utils } from '@1pizzateam/spock';
 
 
 const result = Utils.round(1, 1);
@@ -65,7 +65,7 @@ floor(x: number, decimals: number): number
 ### Example
 
 ```js
-import { Utils } from '@1pizzateam/spockjs';
+import { Utils } from '@1pizzateam/spock';
 
 
 const result = Utils.floor(1, 1);
@@ -93,7 +93,7 @@ ceil(x: number, decimals: number): number
 ### Example
 
 ```js
-import { Utils } from '@1pizzateam/spockjs';
+import { Utils } from '@1pizzateam/spock';
 
 
 const result = Utils.ceil(1, 1);
@@ -121,7 +121,7 @@ trunc(x: number, decimals: number): number
 ### Example
 
 ```js
-import { Utils } from '@1pizzateam/spockjs';
+import { Utils } from '@1pizzateam/spock';
 
 
 const result = Utils.trunc(1, 1);
@@ -149,7 +149,7 @@ roundToNearest(x: number, nearest: number): number
 ### Example
 
 ```js
-import { Utils } from '@1pizzateam/spockjs';
+import { Utils } from '@1pizzateam/spock';
 
 
 const result = Utils.roundToNearest(1, 1);
@@ -178,7 +178,7 @@ mix(x: number, y: number, ratio: number): number
 ### Example
 
 ```js
-import { Utils } from '@1pizzateam/spockjs';
+import { Utils } from '@1pizzateam/spock';
 
 
 const result = Utils.mix(1, 1, 0.5);
@@ -205,7 +205,7 @@ getSign(x: number): number
 ### Example
 
 ```js
-import { Utils } from '@1pizzateam/spockjs';
+import { Utils } from '@1pizzateam/spock';
 
 
 const result = Utils.getSign(1);
@@ -232,7 +232,7 @@ opposite(x: number): number
 ### Example
 
 ```js
-import { Utils } from '@1pizzateam/spockjs';
+import { Utils } from '@1pizzateam/spock';
 
 
 const result = Utils.opposite(1);
@@ -261,7 +261,7 @@ clamp(x: number, min: number, max: number): number
 ### Example
 
 ```js
-import { Utils } from '@1pizzateam/spockjs';
+import { Utils } from '@1pizzateam/spock';
 
 
 const result = Utils.clamp(1, 1, 1);
@@ -290,7 +290,7 @@ normalize(x: number, min: number, max: number): number
 ### Example
 
 ```js
-import { Utils } from '@1pizzateam/spockjs';
+import { Utils } from '@1pizzateam/spock';
 
 
 const result = Utils.normalize(1, 1, 1);
@@ -319,7 +319,7 @@ lerp(min: number, max: number, amount: number): number
 ### Example
 
 ```js
-import { Utils } from '@1pizzateam/spockjs';
+import { Utils } from '@1pizzateam/spock';
 
 
 const result = Utils.lerp(1, 1, 0.5);
@@ -350,7 +350,7 @@ map(x: number, sourceMin: number, sourceMax: number, destMin: number, destMax: n
 ### Example
 
 ```js
-import { Utils } from '@1pizzateam/spockjs';
+import { Utils } from '@1pizzateam/spock';
 
 
 const result = Utils.map(1, 1, 1, 1, 1);
@@ -379,7 +379,7 @@ isIn(x: number, min: number, max: number): boolean
 ### Example
 
 ```js
-import { Utils } from '@1pizzateam/spockjs';
+import { Utils } from '@1pizzateam/spock';
 
 
 const result = Utils.isIn(1, 1, 1);
@@ -408,7 +408,7 @@ isOut(x: number, min: number, max: number): boolean
 ### Example
 
 ```js
-import { Utils } from '@1pizzateam/spockjs';
+import { Utils } from '@1pizzateam/spock';
 
 
 const result = Utils.isOut(1, 1, 1);

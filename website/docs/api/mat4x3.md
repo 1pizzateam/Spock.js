@@ -7,7 +7,7 @@ Reach for it when a transform will never need perspective: object placement, nod
 Because the matrix is affine by construction, the linear-only operations are named for it: `transposeLinear()`, `determinantLinear()`, and `invertAffine()`. Use `Mat4` instead when you need `perspective()` or `orthographic()`.
 
 ```js
-import { Mat4x3, Vec3 } from '@1pizzateam/spockjs';
+import { Mat4x3, Vec3 } from '@1pizzateam/spock';
 
 const view = new Mat4x3().lookAtRH(
   new Vec3(0, 2, 6), // eye
@@ -52,7 +52,7 @@ new Mat4x3(x1?:number, x2?:number, x3?:number, y1?:number, y2?:number, y3?:numbe
 ### Example
 
 ```js
-import { Mat4x3 } from '@1pizzateam/spockjs';
+import { Mat4x3 } from '@1pizzateam/spock';
 
 const value = new Mat4x3(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
 ```
@@ -78,7 +78,7 @@ copy(matrix4x3: Mat4x3): Mat4x3
 ### Example
 
 ```js
-import { Mat4x3 } from '@1pizzateam/spockjs';
+import { Mat4x3 } from '@1pizzateam/spock';
 
 
 const result = new Mat4x3().copy(new Mat4x3());
@@ -105,7 +105,7 @@ toArray(target?: Float32Array): Float32Array
 ### Example
 
 ```js
-import { Mat4x3 } from '@1pizzateam/spockjs';
+import { Mat4x3 } from '@1pizzateam/spock';
 
 
 const result = new Mat4x3().toArray(new Float32Array(16));
@@ -132,7 +132,7 @@ None.
 ### Example
 
 ```js
-import { Mat4x3 } from '@1pizzateam/spockjs';
+import { Mat4x3 } from '@1pizzateam/spock';
 
 
 const result = new Mat4x3().toString();
@@ -159,7 +159,7 @@ None.
 ### Example
 
 ```js
-import { Mat4x3 } from '@1pizzateam/spockjs';
+import { Mat4x3 } from '@1pizzateam/spock';
 
 
 const result = new Mat4x3().identity();
@@ -186,7 +186,7 @@ scale(vector3: Vec3): Mat4x3
 ### Example
 
 ```js
-import { Mat4x3, Vec3 } from '@1pizzateam/spockjs';
+import { Mat4x3, Vec3 } from '@1pizzateam/spock';
 
 
 const result = new Mat4x3().scale(new Vec3(1, 2, 3));
@@ -213,7 +213,7 @@ rotateX(angle: number): Mat4x3
 ### Example
 
 ```js
-import { Mat4x3 } from '@1pizzateam/spockjs';
+import { Mat4x3 } from '@1pizzateam/spock';
 
 
 const result = new Mat4x3().rotateX(Math.PI / 4);
@@ -240,7 +240,7 @@ rotateY(angle: number): Mat4x3
 ### Example
 
 ```js
-import { Mat4x3 } from '@1pizzateam/spockjs';
+import { Mat4x3 } from '@1pizzateam/spock';
 
 
 const result = new Mat4x3().rotateY(Math.PI / 4);
@@ -267,7 +267,7 @@ rotateZ(angle: number): Mat4x3
 ### Example
 
 ```js
-import { Mat4x3 } from '@1pizzateam/spockjs';
+import { Mat4x3 } from '@1pizzateam/spock';
 
 
 const result = new Mat4x3().rotateZ(Math.PI / 4);
@@ -294,7 +294,7 @@ translate(vector3: Vec3): Mat4x3
 ### Example
 
 ```js
-import { Mat4x3, Vec3 } from '@1pizzateam/spockjs';
+import { Mat4x3, Vec3 } from '@1pizzateam/spock';
 
 
 const result = new Mat4x3().translate(new Vec3(1, 2, 3));
@@ -321,7 +321,7 @@ multiply(matrix4x3: Mat4x3): Mat4x3
 ### Example
 
 ```js
-import { Mat4x3 } from '@1pizzateam/spockjs';
+import { Mat4x3 } from '@1pizzateam/spock';
 
 
 const result = new Mat4x3().multiply(new Mat4x3());
@@ -350,7 +350,7 @@ lookAtRH(eye: Vec3, target: Vec3, up: Vec3): Mat4x3
 ### Example
 
 ```js
-import { Mat4x3, Vec3 } from '@1pizzateam/spockjs';
+import { Mat4x3, Vec3 } from '@1pizzateam/spock';
 
 
 const result = new Mat4x3().lookAtRH(new Vec3(1, 2, 3), new Vec3(1, 2, 3), new Vec3(1, 2, 3));
@@ -377,7 +377,7 @@ None.
 ### Example
 
 ```js
-import { Mat4x3 } from '@1pizzateam/spockjs';
+import { Mat4x3 } from '@1pizzateam/spock';
 
 
 const result = new Mat4x3().transposeLinear();
@@ -404,7 +404,7 @@ None.
 ### Example
 
 ```js
-import { Mat4x3 } from '@1pizzateam/spockjs';
+import { Mat4x3 } from '@1pizzateam/spock';
 
 
 const result = new Mat4x3().determinantLinear();
@@ -431,7 +431,7 @@ None.
 ### Example
 
 ```js
-import { Mat4x3 } from '@1pizzateam/spockjs';
+import { Mat4x3 } from '@1pizzateam/spock';
 
 
 const result = new Mat4x3().invertAffine();

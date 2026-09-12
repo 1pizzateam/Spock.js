@@ -1,10 +1,10 @@
 # Migrating to 4.0
 
-Version 4 is published as `@1pizzateam/spockjs` and is ESM-only.
+Version 4 is published as `@1pizzateam/spock` and is ESM-only.
 
 ```diff
 - import { Vector2 } from '@lcluber/type6js';
-+ import { Vec2 } from '@1pizzateam/spockjs';
++ import { Vec2 } from '@1pizzateam/spock';
 ```
 
 ## Runtime and packaging
@@ -39,7 +39,7 @@ Version 4 is published as `@1pizzateam/spockjs` and is ESM-only.
 - Off-grid and unused occupancy uses `Grid.emptyCell` (`-1`).
 
 ```js
-import { Circ, Grid } from '@1pizzateam/spockjs';
+import { Circ, Grid } from '@1pizzateam/spock';
 
 const grid = new Grid(800, 600, 32);
 const circle = new Circ(20, 100, 100).setGrid(grid);

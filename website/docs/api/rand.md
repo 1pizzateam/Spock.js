@@ -7,7 +7,7 @@ The module-level `float()`, `integer()`, `distribution()`, and `pick()` use `Mat
 `create()` returns an independent generator with the same four methods, which is the better option when you want one reproducible stream without touching global state. `distribution()` averages several samples, biasing results toward the middle of the range instead of spreading them evenly.
 
 ```js
-import { Rand } from '@1pizzateam/spockjs';
+import { Rand } from '@1pizzateam/spock';
 
 const level = Rand.create(1337); // same seed, same level, every run
 
@@ -38,7 +38,7 @@ float(min: number, max: number): number
 ### Example
 
 ```js
-import { Rand } from '@1pizzateam/spockjs';
+import { Rand } from '@1pizzateam/spock';
 
 
 const result = Rand.float(1, 1);
@@ -66,7 +66,7 @@ integer(min: number, max: number): number
 ### Example
 
 ```js
-import { Rand } from '@1pizzateam/spockjs';
+import { Rand } from '@1pizzateam/spock';
 
 
 const result = Rand.integer(1, 1);
@@ -95,7 +95,7 @@ distribution(min: number, max: number, iterations: number): number
 ### Example
 
 ```js
-import { Rand } from '@1pizzateam/spockjs';
+import { Rand } from '@1pizzateam/spock';
 
 
 const result = Rand.distribution(1, 1, 4);
@@ -123,7 +123,7 @@ pick(value1: number, value2: number): number
 ### Example
 
 ```js
-import { Rand } from '@1pizzateam/spockjs';
+import { Rand } from '@1pizzateam/spock';
 
 
 const result = Rand.pick(1, 1);
@@ -150,7 +150,7 @@ seed(value?: number): void
 ### Example
 
 ```js
-import { Rand } from '@1pizzateam/spockjs';
+import { Rand } from '@1pizzateam/spock';
 
 
 const result = Rand.seed(1);
@@ -177,7 +177,7 @@ create(seed: number): { float(min, max): number; integer(min, max): number; dist
 ### Example
 
 ```js
-import { Rand } from '@1pizzateam/spockjs';
+import { Rand } from '@1pizzateam/spock';
 
 
 const result = Rand.create(42);

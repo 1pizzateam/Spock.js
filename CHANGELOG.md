@@ -2,7 +2,7 @@
 Version 4.0.0 (September 4th 2026)
 -----------------------------
  * Breaking:
-    * Published as `@1pizzateam/spockjs` (was `@lcluber/type6js`)
+    * Published as `@1pizzateam/spock` (was `@lcluber/type6js`)
     * ESM-only package, Node.js 22+, no CommonJS or IIFE/old-browser build
     * `new Mat3()`, `new Mat4x3()` and `new Mat4()` with no arguments are identity, not all zeros
     * Published types are emitted by tsc (no hand-written spock.d.ts)

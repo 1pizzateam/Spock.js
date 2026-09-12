@@ -37,7 +37,7 @@ features:
 <GameOfLife />
 
 ```js
-import { Grid, Rand, Rect, Time, Utils } from '@1pizzateam/spockjs';
+import { Grid, Rand, Rect, Time, Utils } from '@1pizzateam/spock';
 
 const CELL = 8;
 const GROW = 4;

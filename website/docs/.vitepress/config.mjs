@@ -25,7 +25,7 @@ function localEntry() {
   return entry;
 }
 
-const alias = { '@1pizzateam/spockjs': localEntry() };
+const alias = { '@1pizzateam/spock': localEntry() };
 
 export default defineConfig({
   title: 'Spock.js',
@@ -100,7 +100,7 @@ export default defineConfig({
     ],
     socialLinks: [
       { icon: 'github', link: 'https://github.com/1pizzateam/Spock.js' },
-      { icon: 'npm', link: 'https://www.npmjs.com/package/@1pizzateam/spockjs' },
+      { icon: 'npm', link: 'https://www.npmjs.com/package/@1pizzateam/spock' },
     ],
     search: {
       provider: 'local',

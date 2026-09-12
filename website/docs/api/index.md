@@ -1,9 +1,9 @@
 # API Reference
 
-All public APIs are named ESM exports from `@1pizzateam/spockjs`. There is no default export and no namespace object, so you import exactly what you use and a bundler drops the rest.
+All public APIs are named ESM exports from `@1pizzateam/spock`. There is no default export and no namespace object, so you import exactly what you use and a bundler drops the rest.
 
 ```js
-import { Vec2, Rect, Utils } from '@1pizzateam/spockjs';
+import { Vec2, Rect, Utils } from '@1pizzateam/spock';
 ```
 
 The classes — vectors, matrices, quaternions, and shapes — are mutable. Their methods write into the instance they were called on and return it, so operations chain and a render loop can reuse instances instead of allocating each frame. Methods that measure or test return a number or boolean instead. `Trigo`, `Bezier`, `Rand`, `NumArray`, `Utils`, and `Time` are plain objects of stateless functions, called directly on the export.

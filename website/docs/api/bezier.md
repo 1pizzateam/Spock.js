@@ -7,7 +7,7 @@ Every function takes plain numbers, so you call it once per axis. That keeps it 
 Alongside evaluation there are first derivatives, which give the tangent and so the direction of travel, de Casteljau splits that cut a curve at `t` into two control polygons, and sampled `*Length()` and `*ParameterAtLength()` for walking a curve at constant speed.
 
 ```js
-import { Bezier } from '@1pizzateam/spockjs';
+import { Bezier } from '@1pizzateam/spock';
 
 const x = Bezier.cubic(0, 30, 70, 100, 0.5);
 const slope = Bezier.cubicDerivative(0, 30, 70, 100, 0.5);
@@ -40,7 +40,7 @@ quadratic(p0: number, p1: number, p2: number, t: number): number
 ### Example
 
 ```js
-import { Bezier } from '@1pizzateam/spockjs';
+import { Bezier } from '@1pizzateam/spock';
 
 
 const result = Bezier.quadratic(1, 1, 1, 0.5);
@@ -71,7 +71,7 @@ cubic(p0: number, p1: number, p2: number, p3: number, t: number): number
 ### Example
 
 ```js
-import { Bezier } from '@1pizzateam/spockjs';
+import { Bezier } from '@1pizzateam/spock';
 
 
 const result = Bezier.cubic(1, 1, 1, 1, 0.5);
@@ -101,7 +101,7 @@ quadraticDerivative(p0: number, p1: number, p2: number, t: number): number
 ### Example
 
 ```js
-import { Bezier } from '@1pizzateam/spockjs';
+import { Bezier } from '@1pizzateam/spock';
 
 
 const result = Bezier.quadraticDerivative(1, 1, 1, 0.5);
@@ -132,7 +132,7 @@ cubicDerivative(p0: number, p1: number, p2: number, p3: number, t: number): numb
 ### Example
 
 ```js
-import { Bezier } from '@1pizzateam/spockjs';
+import { Bezier } from '@1pizzateam/spock';
 
 
 const result = Bezier.cubicDerivative(1, 1, 1, 1, 0.5);
@@ -164,7 +164,7 @@ quadraticSplit(p0: number, p1: number, p2: number, t: number, left: number[], ri
 ### Example
 
 ```js
-import { Bezier } from '@1pizzateam/spockjs';
+import { Bezier } from '@1pizzateam/spock';
 
 
 const result = Bezier.quadraticSplit(1, 1, 1, 0.5, [1, 2, 3], [1, 2, 3]);
@@ -197,7 +197,7 @@ cubicSplit(p0: number, p1: number, p2: number, p3: number, t: number, left: numb
 ### Example
 
 ```js
-import { Bezier } from '@1pizzateam/spockjs';
+import { Bezier } from '@1pizzateam/spock';
 
 
 const result = Bezier.cubicSplit(1, 1, 1, 1, 0.5, [1, 2, 3], [1, 2, 3]);
@@ -227,7 +227,7 @@ quadraticLength(p0: number, p1: number, p2: number, samples?: number): number
 ### Example
 
 ```js
-import { Bezier } from '@1pizzateam/spockjs';
+import { Bezier } from '@1pizzateam/spock';
 
 
 const result = Bezier.quadraticLength(1, 1, 1, 16);
@@ -258,7 +258,7 @@ cubicLength(p0: number, p1: number, p2: number, p3: number, samples?: number): n
 ### Example
 
 ```js
-import { Bezier } from '@1pizzateam/spockjs';
+import { Bezier } from '@1pizzateam/spock';
 
 
 const result = Bezier.cubicLength(1, 1, 1, 1, 16);
@@ -289,7 +289,7 @@ quadraticParameterAtLength(p0: number, p1: number, p2: number, distance: number,
 ### Example
 
 ```js
-import { Bezier } from '@1pizzateam/spockjs';
+import { Bezier } from '@1pizzateam/spock';
 
 
 const result = Bezier.quadraticParameterAtLength(1, 1, 1, 10, 16);
@@ -321,7 +321,7 @@ cubicParameterAtLength(p0: number, p1: number, p2: number, p3: number, distance:
 ### Example
 
 ```js
-import { Bezier } from '@1pizzateam/spockjs';
+import { Bezier } from '@1pizzateam/spock';
 
 
 const result = Bezier.cubicParameterAtLength(1, 1, 1, 1, 10, 16);

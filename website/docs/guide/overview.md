@@ -15,7 +15,7 @@ Spock.js is an open-source mathematics library written in TypeScript. It provide
 ## Quick start
 
 ```js
-import { Vec2, Utils } from '@1pizzateam/spockjs';
+import { Vec2, Utils } from '@1pizzateam/spock';
 
 const position = new Vec2(10, 20)
   .add(new Vec2(5, -2))

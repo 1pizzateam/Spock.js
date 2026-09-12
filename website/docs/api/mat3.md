@@ -7,7 +7,7 @@ It handles the usual 2D pipeline: translation, rotation, and scale, composed tog
 `scale()`, `rotate()`, and `translate()` compose onto the current matrix rather than replacing it, so the order you call them in is the order they apply. `toArray()` hands back the live buffer, ready to upload to WebGL, or copies into an array you pass in.
 
 ```js
-import { Mat3, Vec2 } from '@1pizzateam/spockjs';
+import { Mat3, Vec2 } from '@1pizzateam/spock';
 
 const transform = new Mat3()
   .translate(new Vec2(120, 80))
@@ -46,7 +46,7 @@ new Mat3(x1?:number, x2?:number, x3?:number, y1?:number, y2?:number, y3?:number,
 ### Example
 
 ```js
-import { Mat3 } from '@1pizzateam/spockjs';
+import { Mat3 } from '@1pizzateam/spock';
 
 const value = new Mat3(1, 1, 1, 1, 1, 1, 1, 1, 1);
 ```
@@ -72,7 +72,7 @@ copy(matrix3x3: Mat3): Mat3
 ### Example
 
 ```js
-import { Mat3 } from '@1pizzateam/spockjs';
+import { Mat3 } from '@1pizzateam/spock';
 
 
 const result = new Mat3().copy(new Mat3());
@@ -99,7 +99,7 @@ toArray(target?: Float32Array): Float32Array
 ### Example
 
 ```js
-import { Mat3 } from '@1pizzateam/spockjs';
+import { Mat3 } from '@1pizzateam/spock';
 
 
 const result = new Mat3().toArray(new Float32Array(16));
@@ -126,7 +126,7 @@ None.
 ### Example
 
 ```js
-import { Mat3 } from '@1pizzateam/spockjs';
+import { Mat3 } from '@1pizzateam/spock';
 
 
 const result = new Mat3().toString();
@@ -153,7 +153,7 @@ None.
 ### Example
 
 ```js
-import { Mat3 } from '@1pizzateam/spockjs';
+import { Mat3 } from '@1pizzateam/spock';
 
 
 const result = new Mat3().identity();
@@ -180,7 +180,7 @@ scale(vector2: Vec2): Mat3
 ### Example
 
 ```js
-import { Mat3, Vec2 } from '@1pizzateam/spockjs';
+import { Mat3, Vec2 } from '@1pizzateam/spock';
 
 
 const result = new Mat3().scale(new Vec2(1, 2));
@@ -207,7 +207,7 @@ rotate(angle: number): Mat3
 ### Example
 
 ```js
-import { Mat3 } from '@1pizzateam/spockjs';
+import { Mat3 } from '@1pizzateam/spock';
 
 
 const result = new Mat3().rotate(Math.PI / 4);
@@ -234,7 +234,7 @@ translate(vector2: Vec2): Mat3
 ### Example
 
 ```js
-import { Mat3, Vec2 } from '@1pizzateam/spockjs';
+import { Mat3, Vec2 } from '@1pizzateam/spock';
 
 
 const result = new Mat3().translate(new Vec2(1, 2));
@@ -261,7 +261,7 @@ multiply(matrix3x3: Mat3): Mat3
 ### Example
 
 ```js
-import { Mat3 } from '@1pizzateam/spockjs';
+import { Mat3 } from '@1pizzateam/spock';
 
 
 const result = new Mat3().multiply(new Mat3());
@@ -288,7 +288,7 @@ None.
 ### Example
 
 ```js
-import { Mat3 } from '@1pizzateam/spockjs';
+import { Mat3 } from '@1pizzateam/spock';
 
 
 const result = new Mat3().transpose();
@@ -315,7 +315,7 @@ None.
 ### Example
 
 ```js
-import { Mat3 } from '@1pizzateam/spockjs';
+import { Mat3 } from '@1pizzateam/spock';
 
 
 const result = new Mat3().determinant();
@@ -342,7 +342,7 @@ None.
 ### Example
 
 ```js
-import { Mat3 } from '@1pizzateam/spockjs';
+import { Mat3 } from '@1pizzateam/spock';
 
 
 const result = new Mat3().invert();

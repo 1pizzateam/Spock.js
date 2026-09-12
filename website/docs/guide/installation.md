@@ -5,13 +5,13 @@ Spock.js 4 requires Node.js 22 or newer and is published as an ES module.
 ## npm
 
 ```bash
-npm install @1pizzateam/spockjs
+npm install @1pizzateam/spock
 ```
 
 ## Yarn
 
 ```bash
-yarn add @1pizzateam/spockjs
+yarn add @1pizzateam/spock
 ```
 
 ## Usage
@@ -23,7 +23,7 @@ import {
   Vec2,
   Mat3,
   Trigo,
-} from '@1pizzateam/spockjs';
+} from '@1pizzateam/spock';
 
 const position = new Vec2(4, 5);
 const transform = new Mat3()
@@ -35,7 +35,7 @@ Spock.js 4 has no CommonJS or IIFE build. Browser projects should load it throug
 
 ```html
 <script type="module">
-  import { Vec2 } from './node_modules/@1pizzateam/spockjs/dist/spock.js';
+  import { Vec2 } from './node_modules/@1pizzateam/spock/dist/spock.js';
 
   console.log(new Vec2(3, 4).getMagnitude());
 </script>

@@ -7,7 +7,7 @@ Radius and diameter stay in sync, so setting either updates the other. `isIn()` 
 Occupancy is opt-in. Call `setGrid()` to attach a `Grid`, and from then on moving or resizing the circle refreshes `gridCells`, the list of cells its bounding box covers. Pair that with `Grid.testCells()` for a cheap broad-phase overlap check.
 
 ```js
-import { Circ, Grid } from '@1pizzateam/spockjs';
+import { Circ, Grid } from '@1pizzateam/spock';
 
 const grid = new Grid(800, 600, 32);
 const ball = new Circ(20, 100, 100).setGrid(grid);
@@ -39,7 +39,7 @@ new Circ(radius: number, positionX: number, positionY: number)
 ### Example
 
 ```js
-import { Circ } from '@1pizzateam/spockjs';
+import { Circ } from '@1pizzateam/spock';
 
 const value = new Circ(10, 1, 1);
 ```
@@ -65,7 +65,7 @@ None.
 ### Example
 
 ```js
-import { Circ } from '@1pizzateam/spockjs';
+import { Circ } from '@1pizzateam/spock';
 
 
 const result = new Circ(10, 0, 0).clone();
@@ -92,7 +92,7 @@ copy(circ: Circ): Circ
 ### Example
 
 ```js
-import { Circ } from '@1pizzateam/spockjs';
+import { Circ } from '@1pizzateam/spock';
 
 
 const result = new Circ(10, 0, 0).copy(undefined);
@@ -119,7 +119,7 @@ setGrid(grid: Grid | null): Circ
 ### Example
 
 ```js
-import { Circ, Grid } from '@1pizzateam/spockjs';
+import { Circ, Grid } from '@1pizzateam/spock';
 
 
 const result = new Circ(10, 0, 0).setGrid(new Grid(100, 100, 10));
@@ -147,7 +147,7 @@ setPosition(positionX: number, positionY: number): Circ
 ### Example
 
 ```js
-import { Circ } from '@1pizzateam/spockjs';
+import { Circ } from '@1pizzateam/spock';
 
 
 const result = new Circ(10, 0, 0).setPosition(1, 1);
@@ -174,7 +174,7 @@ setRadius(radius: number): this
 ### Example
 
 ```js
-import { Circ } from '@1pizzateam/spockjs';
+import { Circ } from '@1pizzateam/spock';
 
 
 const result = new Circ(10, 0, 0).setRadius(10);
@@ -201,7 +201,7 @@ setDiameter(diameter: number): this
 ### Example
 
 ```js
-import { Circ } from '@1pizzateam/spockjs';
+import { Circ } from '@1pizzateam/spock';
 
 
 const result = new Circ(10, 0, 0).setDiameter(20);
@@ -228,7 +228,7 @@ scale(scalar: number): Circ
 ### Example
 
 ```js
-import { Circ } from '@1pizzateam/spockjs';
+import { Circ } from '@1pizzateam/spock';
 
 
 const result = new Circ(10, 0, 0).scale(1);
@@ -255,7 +255,7 @@ isIn(v: Vec2): boolean
 ### Example
 
 ```js
-import { Circ, Vec2 } from '@1pizzateam/spockjs';
+import { Circ, Vec2 } from '@1pizzateam/spock';
 
 
 const result = new Circ(10, 0, 0).isIn(new Vec2(1, 2));
@@ -285,7 +285,7 @@ draw(context: CanvasRenderingContext2D, fillColor: string, strokeColor: string, 
 ### Example
 
 ```js
-import { Circ } from '@1pizzateam/spockjs';
+import { Circ } from '@1pizzateam/spock';
 
 const context = document.querySelector('canvas').getContext('2d');
 

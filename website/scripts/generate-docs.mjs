@@ -36,7 +36,7 @@ const intros = {
       'Use it for positions, directions, velocities, sizes, and any other 2D pair. Nearly every method writes into the vector it was called on and returns that same vector, so operations chain and a render loop can reuse a handful of instances instead of allocating a new one each frame. When you need an independent value, take a `clone()` first.',
       'On top of arithmetic it carries magnitude and distance queries, normalization, per-axis rounding, angle helpers that read and write the vector\'s heading, interpolation with `lerp()`, clamping into a `Rect`, and Bézier evaluation, so curve sampling stays in vector space.',
     ],
-    example: `import { Vec2 } from '@1pizzateam/spockjs';
+    example: `import { Vec2 } from '@1pizzateam/spock';
 
 const velocity = new Vec2(3, 4).normalize().scale(10);
 
@@ -50,7 +50,7 @@ const travelled = position.getDistance(start);`,
       'It mirrors `Vec2` and adds the operations that only make sense in 3D, most notably `cross()` and a `getAngle()` that measures between two vectors. As with `Vec2`, methods mutate the receiver and return it, so calls chain and hot loops stay allocation-free.',
       '`Vec3` is the vector type the 3D transforms speak: `Mat4.translate()`, `Mat4.lookAtRH()`, `Quat.setAxisAngle()`, and `Quat.multiplyVector()` all take or fill one.',
     ],
-    example: `import { Vec3 } from '@1pizzateam/spockjs';
+    example: `import { Vec3 } from '@1pizzateam/spock';
 
 const forward = new Vec3(0, 0, -1);
 const up = new Vec3(0, 1, 0);
@@ -64,7 +64,7 @@ const angle = forward.getAngle(up); // radians, or false for a zero-length vecto
       'It handles the usual 2D pipeline: translation, rotation, and scale, composed together with `multiply()`. `new Mat3()` with no arguments is the identity matrix; pass nine numbers to set the entries directly.',
       '`scale()`, `rotate()`, and `translate()` compose onto the current matrix rather than replacing it, so the order you call them in is the order they apply. `toArray()` hands back the live buffer, ready to upload to WebGL, or copies into an array you pass in.',
     ],
-    example: `import { Mat3, Vec2 } from '@1pizzateam/spockjs';
+    example: `import { Mat3, Vec2 } from '@1pizzateam/spock';
 
 const transform = new Mat3()
   .translate(new Vec2(120, 80))
@@ -79,7 +79,7 @@ const buffer = transform.toArray(); // the live Float32Array(9)`,
       'Reach for it when a transform will never need perspective: object placement, node hierarchies, and camera views. Leaving out the projection row makes inversion cheaper and keeps the last column fixed at (0, 0, 0, 1).',
       'Because the matrix is affine by construction, the linear-only operations are named for it: `transposeLinear()`, `determinantLinear()`, and `invertAffine()`. Use `Mat4` instead when you need `perspective()` or `orthographic()`.',
     ],
-    example: `import { Mat4x3, Vec3 } from '@1pizzateam/spockjs';
+    example: `import { Mat4x3, Vec3 } from '@1pizzateam/spock';
 
 const view = new Mat4x3().lookAtRH(
   new Vec3(0, 2, 6), // eye
@@ -97,7 +97,7 @@ const model = new Mat4x3()
       'It covers everything `Mat4x3` does — translate, scale, rotate about each axis, `lookAtRH()` — and adds `perspective()` and `orthographic()`, which write the projection row that `Mat4x3` leaves out.',
       'Entries live in a `Float32Array`. `toArray()` with no argument returns that live buffer for a WebGL upload; pass a target to copy instead. `multiply()` preserves the last row, so composing with a perspective matrix behaves.',
     ],
-    example: `import { Mat4, Vec3 } from '@1pizzateam/spockjs';
+    example: `import { Mat4, Vec3 } from '@1pizzateam/spock';
 
 const projection = new Mat4().perspective(Math.PI / 4, 16 / 9, 0.1, 100);
 const view = new Mat4().lookAtRH(
@@ -114,7 +114,7 @@ const viewProjection = new Mat4().copy(projection).multiply(view);`,
       'Quaternions are the compact way to hold and blend 3D rotations. They avoid gimbal lock, compose with a single `multiply()`, and interpolate smoothly with `slerp()`, which is why they beat Euler angles for animation and camera work.',
       '`new Quat()` is the identity rotation. Build one from an axis and angle with `setAxisAngle()`, or from Euler angles with `setFromEuler()`. At render time `toMat4()` or `toMat4x3()` writes the rotation into a matrix. Component order is `[w, x, y, z]` in both the constructor and `toArray()`.',
     ],
-    example: `import { Quat, Vec3 } from '@1pizzateam/spockjs';
+    example: `import { Quat, Vec3 } from '@1pizzateam/spock';
 
 const start = new Quat();
 const end = new Quat().setAxisAngle(new Vec3(0, 1, 0), Math.PI / 2);
@@ -128,7 +128,7 @@ const facing = current.multiplyVector(new Vec3(0, 0, 1));`,
       'Radius and diameter stay in sync, so setting either updates the other. `isIn()` answers point containment with a squared distance, avoiding a square root.',
       'Occupancy is opt-in. Call `setGrid()` to attach a `Grid`, and from then on moving or resizing the circle refreshes `gridCells`, the list of cells its bounding box covers. Pair that with `Grid.testCells()` for a cheap broad-phase overlap check.',
     ],
-    example: `import { Circ, Grid } from '@1pizzateam/spockjs';
+    example: `import { Circ, Grid } from '@1pizzateam/spock';
 
 const grid = new Grid(800, 600, 32);
 const ball = new Circ(20, 100, 100).setGrid(grid);
@@ -142,7 +142,7 @@ const occupied = ball.gridCells.filter(cell => cell !== Grid.emptyCell);`,
       'The constructor takes width and height first, then the centre. `topLeftCorner` and `bottomRightCorner` are recomputed whenever you move or resize it, so containment tests and clamping read them directly instead of deriving them every frame.',
       'As with `Circ`, occupancy is opt-in through `setGrid()`, after which `gridCells` lists every cell the rectangle covers. `Vec2.clamp()` takes a `Rect`, which makes it the natural type for bounds.',
     ],
-    example: `import { Rect, Vec2 } from '@1pizzateam/spockjs';
+    example: `import { Rect, Vec2 } from '@1pizzateam/spock';
 
 const bounds = new Rect(640, 360, 320, 180);
 
@@ -155,7 +155,7 @@ const inside = bounds.isIn(pointer); // true`,
       'This is the spatial index behind `Circ` and `Rect` occupancy. Construct it with the area and a cell size; `len` is a `Vec2` holding the column and row counts. Attaching it to a shape fills that shape\'s `gridCells` with the indices its bounding box overlaps.',
       '`testCells()` then answers whether two shapes share a cell, a cheap broad-phase check to run before any exact collision maths. Unused and off-grid slots use the `Grid.emptyCell` sentinel (`-1`), which `testCells()` ignores. `draw()` paints the lattice for debugging.',
     ],
-    example: `import { Circ, Grid } from '@1pizzateam/spockjs';
+    example: `import { Circ, Grid } from '@1pizzateam/spock';
 
 const grid = new Grid(800, 600, 32); // 25 × 19 cells
 const a = new Circ(20, 100, 100).setGrid(grid);
@@ -171,7 +171,7 @@ if (grid.testCells(a.gridCells, b.gridCells)) {
       '`sine()` and `cosine()` read from a 16k-entry lookup table: fast enough to call per particle per frame, and accurate enough for motion. When you need full precision, such as building a matrix or a quaternion, use `sinePrecise()` and `cosinePrecise()`, which call `Math.sin` and `Math.cos` directly.',
       'The constants `pi`, `twopi`, and `halfpi` save recomputing them, `degreeToRadian()` and `radianToDegree()` convert, and `normalizeRadian()` wraps an angle into (-π, π]. The `*Equation` helpers evaluate `amplitude * f(period + shiftX) + shiftY` in one call, which is the shape most oscillations take.',
     ],
-    example: `import { Trigo } from '@1pizzateam/spockjs';
+    example: `import { Trigo } from '@1pizzateam/spock';
 
 const angle = Trigo.degreeToRadian(45);
 const wrapped = Trigo.normalizeRadian(angle + Trigo.twopi);
@@ -185,7 +185,7 @@ const y = Trigo.sineEquation(20, performance.now() * 0.002, 0, 100);`,
       'Every function takes plain numbers, so you call it once per axis. That keeps it useful for animation curves and easing, where the thing being interpolated is one value rather than a point. For curves in space, `Vec2` and `Vec3` carry the same operations and handle the axes for you.',
       'Alongside evaluation there are first derivatives, which give the tangent and so the direction of travel, de Casteljau splits that cut a curve at `t` into two control polygons, and sampled `*Length()` and `*ParameterAtLength()` for walking a curve at constant speed.',
     ],
-    example: `import { Bezier } from '@1pizzateam/spockjs';
+    example: `import { Bezier } from '@1pizzateam/spock';
 
 const x = Bezier.cubic(0, 30, 70, 100, 0.5);
 const slope = Bezier.cubicDerivative(0, 30, 70, 100, 0.5);
@@ -199,7 +199,7 @@ const t = Bezier.cubicParameterAtLength(0, 30, 70, 100, 50);`,
       'The module-level `float()`, `integer()`, `distribution()`, and `pick()` use `Math.random()` until you call `seed()`, after which they follow a deterministic mulberry32 sequence. Call `seed()` with no argument to hand them back to `Math.random()`.',
       '`create()` returns an independent generator with the same four methods, which is the better option when you want one reproducible stream without touching global state. `distribution()` averages several samples, biasing results toward the middle of the range instead of spreading them evenly.',
     ],
-    example: `import { Rand } from '@1pizzateam/spockjs';
+    example: `import { Rand } from '@1pizzateam/spock';
 
 const level = Rand.create(1337); // same seed, same level, every run
 
@@ -213,7 +213,7 @@ const clustered = level.distribution(0, 800, 4); // bunched toward the middle`,
       'It covers the reductions that come up constantly — `min()`, `max()`, `sum()`, `multiply()` for the product, and `average()` — written as straight loops rather than `reduce()` callbacks, so they stay fast on large arrays and work on typed arrays too.',
       '`min()`, `max()`, and `average()` return `NaN` for an empty array. `sum()` returns 0 and `multiply()` returns 1, their identity values.',
     ],
-    example: `import { NumArray } from '@1pizzateam/spockjs';
+    example: `import { NumArray } from '@1pizzateam/spock';
 
 const frameTimes = [16.7, 16.9, 33.1, 16.6];
 
@@ -226,7 +226,7 @@ const mean = NumArray.average(frameTimes);`,
       '`clamp()`, `lerp()`, `mix()`, `normalize()`, and `map()` are the interpolation set. `normalize()` takes a value from a range into 0–1, `map()` moves it from one range straight into another, and `lerp()` and `mix()` blend two values, differing only in argument order.',
       'The rounding group — `round()`, `floor()`, `ceil()`, and `trunc()` — takes a decimal count, so you can snap to two decimals without the usual multiply-and-divide dance. `roundToNearest()` snaps to an arbitrary step instead. `isIn()` and `isOut()` are readable range tests.',
     ],
-    example: `import { Utils } from '@1pizzateam/spockjs';
+    example: `import { Utils } from '@1pizzateam/spock';
 
 const opacity = Utils.clamp(1.25, 0, 1);       // 1
 const eased = Utils.lerp(0, 100, 0.25);        // 25
@@ -239,7 +239,7 @@ const snapped = Utils.roundToNearest(147, 25); // 150`,
       'Four one-line conversions that keep the ×1000 and 1000÷ constants out of animation code. `millisecToSec()` and `secToMillisec()` handle units; `fpsToMillisec()` and `millisecToFps()` translate between a frame rate and a frame budget.',
       'The common use is turning a target rate into the duration you compare against elapsed time, so the constant reads as a rate instead of an unexplained decimal.',
     ],
-    example: `import { Time } from '@1pizzateam/spockjs';
+    example: `import { Time } from '@1pizzateam/spock';
 
 const frameBudget = Time.fpsToMillisec(60); // 16.67 ms
 const actualFps = Time.millisecToFps(20);   // 50
@@ -706,7 +706,7 @@ function fallbackUsage(exportName, entry) {
       if (new RegExp(`\\b${type}\\b`).test(param.type)) imports.add(type);
     }
   }
-  const importLine = `import { ${[...imports].join(', ')} } from '@1pizzateam/spockjs';`;
+  const importLine = `import { ${[...imports].join(', ')} } from '@1pizzateam/spock';`;
   if (entry.name === 'constructor') {
     const args = entry.params.map(p => valueFor(p.type, p.name));
     return `${importLine}\n\nconst value = new ${exportName}(${args.join(', ')});`;
@@ -751,7 +751,7 @@ function createPage(exportName, sourceFile, outputFile) {
     for (const paragraph of intro.body) markdown += `${paragraph}\n\n`;
     markdown += `\`\`\`js\n${intro.example}\n\`\`\`\n\n`;
   } else {
-    markdown += `Import with \`import { ${exportName} } from '@1pizzateam/spockjs';\`.\n\n`;
+    markdown += `Import with \`import { ${exportName} } from '@1pizzateam/spock';\`.\n\n`;
   }
   for (const entry of entries) {
     const old = legacyFor(exportName, entry.name);
