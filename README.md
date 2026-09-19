@@ -1,6 +1,5 @@
 [![License: MIT](https://img.shields.io/npm/l/@1pizzateam/spock.svg)](https://opensource.org/licenses/MIT)
 [![npm version](https://badge.fury.io/js/%401pizzateam%2Fspock.svg)](https://www.npmjs.com/package/@1pizzateam/spock)
-[![minified size](https://img.shields.io/bundlephobia/min/@1pizzateam/spock)](https://www.npmjs.com/package/@1pizzateam/spock)
 ![Jest:coverage](https://img.shields.io/badge/Jest:coverage-95%25-brightgreen.svg)
 
 ## Synopsis
