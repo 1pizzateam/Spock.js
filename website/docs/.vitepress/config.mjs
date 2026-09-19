@@ -41,10 +41,6 @@ export default defineConfig({
   themeConfig: {
     siteTitle: 'Spock.js',
     outline: [2, 3],
-    nav: [
-      { text: 'Guide', link: '/guide/overview' },
-      { text: 'API', link: '/api/' },
-    ],
     sidebar: [
       {
         text: 'Guide',
