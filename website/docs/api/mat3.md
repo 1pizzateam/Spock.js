@@ -2,6 +2,8 @@
 
 A 3×3 matrix for 2D affine transforms, stored in a `Float32Array`.
 
+<TransformDemo />
+
 It handles the usual 2D pipeline: translation, rotation, and scale, composed together with `multiply()`. `new Mat3()` with no arguments is the identity matrix; pass nine numbers to set the entries directly.
 
 `scale()`, `rotate()`, and `translate()` compose onto the current matrix rather than replacing it, so the order you call them in is the order they apply. `toArray()` hands back the live buffer, ready to upload to WebGL, or copies into an array you pass in.
@@ -10,8 +12,8 @@ It handles the usual 2D pipeline: translation, rotation, and scale, composed tog
 import { Mat3, Vec2 } from '@1pizzateam/spock';
 
 const transform = new Mat3()
-  .translate(new Vec2(120, 80))
-  .rotate(Math.PI / 6)
+  .translate(new Vec2(100, 50))
+  .rotate(Math.PI / 4)
   .scale(new Vec2(2, 2));
 
 const buffer = transform.toArray(); // the live Float32Array(9)

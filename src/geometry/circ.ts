@@ -68,11 +68,26 @@ export class Circ {
     return this;
   }
 
-  /** Move the center and refresh occupancy. */
-  public setPosition( positionX: number, positionY: number ): Circ {
-    this.position.setScalar(positionX, positionY);
+  /** Move the center to a position vector and refresh occupancy. */
+  public setPosition(position: Vec2): Circ {
+    this.position.copy(position);
     this.setGridPos();
     return this;
+  }
+
+  /** Translate center by offset vector in-place and refresh occupancy. */
+  public translate(offset: Vec2): Circ {
+    this.position.add(offset);
+    this.setGridPos();
+    return this;
+  }
+
+  /** Closest point on or within the circle to an external point. */
+  public getClosestPoint(point: Vec2, target: Vec2 = new Vec2()): Vec2 {
+    const dSq = point.getDistance(this.position, true);
+    if (dSq <= this.radius * this.radius) return target.copy(point);
+    const d = Math.sqrt(dSq);
+    return target.copy(point).subtract(this.position).scale(this.radius / d).add(this.position);
   }
 
   /** Set radius. */

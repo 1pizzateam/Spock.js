@@ -128,12 +128,12 @@ const facing = current.multiplyVector(new Vec3(0, 0, 1));`,
       'Radius and diameter stay in sync, so setting either updates the other. `isIn()` answers point containment with a squared distance, avoiding a square root.',
       'Occupancy is opt-in. Call `setGrid()` to attach a `Grid`, and from then on moving or resizing the circle refreshes `gridCells`, the list of cells its bounding box covers. Pair that with `Grid.testCells()` for a cheap broad-phase overlap check.',
     ],
-    example: `import { Circ, Grid } from '@1pizzateam/spock';
+    example: `import { Circ, Grid, Vec2 } from '@1pizzateam/spock';
 
 const grid = new Grid(800, 600, 32);
 const ball = new Circ(20, 100, 100).setGrid(grid);
 
-ball.setPosition(240, 180);
+ball.setPosition(new Vec2(240, 180));
 const occupied = ball.gridCells.filter(cell => cell !== Grid.emptyCell);`,
   },
   Rect: {

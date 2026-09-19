@@ -34,8 +34,8 @@ export class Rect {
 
   /** Copy size, position, and grid from another rectangle. */
   public copy( rect: Rect ): Rect {
-    this.size.setScalar(rect.size.x, rect.size.y);
-    this.position.setScalar(rect.position.x, rect.position.y);
+    this.size.copy(rect.size);
+    this.position.copy(rect.position);
     this.setHalfSize();
     this.setCorners();
     return this.setGrid(rect.grid);
@@ -51,12 +51,28 @@ export class Rect {
     return this;
   }
 
-  /** Move the center and refresh corners and occupancy. */
-  public setPosition(positionX: number, positionY: number): Rect {
-    this.position.setScalar( positionX, positionY );
+  /** Move the center to a position vector and refresh corners and occupancy. */
+  public setPosition(position: Vec2): Rect {
+    this.position.copy(position);
     this.setCorners();
     this.setGridPos();
     return this;
+  }
+
+  /** Translate center and corners by offset vector in-place and refresh occupancy. */
+  public translate(offset: Vec2): Rect {
+    this.position.add(offset);
+    this.topLeftCorner.add(offset);
+    this.bottomRightCorner.add(offset);
+    this.setGridPos();
+    return this;
+  }
+
+  /** Closest point on or within the rectangle to an external point. */
+  public getClosestPoint(point: Vec2, target: Vec2 = new Vec2()): Vec2 {
+    target.x = Utils.clamp(point.x, this.topLeftCorner.x, this.bottomRightCorner.x);
+    target.y = Utils.clamp(point.y, this.topLeftCorner.y, this.bottomRightCorner.y);
+    return target;
   }
 
   /** Resize and refresh corners and occupancy. */

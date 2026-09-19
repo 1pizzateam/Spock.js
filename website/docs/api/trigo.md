@@ -2,6 +2,8 @@
 
 Angle constants, conversions, and wave equations, with both fast and precise sine and cosine.
 
+<TrigoDemo />
+
 `sine()` and `cosine()` read from a 16k-entry lookup table: fast enough to call per particle per frame, and accurate enough for motion. When you need full precision, such as building a matrix or a quaternion, use `sinePrecise()` and `cosinePrecise()`, which call `Math.sin` and `Math.cos` directly.
 
 The constants `pi`, `twopi`, and `halfpi` save recomputing them, `degreeToRadian()` and `radianToDegree()` convert, and `normalizeRadian()` wraps an angle into (-π, π]. The `*Equation` helpers evaluate `amplitude * f(period + shiftX) + shiftY` in one call, which is the shape most oscillations take.
@@ -9,11 +11,9 @@ The constants `pi`, `twopi`, and `halfpi` save recomputing them, `degreeToRadian
 ```js
 import { Trigo } from '@1pizzateam/spock';
 
-const angle = Trigo.degreeToRadian(45);
-const wrapped = Trigo.normalizeRadian(angle + Trigo.twopi);
-
-// 20 pixels of vertical wobble around y = 100
-const y = Trigo.sineEquation(20, performance.now() * 0.002, 0, 100);
+const wrapped = Trigo.normalizeRadian(7.5);
+const y = Trigo.sine(wrapped);
+const heading = Trigo.arctan2(1, 1);
 ```
 
 ## Trigo.degreeToRadian()
@@ -258,6 +258,22 @@ import { Trigo } from '@1pizzateam/spock';
 
 
 const result = Trigo.cosinePrecise(Math.PI / 4);
+```
+
+---
+
+## Wave equations
+
+<WaveDemo />
+
+```js
+import { Trigo } from '@1pizzateam/spock';
+
+const slice = Trigo.twopi / 24;
+
+// amplitude * cos(period + shiftX) + shiftY
+const x = Trigo.cosineEquation(200, slice * i, 0, centerX);
+const y = Trigo.sineEquation(200, slice * i, 0, centerY);
 ```
 
 ## Trigo.sineEquation()

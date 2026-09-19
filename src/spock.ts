@@ -3,7 +3,7 @@ export { Trigo } from './trigo';
 export { Utils }        from './utils';
 export { Time }         from './time';
 export { Rand }       from './rand';
-export { NumArray }     from './array';
+export { NumArray, RollingAverage } from './array';
 export { Bezier }       from './bezier';
 export { Circ }       from './geometry/circ';
 export { Rect }    from './geometry/rect';

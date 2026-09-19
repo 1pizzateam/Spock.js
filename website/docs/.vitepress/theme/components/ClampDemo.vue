@@ -36,7 +36,7 @@ function draw(context, state, theme) {
     );
 
   clamped.copy(pointer).clamp(inner);
-  circle.setPosition(clamped.x, clamped.y);
+  circle.setPosition(clamped);
 
   const inside = bounds.isIn(pointer);
   const distance = pointer.getDistance(bounds.position);

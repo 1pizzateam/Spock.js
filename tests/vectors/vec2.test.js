@@ -225,4 +225,61 @@ describe('Vec2', () => {
     expect(tangent.y).toBe(0);
   });
 
+  it('should compute 2D crossProduct, perp, and perpCW', () => {
+    const a = new Vec2(3, 4);
+    const b = new Vec2(2, -1);
+    // a.x * b.y - a.y * b.x = 3 * (-1) - 4 * 2 = -3 - 8 = -11
+    expect(a.crossProduct(b)).toBe(-11);
+
+    const v1 = new Vec2(3, 4).perp();
+    expect(v1.x).toBe(-4);
+    expect(v1.y).toBe(3);
+
+    const v2 = new Vec2(3, 4).perpCW();
+    expect(v2.x).toBe(4);
+    expect(v2.y).toBe(-3);
+  });
+
+  it('should project and reflect across a normal', () => {
+    // Normal along +Y
+    const normalY = new Vec2(0, 1);
+    const v = new Vec2(3, 4);
+
+    const proj = v.clone().project(normalY);
+    expect(proj.x).toBe(0);
+    expect(proj.y).toBe(4);
+
+    const refl = v.clone().reflect(normalY);
+    expect(refl.x).toBe(3);
+    expect(refl.y).toBe(-4);
+
+    // Normal along +X
+    const normalX = new Vec2(1, 0);
+    const reflX = v.clone().reflect(normalX);
+    expect(reflX.x).toBe(-3);
+    expect(reflX.y).toBe(4);
+  });
+
+  it('should isolate min and max axes in place', () => {
+    const v1 = new Vec2(5, 2);
+    expect(v1.isolateMinAxis()).toBe('y');
+    expect(v1.x).toBe(0);
+    expect(v1.y).toBe(2);
+
+    const v2 = new Vec2(1, 8);
+    expect(v2.isolateMinAxis()).toBe('x');
+    expect(v2.x).toBe(1);
+    expect(v2.y).toBe(0);
+
+    const v3 = new Vec2(5, 2);
+    expect(v3.isolateMaxAxis()).toBe('x');
+    expect(v3.x).toBe(5);
+    expect(v3.y).toBe(0);
+
+    const v4 = new Vec2(1, 8);
+    expect(v4.isolateMaxAxis()).toBe('y');
+    expect(v4.x).toBe(0);
+    expect(v4.y).toBe(8);
+  });
+
 });

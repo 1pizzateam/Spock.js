@@ -2,6 +2,8 @@
 
 Conversions between milliseconds, seconds, and frame rates.
 
+<TimeDemo />
+
 Four one-line conversions that keep the ×1000 and 1000÷ constants out of animation code. `millisecToSec()` and `secToMillisec()` handle units; `fpsToMillisec()` and `millisecToFps()` translate between a frame rate and a frame budget.
 
 The common use is turning a target rate into the duration you compare against elapsed time, so the constant reads as a rate instead of an unexplained decimal.
@@ -123,4 +125,87 @@ import { Time } from '@1pizzateam/spock';
 
 const result = Time.fpsToMillisec(1);
 ```
+
+## Time.now()
+
+High-resolution monotonic timestamp in milliseconds across environments.
+
+Uses `performance.now()` when available with a fallback to `Date.now()`.
+
+```ts
+now(): number
+```
+
+### Returns
+
+`number` — monotonic millisecond timestamp
+
+### Example
+
+```js
+import { Time } from '@1pizzateam/spock';
+
+const start = Time.now();
+```
+
+## Time.clampDelta()
+
+Clamp frame delta duration in milliseconds to prevent simulation instability.
+
+Protects animation and physics updates against massive lag spikes or tab switching.
+
+```ts
+clampDelta(delta: number, maxMs?: number, minMs?: number): number
+```
+
+### Parameters
+
+- `delta` — `number`. Frame duration in milliseconds.
+- `maxMs` — `number`. Maximum allowed duration in ms (default: `100`).
+- `minMs` — `number`. Minimum allowed duration in ms (default: `0`).
+
+### Returns
+
+`number` — the clamped delta in milliseconds
+
+## Time.smoothFps()
+
+Exponential moving average for smooth instantaneous FPS updates.
+
+Provides zero-allocation, instantaneous framerate smoothing without needing ring buffers.
+
+```ts
+smoothFps(currentFps: number, instantFps: number, alpha?: number): number
+```
+
+### Parameters
+
+- `currentFps` — `number`. Current smoothed FPS.
+- `instantFps` — `number`. Measured FPS of the latest frame.
+- `alpha` — `number`. Smoothing weight factor between 0 and 1 (default: `0.05`).
+
+### Returns
+
+`number` — updated smoothed FPS
+
+## Time.subSteps()
+
+Compute fixed-timestep simulation sub-steps and accumulator remainder.
+
+Facilitates deterministic, fixed-timestep game loops and physics accumulators.
+
+```ts
+subSteps(delta: number, fixedStep: number, maxSubSteps?: number): { steps: number; remainder: number }
+```
+
+### Parameters
+
+- `delta` — `number`. Elapsed duration in milliseconds.
+- `fixedStep` — `number`. Fixed step duration in milliseconds (e.g. `16.666`).
+- `maxSubSteps` — `number`. Maximum sub-steps permitted (default: `4`).
+
+### Returns
+
+`{ steps: number, remainder: number }`
+
 

@@ -2,6 +2,8 @@
 
 A full 4×4 matrix: affine transforms plus the projection matrices a renderer needs.
 
+<Mat4Demo />
+
 It covers everything `Mat4x3` does — translate, scale, rotate about each axis, `lookAtRH()` — and adds `perspective()` and `orthographic()`, which write the projection row that `Mat4x3` leaves out.
 
 Entries live in a `Float32Array`. `toArray()` with no argument returns that live buffer for a WebGL upload; pass a target to copy instead. `multiply()` preserves the last row, so composing with a perspective matrix behaves.

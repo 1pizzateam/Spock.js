@@ -2,6 +2,8 @@
 
 Random numbers, either from `Math.random()` or from a seeded generator you can replay.
 
+<RandDemo />
+
 The module-level `float()`, `integer()`, `distribution()`, and `pick()` use `Math.random()` until you call `seed()`, after which they follow a deterministic mulberry32 sequence. Call `seed()` with no argument to hand them back to `Math.random()`.
 
 `create()` returns an independent generator with the same four methods, which is the better option when you want one reproducible stream without touching global state. `distribution()` averages several samples, biasing results toward the middle of the range instead of spreading them evenly.
@@ -9,11 +11,11 @@ The module-level `float()`, `integer()`, `distribution()`, and `pick()` use `Mat
 ```js
 import { Rand } from '@1pizzateam/spock';
 
-const level = Rand.create(1337); // same seed, same level, every run
+const random = Rand.create(1337); // same seed, same level, every run
 
-const x = level.float(0, 800);
-const enemies = level.integer(3, 8);
-const clustered = level.distribution(0, 800, 4); // bunched toward the middle
+const flat = random.float(0, 1);
+const enemies = random.integer(3, 8);
+const centered = random.distribution(0, 1, 5); // clustered toward middle
 ```
 
 ## Rand.float()
@@ -70,6 +72,24 @@ import { Rand } from '@1pizzateam/spock';
 
 
 const result = Rand.integer(1, 1);
+```
+
+---
+
+## 2D particle distribution
+
+<RandScatterDemo />
+
+```js
+import { Rand } from '@1pizzateam/spock';
+
+const random = Rand.create(20260904);
+
+for (let i = 0; i < 9000; i++) {
+  const x = random.distribution(0, width, 5);
+  const y = random.distribution(0, height, 5);
+  const tint = random.pick(0, 1);
+}
 ```
 
 ## Rand.distribution()

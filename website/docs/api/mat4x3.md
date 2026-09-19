@@ -2,6 +2,8 @@
 
 A 4×3 affine transform for 3D — rotation, scale, and translation, but no projection — stored in a 4×4 `Float32Array`.
 
+<Mat4x3Demo />
+
 Reach for it when a transform will never need perspective: object placement, node hierarchies, and camera views. Leaving out the projection row makes inversion cheaper and keeps the last column fixed at (0, 0, 0, 1).
 
 Because the matrix is affine by construction, the linear-only operations are named for it: `transposeLinear()`, `determinantLinear()`, and `invertAffine()`. Use `Mat4` instead when you need `perspective()` or `orthographic()`.

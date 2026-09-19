@@ -1,7 +1,7 @@
 <script setup>
 import { onBeforeUnmount, onMounted, ref } from 'vue';
 import { withBase } from 'vitepress';
-import { Grid, NumArray, Rand, Rect, Time, Utils } from '@1pizzateam/spock';
+import { Grid, NumArray, Rand, Rect, Time, Utils, Vec2 } from '@1pizzateam/spock';
 import { startCanvas } from '../canvas.js';
 
 const CELL_SIZE = 8;
@@ -28,6 +28,7 @@ let previousStep = 0;
 let animationTime = 0;
 let stop = null;
 let seedOffset = 0;
+const seedPos = new Vec2();
 
 /** Scatter square soup blobs and let the grid tell us which cells they cover. */
 function randomize() {
@@ -41,10 +42,8 @@ function randomize() {
   const blobs = Utils.clamp(Math.round(cells.length / 260), 6, 48);
   for (let i = 0; i < blobs; i++) {
     const side = generator.integer(6, 14) * CELL_SIZE;
-    seeder.setSize(side, side).setPosition(
-      generator.float(0, width),
-      generator.float(0, height)
-    );
+    seedPos.setScalar(generator.float(0, width), generator.float(0, height));
+    seeder.setSize(side, side).setPosition(seedPos);
     for (const cell of seeder.gridCells)
       if (cell !== Grid.emptyCell) cells[cell] = generator.pick(1, 0);
   }

@@ -292,6 +292,43 @@ export class Vec2 {
     return this.x * vector.x + this.y * vector.y;
   }
 
+  /** 2D cross product / determinant (this.x * vector.y - this.y * vector.x). */
+  public crossProduct(vector: Vec2): number {
+    return this.x * vector.y - this.y * vector.x;
+  }
+
+  /** Rotate 90 degrees counter-clockwise in-place (-y, x). */
+  public perp(): Vec2 {
+    const x = this.x;
+    this.x = -this.y;
+    this.y = x;
+    return this;
+  }
+
+  /** Rotate 90 degrees clockwise in-place (y, -x). */
+  public perpCW(): Vec2 {
+    const x = this.x;
+    this.x = this.y;
+    this.y = -x;
+    return this;
+  }
+
+  /** Project this vector onto a normal in-place. */
+  public project(normal: Vec2): Vec2 {
+    const dot = this.dotProduct(normal);
+    this.x = normal.x * dot;
+    this.y = normal.y * dot;
+    return this;
+  }
+
+  /** Reflect this vector across a surface normal in-place. */
+  public reflect(normal: Vec2): Vec2 {
+    const dot2 = 2 * this.dotProduct(normal);
+    this.x -= normal.x * dot2;
+    this.y -= normal.y * dot2;
+    return this;
+  }
+
   /** Keep length; set heading in radians. */
   public setRadian(angle: number): Vec2 {
     applySineCosine(this, angle, Math.sqrt(this.x * this.x + this.y * this.y));
@@ -319,6 +356,26 @@ export class Vec2 {
     else
       this.x = scalar;
     return this;
+  }
+
+  /** Zero the larger component in-place and return the shallowest axis name. */
+  public isolateMinAxis(): 'x' | 'y' {
+    if (this.y < this.x) {
+      this.x = 0;
+      return 'y';
+    }
+    this.y = 0;
+    return 'x';
+  }
+
+  /** Zero the smaller component in-place and return the largest axis name. */
+  public isolateMaxAxis(): 'x' | 'y' {
+    if (this.y > this.x) {
+      this.x = 0;
+      return 'y';
+    }
+    this.y = 0;
+    return 'x';
   }
 
   /** Set the other axis to value. */

@@ -14,6 +14,13 @@ import TransformDemo from './components/TransformDemo.vue';
 import TrigoDemo from './components/TrigoDemo.vue';
 import UtilsDemo from './components/UtilsDemo.vue';
 import WaveDemo from './components/WaveDemo.vue';
+import RollingAverageDemo from './components/RollingAverageDemo.vue';
+import CircDemo from './components/CircDemo.vue';
+import Vec3Demo from './components/Vec3Demo.vue';
+import Mat4Demo from './components/Mat4Demo.vue';
+import Mat4x3Demo from './components/Mat4x3Demo.vue';
+import NumArrayDemo from './components/NumArrayDemo.vue';
+import TimeDemo from './components/TimeDemo.vue';
 import './demo.css';
 
 export default {
@@ -38,5 +45,12 @@ export default {
     app.component('TrigoDemo', TrigoDemo);
     app.component('UtilsDemo', UtilsDemo);
     app.component('WaveDemo', WaveDemo);
+    app.component('RollingAverageDemo', RollingAverageDemo);
+    app.component('CircDemo', CircDemo);
+    app.component('Vec3Demo', Vec3Demo);
+    app.component('Mat4Demo', Mat4Demo);
+    app.component('Mat4x3Demo', Mat4x3Demo);
+    app.component('NumArrayDemo', NumArrayDemo);
+    app.component('TimeDemo', TimeDemo);
   },
 };

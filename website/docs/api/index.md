@@ -28,11 +28,19 @@ The classes — vectors, matrices, quaternions, and shapes — are mutable. Thei
 - [Grid](./grid) — uniform cell lattice used as a broad-phase spatial index
 - `GRID_EMPTY_CELL` — `-1`, the sentinel used for empty occupancy, also exposed as `Grid.emptyCell`
 
-## Utilities
+## Curves
+
+- [Quadratic Bézier](./bezier-quadratic) — degree-2 curves with 3 control points: evaluation, tangents, splits, and sampled arc length
+- [Cubic Bézier](./bezier-cubic) — degree-3 curves with 4 control points: evaluation, tangents, splits, and sampled arc length
+
+## Trigo
 
 - [Trigo](./trigo) — angle constants and conversions, lookup-table and precise sine and cosine, wave equations
-- [Bezier](./bezier) — scalar quadratic and cubic Bézier evaluation, derivatives, splits, and arc length
+
+## Utilities
+
 - [Rand](./rand) — uniform values, distributions, and picks, from `Math.random()` or a replayable seed
-- [NumArray](./num-array) — min, max, sum, product, and average over an array of numbers
+- [NumArray](./num-array) — min, max, sum, product, and average reductions over number arrays
+- [RollingAverage](./rolling-average) — fixed-capacity circular buffer for $O(1)$ real-time rolling averages with zero allocations
 - [Utils](./utils) — clamping, interpolation, range mapping, and decimal rounding
-- [Time](./time) — conversions between milliseconds, seconds, and frame rates
+- [Time](./time) — conversions between ms, seconds, and frame rates, monotonic clock, delta clamping, and sub-stepping

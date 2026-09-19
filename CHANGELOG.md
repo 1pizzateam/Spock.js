@@ -1,4 +1,32 @@
 
+Version 4.1.0 (September 19th 2026)
+-----------------------------
+ * Geometry (Circ & Rect):
+    * Pure vector-first API: `setPosition(position: Vec2)` and `translate(offset: Vec2)` directly manipulate center and corners via vector arithmetic (replaces scalar `(x, y)` parameters)
+    * Removed redundant aliases `setPositionFromVector` and `translateVector`
+    * Add `getClosestPoint(point)` for circle clamping and Voronoi classification
+    * Modernize `Rect.copy()` to copy size and position vectors directly via `Vec2.copy()` without scalar unpacking
+ * Grid:
+    * Optimize `testCells()` with $O(1)$ early range rejection and sorted two-pointer linear merge
+    * Add `totalCells` getter returning total cell count (`len.x * len.y`)
+    * Add `getFirstCommonCell()` returning the lowest shared cell index or `GRID_EMPTY_CELL` (-1)
+    * Add `isFirstCommonCell()` for spatial broad-phase collision pair deduplication
+    * Add `getCell(x, y)` returning cell index from 2D coordinates
+    * Add `getCellCoords(cellId)` decomposing cell index into column and row vector coordinates
+ * Vec2:
+    * Add `crossProduct(vector)` returning 2D determinant ($x_1 y_2 - y_1 x_2$)
+    * Add `perp()` ($(-y, x)$) and `perpCW()` ($(y, -x)$) 90-degree in-place rotations
+    * Add `project(normal)` projecting vector onto a normal in-place
+    * Add `reflect(normal)` reflecting vector across a surface normal in-place
+    * Add `isolateMinAxis()` and `isolateMaxAxis()` zeroing non-shallowest or non-largest components in-place
+ * Time:
+    * Add `now()` returning cross-platform monotonic high-resolution millisecond timestamp (`performance.now()` with fallback to `Date.now()`)
+    * Add `clampDelta(delta, maxMs, minMs)` protecting animation and physics simulation loops against lag spikes and tab switching
+    * Add `smoothFps(currentFps, instantFps, alpha)` zero-allocation exponential moving average for instantaneous FPS tracking
+    * Add `subSteps(delta, fixedStep, maxSubSteps)` calculating fixed-timestep simulation sub-steps and accumulator remainder
+ * Array:
+    * Add and export `RollingAverage` circular buffer class for $O(1)$ `push()` and $O(1)$ running `average` tracking without startup bias
+
 Version 4.0.0 (September 4th 2026)
 -----------------------------
  * Breaking:

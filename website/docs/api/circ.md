@@ -2,17 +2,19 @@
 
 A circle: a `Vec2` centre and a radius, with optional grid occupancy and canvas drawing.
 
+<CircDemo />
+
 Radius and diameter stay in sync, so setting either updates the other. `isIn()` answers point containment with a squared distance, avoiding a square root.
 
 Occupancy is opt-in. Call `setGrid()` to attach a `Grid`, and from then on moving or resizing the circle refreshes `gridCells`, the list of cells its bounding box covers. Pair that with `Grid.testCells()` for a cheap broad-phase overlap check.
 
 ```js
-import { Circ, Grid } from '@1pizzateam/spock';
+import { Circ, Grid, Vec2 } from '@1pizzateam/spock';
 
 const grid = new Grid(800, 600, 32);
 const ball = new Circ(20, 100, 100).setGrid(grid);
 
-ball.setPosition(240, 180);
+ball.setPosition(new Vec2(240, 180));
 const occupied = ball.gridCells.filter(cell => cell !== Grid.emptyCell);
 ```
 
@@ -127,18 +129,15 @@ const result = new Circ(10, 0, 0).setGrid(new Grid(100, 100, 10));
 
 ## Circ.setPosition()
 
-Move the center and refresh occupancy.
-
-Moves the centre and refreshes occupancy in the same call, so `gridCells` never goes stale. Returns the circle, so it chains.
+Move the center to a position vector and refresh occupancy in the same call, so `gridCells` never goes stale. Returns the circle, so it chains.
 
 ```ts
-setPosition(positionX: number, positionY: number): Circ
+setPosition(position: Vec2): Circ
 ```
 
 ### Parameters
 
-- `positionX` — `number`.
-- `positionY` — `number`.
+- `position` — `Vec2`. Center position vector.
 
 ### Returns
 
@@ -147,11 +146,53 @@ setPosition(positionX: number, positionY: number): Circ
 ### Example
 
 ```js
-import { Circ } from '@1pizzateam/spock';
+import { Circ, Vec2 } from '@1pizzateam/spock';
 
-
-const result = new Circ(10, 0, 0).setPosition(1, 1);
+const circle = new Circ(10, 0, 0);
+circle.setPosition(new Vec2(15, 20));
 ```
+
+## Circ.translate()
+
+Translate center by an offset vector in-place and refresh occupancy.
+
+```ts
+translate(offset: Vec2): Circ
+```
+
+### Parameters
+
+- `offset` — `Vec2`. Displacement vector.
+
+### Returns
+
+`Circ`
+
+### Example
+
+```js
+import { Circ, Vec2 } from '@1pizzateam/spock';
+
+const circle = new Circ(10, 0, 0);
+circle.translate(new Vec2(5, 10));
+```
+
+## Circ.getClosestPoint()
+
+Closest point on or within the circle to an external point.
+
+```ts
+getClosestPoint(point: Vec2, target?: Vec2): Vec2
+```
+
+### Parameters
+
+- `point` — `Vec2`.
+- `target` — `Vec2`. Optional.
+
+### Returns
+
+`Vec2`
 
 ## Circ.setRadius()
 

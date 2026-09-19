@@ -1,5 +1,5 @@
 <script setup>
-import { Circ, Grid } from '@1pizzateam/spock';
+import { Circ, Grid, Vec2 } from '@1pizzateam/spock';
 import DemoFrame from './DemoFrame.vue';
 import { label } from '../canvas.js';
 
@@ -8,6 +8,7 @@ let grid = null;
 let circle = null;
 let width = 0;
 let height = 0;
+const circlePos = new Vec2();
 
 function draw(context, state, theme) {
   if (state.width !== width || state.height !== height) {
@@ -20,7 +21,8 @@ function draw(context, state, theme) {
 
   const x = state.pointer ? state.pointer.x : width * 0.5 + Math.cos(state.time * 0.7) * width * 0.25;
   const y = state.pointer ? state.pointer.y : height * 0.5 + Math.sin(state.time) * height * 0.22;
-  circle.setPosition(x, y);
+  circlePos.setScalar(x, y);
+  circle.setPosition(circlePos);
 
   const columns = grid.len.x;
   context.fillStyle = theme.dark ? 'rgba(91, 140, 255, 0.28)' : 'rgba(91, 140, 255, 0.18)';
@@ -35,7 +37,7 @@ function draw(context, state, theme) {
   circle.draw(context, '', theme.accent, 2);
 
   const occupied = circle.gridCells.filter(cell => cell !== Grid.emptyCell).length;
-  label(context, `${occupied} occupied cells of ${grid.len.x * grid.len.y}`, theme.text);
+  label(context, `${occupied} occupied cells of ${grid.totalCells}`, theme.text);
 }
 </script>
 

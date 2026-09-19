@@ -68,4 +68,31 @@ describe('Circ', () => {
     expect(dest.gridCells).toEqual(source.gridCells);
   });
 
+  it('should support vector setPosition and translate', () => {
+    const grid = new Grid(100, 100, 10);
+    const circle = new Circ(5, 10, 10).setGrid(grid);
+
+    circle.setPosition(new Vec2(25, 25));
+    expect(circle.position.x).toBe(25);
+    expect(circle.position.y).toBe(25);
+
+    circle.translate(new Vec2(-5, 10));
+    expect(circle.position.x).toBe(20);
+    expect(circle.position.y).toBe(35);
+  });
+
+  it('should compute closest point on or inside circle', () => {
+    const circle = new Circ(10, 0, 0);
+
+    // Point inside remains unchanged
+    const inside = circle.getClosestPoint(new Vec2(3, 4));
+    expect(inside.x).toBe(3);
+    expect(inside.y).toBe(4);
+
+    // Point outside is projected onto boundary
+    const outside = circle.getClosestPoint(new Vec2(30, 40));
+    expect(outside.x).toBeCloseTo(6);
+    expect(outside.y).toBeCloseTo(8);
+  });
+
 });

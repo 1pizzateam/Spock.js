@@ -2,6 +2,8 @@
 
 A rotation stored as a unit quaternion: a scalar `w` plus a `Vec3` named `vector`.
 
+<QuatDemo />
+
 Quaternions are the compact way to hold and blend 3D rotations. They avoid gimbal lock, compose with a single `multiply()`, and interpolate smoothly with `slerp()`, which is why they beat Euler angles for animation and camera work.
 
 `new Quat()` is the identity rotation. Build one from an axis and angle with `setAxisAngle()`, or from Euler angles with `setFromEuler()`. At render time `toMat4()` or `toMat4x3()` writes the rotation into a matrix. Component order is `[w, x, y, z]` in both the constructor and `toArray()`.
@@ -9,11 +11,13 @@ Quaternions are the compact way to hold and blend 3D rotations. They avoid gimba
 ```js
 import { Quat, Vec3 } from '@1pizzateam/spock';
 
-const start = new Quat();
-const end = new Quat().setAxisAngle(new Vec3(0, 1, 0), Math.PI / 2);
+const rotation = new Quat()
+  .setAxisAngle(new Vec3(0.4, 1, 0.25), Math.PI / 2);
 
-const current = start.clone().slerp(end, 0.25);
-const facing = current.multiplyVector(new Vec3(0, 0, 1));
+const target = new Vec3();
+rotation.multiplyVector(new Vec3(0, 0, 1), target);
+
+const current = rotation.clone().slerp(new Quat(), 0.5);
 ```
 
 ## Constructor

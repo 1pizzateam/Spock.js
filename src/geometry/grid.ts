@@ -56,16 +56,78 @@ export class Grid {
     );
   }
 
-  /** True if the occupancy lists share a real cell. */
+  /** Total number of cells in the lattice (cols × rows). */
+  get totalCells(): number {
+    return this.len.x * this.len.y;
+  }
+
+  /** True if the sorted occupancy lists share a real cell. */
   public testCells(aCells: number[], bCells: number[]): boolean {
-    for (const aCell of aCells) {
-      if (aCell !== GRID_EMPTY_CELL)
-        for (const bCell of bCells) {
-          if (bCell !== GRID_EMPTY_CELL && aCell === bCell)
-            return true;
-        }
+    const aLen = aCells.length;
+    const bLen = bCells.length;
+    if (!aLen || !bLen) return false;
+
+    let a = 0;
+    let b = 0;
+    while (a < aLen && aCells[a] === GRID_EMPTY_CELL) a++;
+    while (b < bLen && bCells[b] === GRID_EMPTY_CELL) b++;
+    if (a === aLen || b === bLen || aCells[a] > bCells[bLen - 1] || bCells[b] > aCells[aLen - 1])
+      return false;
+
+    while (a < aLen && b < bLen) {
+      const ca = aCells[a];
+      const cb = bCells[b];
+      if (ca === cb) return true;
+      if (ca < cb) a++;
+      else b++;
     }
     return false;
+  }
+
+  /** Return the lowest common cell shared by both sorted lists, or -1 if disjoint. */
+  public getFirstCommonCell(aCells: number[], bCells: number[]): number {
+    const aLen = aCells.length;
+    const bLen = bCells.length;
+    if (!aLen || !bLen) return GRID_EMPTY_CELL;
+
+    let a = 0;
+    let b = 0;
+    while (a < aLen && aCells[a] === GRID_EMPTY_CELL) a++;
+    while (b < bLen && bCells[b] === GRID_EMPTY_CELL) b++;
+    if (a === aLen || b === bLen || aCells[a] > bCells[bLen - 1] || bCells[b] > aCells[aLen - 1])
+      return GRID_EMPTY_CELL;
+
+    while (a < aLen && b < bLen) {
+      const ca = aCells[a];
+      const cb = bCells[b];
+      if (ca === cb) return ca;
+      if (ca < cb) a++;
+      else b++;
+    }
+    return GRID_EMPTY_CELL;
+  }
+
+  /** Fast deduplication check: true if cellId is the first common cell between a and b. */
+  public isFirstCommonCell(aCells: number[], bCells: number[], cellId: number): boolean {
+    if (aCells[0] === cellId || bCells[0] === cellId) return true;
+    return this.getFirstCommonCell(aCells, bCells) === cellId;
+  }
+
+  /** Get cell index at (x, y) coordinates, or -1 if out of bounds. */
+  public getCell(x: number, y: number): number {
+    if (x < 0 || y < 0) return GRID_EMPTY_CELL;
+    const col = Math.floor(x / this.cellSize);
+    const row = Math.floor(y / this.cellSize);
+    if (col >= this.len.x || row >= this.len.y) return GRID_EMPTY_CELL;
+    return row * this.len.x + col;
+  }
+
+  /** Decompose a cell index into (col, row) coordinates. */
+  public getCellCoords(cellId: number, target: Vec2 = new Vec2()): Vec2 {
+    if (cellId < 0 || cellId >= this.totalCells)
+      return target.setScalar(GRID_EMPTY_CELL, GRID_EMPTY_CELL);
+    const cols = this.len.x;
+    return target.setScalar(cellId % cols, Math.floor(cellId / cols));
   }
 
   /** Draw the lattice on a canvas. */

@@ -2,6 +2,8 @@
 
 Reductions that turn an array of numbers into a single value.
 
+<NumArrayDemo />
+
 It covers the reductions that come up constantly — `min()`, `max()`, `sum()`, `multiply()` for the product, and `average()` — written as straight loops rather than `reduce()` callbacks, so they stay fast on large arrays and work on typed arrays too.
 
 `min()`, `max()`, and `average()` return `NaN` for an empty array. `sum()` returns 0 and `multiply()` returns 1, their identity values.
@@ -149,4 +151,12 @@ import { NumArray } from '@1pizzateam/spock';
 
 const result = NumArray.average([1, 2, 3]);
 ```
+
+---
+
+## Related: RollingAverage
+
+While `NumArray.average()` computes the arithmetic mean across an entire static array in $O(N)$ time, [RollingAverage](./rolling-average) maintains a moving average across a continuous streaming window in constant $O(1)$ time with zero memory allocations.
+
+See the full **[RollingAverage Guide & API Reference](./rolling-average)**.
 

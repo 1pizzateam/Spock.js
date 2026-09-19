@@ -32,3 +32,14 @@
   aspect-ratio: 1;
   margin: 0 auto;
 }
+
+/* Standalone chapter link: Trigo matches top-level chapter headings */
+.VPSidebar a[href*="api/trigo"] .text {
+  font-weight: 700 !important;
+  color: var(--vp-c-text-1) !important;
+}
+
+.VPSidebar a[href*="api/trigo"]:hover .text,
+.VPSidebar .is-active a[href*="api/trigo"] .text {
+  color: var(--vp-c-brand-1) !important;
+}

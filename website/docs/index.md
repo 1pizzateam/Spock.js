@@ -37,7 +37,7 @@ features:
 <GameOfLife />
 
 ```js
-import { Grid, Rand, Rect, Time, Utils } from '@1pizzateam/spock';
+import { Grid, Rand, Rect, Time, Utils, Vec2 } from '@1pizzateam/spock';
 
 const CELL = 8;
 const GROW = 4;
@@ -59,8 +59,7 @@ function randomize(seed) {
   for (let i = 0; i < blobs; i++) {
     const side = rand.integer(6, 14) * CELL;
     seeder.setSize(side, side).setPosition(
-      rand.float(0, canvas.width),
-      rand.float(0, canvas.height)
+      new Vec2(rand.float(0, canvas.width), rand.float(0, canvas.height))
     );
     for (const cell of seeder.gridCells)
       if (cell !== Grid.emptyCell) cells[cell] = rand.pick(1, 0);

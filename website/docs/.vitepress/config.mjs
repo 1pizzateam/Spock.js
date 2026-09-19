@@ -40,11 +40,10 @@ export default defineConfig({
   ],
   themeConfig: {
     siteTitle: 'Spock.js',
+    outline: [2, 3],
     nav: [
       { text: 'Guide', link: '/guide/overview' },
       { text: 'API', link: '/api/' },
-      { text: 'Examples', link: '/guide/examples' },
-      { text: '4.0.0', link: '/guide/migration' },
     ],
     sidebar: [
       {
@@ -52,8 +51,6 @@ export default defineConfig({
         items: [
           { text: 'Overview', link: '/guide/overview' },
           { text: 'Installation', link: '/guide/installation' },
-          { text: 'Examples', link: '/guide/examples' },
-          { text: 'Migrating to 4.0', link: '/guide/migration' },
         ],
       },
       {
@@ -87,12 +84,22 @@ export default defineConfig({
         ],
       },
       {
-        text: 'Math utilities',
+        text: 'Curves',
         items: [
-          { text: 'Trigo', link: '/api/trigo' },
-          { text: 'Bezier', link: '/api/bezier' },
+          { text: 'Quadratic Bézier', link: '/api/bezier-quadratic' },
+          { text: 'Cubic Bézier', link: '/api/bezier-cubic' },
+        ],
+      },
+      {
+        text: 'Trigo',
+        link: '/api/trigo',
+      },
+      {
+        text: 'Utilities',
+        items: [
           { text: 'Rand', link: '/api/rand' },
           { text: 'NumArray', link: '/api/num-array' },
+          { text: 'RollingAverage', link: '/api/rolling-average' },
           { text: 'Utils', link: '/api/utils' },
           { text: 'Time', link: '/api/time' },
         ],

@@ -2,6 +2,8 @@
 
 An axis-aligned rectangle defined by a centre position and a size, with cached corners.
 
+<ClampDemo />
+
 The constructor takes width and height first, then the centre. `topLeftCorner` and `bottomRightCorner` are recomputed whenever you move or resize it, so containment tests and clamping read them directly instead of deriving them every frame.
 
 As with `Circ`, occupancy is opt-in through `setGrid()`, after which `gridCells` lists every cell the rectangle covers. `Vec2.clamp()` takes a `Rect`, which makes it the natural type for bounds.
@@ -12,6 +14,7 @@ import { Rect, Vec2 } from '@1pizzateam/spock';
 const bounds = new Rect(640, 360, 320, 180);
 
 const pointer = new Vec2(700, -20).clamp(bounds);
+const distance = pointer.getDistance(bounds.position);
 const inside = bounds.isIn(pointer); // true
 ```
 
@@ -127,18 +130,15 @@ const result = new Rect(20, 10, 0, 0).setGrid(new Grid(100, 100, 10));
 
 ## Rect.setPosition()
 
-Move the center and refresh corners and occupancy.
-
-Moves the centre and refreshes the corners and occupancy together, so nothing goes stale.
+Move the center to a position vector and refresh corners and occupancy together, so nothing goes stale.
 
 ```ts
-setPosition(positionX: number, positionY: number): Rect
+setPosition(position: Vec2): Rect
 ```
 
 ### Parameters
 
-- `positionX` — `number`.
-- `positionY` — `number`.
+- `position` — `Vec2`. Center position vector.
 
 ### Returns
 
@@ -147,11 +147,53 @@ setPosition(positionX: number, positionY: number): Rect
 ### Example
 
 ```js
-import { Rect } from '@1pizzateam/spock';
+import { Rect, Vec2 } from '@1pizzateam/spock';
 
-
-const result = new Rect(20, 10, 0, 0).setPosition(1, 1);
+const rect = new Rect(20, 10, 0, 0);
+rect.setPosition(new Vec2(15, 20));
 ```
+
+## Rect.translate()
+
+Translate center and corners by an offset vector in-place and refresh occupancy.
+
+```ts
+translate(offset: Vec2): Rect
+```
+
+### Parameters
+
+- `offset` — `Vec2`. Displacement vector.
+
+### Returns
+
+`Rect`
+
+### Example
+
+```js
+import { Rect, Vec2 } from '@1pizzateam/spock';
+
+const rect = new Rect(20, 10, 0, 0);
+rect.translate(new Vec2(5, 10));
+```
+
+## Rect.getClosestPoint()
+
+Closest point on or within the rectangle to an external point.
+
+```ts
+getClosestPoint(point: Vec2, target?: Vec2): Vec2
+```
+
+### Parameters
+
+- `point` — `Vec2`.
+- `target` — `Vec2`. Optional.
+
+### Returns
+
+`Vec2`
 
 ## Rect.setSize()
 

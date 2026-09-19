@@ -27,10 +27,11 @@ const opacity = Utils.clamp(1.25, 0, 1);
 Most vector, matrix, quaternion, Circ, and Rect operations mutate the instance and return it, making calls chainable. Methods that test or measure return a boolean or number instead.
 
 ## API groups
-
+ 
 - [Vec2](/api/vec2) and [Vec3](/api/vec3)
 - [Mat3](/api/mat3), [Mat4x3](/api/mat4x3), and [Mat4](/api/mat4)
 - [Quat](/api/quat)
 - [Circ](/api/circ), [Rect](/api/rect), and [Grid](/api/grid)
-- [Trigo](/api/trigo), [Bezier](/api/bezier), and [Rand](/api/rand)
-- [NumArray](/api/num-array), [Utils](/api/utils), and [Time](/api/time)
+- [Quadratic](/api/bezier-quadratic) and [Cubic Bézier](/api/bezier-cubic)
+- [Trigo](/api/trigo), [Rand](/api/rand), and [Utils](/api/utils)
+- [NumArray](/api/num-array), [RollingAverage](/api/rolling-average), and [Time](/api/time)

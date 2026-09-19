@@ -41,10 +41,45 @@ describe('Rect', () => {
   });
 
   it('should chain setPosition and setSize', () => {
-    const rect = new Rect(2, 2, 0, 0).setSize(10, 6).setPosition(5, 5);
+    const rect = new Rect(2, 2, 0, 0).setSize(10, 6).setPosition(new Vec2(5, 5));
     expect(rect.size.x).toBe(10);
     expect(rect.position.x).toBe(5);
     expect(rect.topLeftCorner.x).toBe(0);
+  });
+
+  it('should support vector setPosition and translate', () => {
+    const grid = new Grid(100, 100, 10);
+    const rect = new Rect(10, 10, 20, 20).setGrid(grid);
+
+    rect.setPosition(new Vec2(30, 40));
+    expect(rect.position.x).toBe(30);
+    expect(rect.position.y).toBe(40);
+    expect(rect.topLeftCorner.x).toBe(25);
+    expect(rect.topLeftCorner.y).toBe(35);
+    expect(rect.bottomRightCorner.x).toBe(35);
+    expect(rect.bottomRightCorner.y).toBe(45);
+
+    rect.translate(new Vec2(-10, 5));
+    expect(rect.position.x).toBe(20);
+    expect(rect.position.y).toBe(45);
+    expect(rect.topLeftCorner.x).toBe(15);
+    expect(rect.topLeftCorner.y).toBe(40);
+    expect(rect.bottomRightCorner.x).toBe(25);
+    expect(rect.bottomRightCorner.y).toBe(50);
+  });
+
+  it('should compute closest point on or inside rect', () => {
+    const rect = new Rect(20, 10, 0, 0); // [-10, -5] to [10, 5]
+
+    // Point inside remains unchanged
+    const inside = rect.getClosestPoint(new Vec2(2, 3));
+    expect(inside.x).toBe(2);
+    expect(inside.y).toBe(3);
+
+    // Point outside is clamped to closest corner/edge
+    const outside = rect.getClosestPoint(new Vec2(15, -20));
+    expect(outside.x).toBe(10);
+    expect(outside.y).toBe(-5);
   });
 
 });

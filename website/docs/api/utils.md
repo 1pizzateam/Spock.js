@@ -2,6 +2,8 @@
 
 Scalar helpers that sit between `Math` and your own code: rounding, mixing, clamping, and range tests.
 
+<UtilsDemo />
+
 `clamp()`, `lerp()`, `mix()`, `normalize()`, and `map()` are the interpolation set. `normalize()` takes a value from a range into 0–1, `map()` moves it from one range straight into another, and `lerp()` and `mix()` blend two values, differing only in argument order.
 
 The rounding group — `round()`, `floor()`, `ceil()`, and `trunc()` — takes a decimal count, so you can snap to two decimals without the usual multiply-and-divide dance. `roundToNearest()` snaps to an arbitrary step instead. `isIn()` and `isOut()` are readable range tests.
@@ -9,10 +11,12 @@ The rounding group — `round()`, `floor()`, `ceil()`, and `trunc()` — takes a
 ```js
 import { Utils } from '@1pizzateam/spock';
 
+const celsius = Utils.map(350, 0, 600, -20, 40);
+const ratio = Utils.normalize(celsius, -20, 40);
+const snapped = Utils.roundToNearest(celsius, 2.5);
+
 const opacity = Utils.clamp(1.25, 0, 1);       // 1
 const eased = Utils.lerp(0, 100, 0.25);        // 25
-const gauge = Utils.map(72, 0, 120, 0, 360);   // 216
-const snapped = Utils.roundToNearest(147, 25); // 150
 ```
 
 ## Utils.round()
