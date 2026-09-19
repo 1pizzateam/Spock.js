@@ -13,11 +13,9 @@ function draw(context, state, theme) {
   const right = width - 30;
   const trackY = height * 0.42;
 
-  const pointerX = state.pointer
-    ? Utils.clamp(state.pointer.x, left, right)
-    : Utils.map(Math.sin(state.time * 0.9), -1, 1, left, right);
+  const currentX = Utils.map(Math.sin(state.time * 0.9), -1, 1, left, right);
 
-  const celsius = Utils.map(pointerX, left, right, CELSIUS_MIN, CELSIUS_MAX);
+  const celsius = Utils.map(currentX, left, right, CELSIUS_MIN, CELSIUS_MAX);
   const ratio = Utils.normalize(celsius, CELSIUS_MIN, CELSIUS_MAX);
   const snapped = Utils.roundToNearest(celsius, STEP);
   const snappedX = Utils.map(snapped, CELSIUS_MIN, CELSIUS_MAX, left, right);
@@ -28,9 +26,9 @@ function draw(context, state, theme) {
     polyline(context, [[x, trackY - 6], [x, trackY + 6]], theme.guide, 1);
   }
 
-  polyline(context, [[left, trackY], [pointerX, trackY]], theme.accent, 3);
+  polyline(context, [[left, trackY], [currentX, trackY]], theme.accent, 3);
   polyline(context, [[snappedX, trackY - 16], [snappedX, trackY + 16]], theme.fresh, 2);
-  dot(context, pointerX, trackY, 7, theme.warm, theme.surface);
+  dot(context, currentX, trackY, 7, theme.warm, theme.surface);
 
   const barY = height - 26;
   const barWidth = (right - left) * ratio;
@@ -47,7 +45,7 @@ function draw(context, state, theme) {
 
 <template>
   <DemoFrame :draw="draw">
-    Move the pointer along the track. <code>map()</code> converts the pixel position into degrees
+    <code>map()</code> converts the position into degrees
     Celsius, <code>roundToNearest()</code> snaps that reading to the nearest 2.5° tick (green), and
     <code>normalize()</code> reduces it to the 0–1 ratio driving the bar underneath.
   </DemoFrame>

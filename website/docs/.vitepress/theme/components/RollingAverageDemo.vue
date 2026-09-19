@@ -69,6 +69,7 @@ function draw(context, state, theme) {
 <template>
   <DemoFrame :draw="draw">
     The orange curve shows a synthesized jittery input signal; the thick green curve is smoothed
-    in real time by <code>RollingAverage(30)</code> in constant <code>O(1)</code> time with zero memory allocations.
+    in real time by <code>RollingAverage(30)</code> in constant <code>O(1)</code> time with zero memory allocations
+    (the same algorithm used internally by LoopR's <code>Player.getFPS()</code>).
   </DemoFrame>
 </template>

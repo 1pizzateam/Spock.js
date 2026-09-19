@@ -15,6 +15,8 @@ const GROWTH_STEPS = 4;
 const canvas = ref(null);
 const generation = ref(0);
 const population = ref(0);
+const fps = ref(0);
+const isRunning = ref(true);
 
 let grid = null;
 let seeder = null;
@@ -29,6 +31,11 @@ let animationTime = 0;
 let stop = null;
 let seedOffset = 0;
 const seedPos = new Vec2();
+
+function togglePlay() {
+  if (!stop?.player) return;
+  isRunning.value = stop.player.toggle();
+}
 
 /** Scatter square soup blobs and let the grid tell us which cells they cover. */
 function randomize() {
@@ -96,6 +103,7 @@ function evolve() {
 
 function draw(context, state, theme) {
   animationTime = state.time;
+  fps.value = Math.round(state.fps);
   if (!grid || state.width !== width || state.height !== height)
     rebuild(state.width, state.height);
 
@@ -145,29 +153,70 @@ onBeforeUnmount(() => {
           newborn cell, and <code>NumArray</code> counts who is still alive.
         </p>
       </div>
-      <button
-        type="button"
-        class="life-reload"
-        aria-label="Start fresh"
-        title="Start fresh"
-        @click="randomize"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="20"
-          height="20"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          aria-hidden="true"
+      <div class="life-actions">
+        <button
+          type="button"
+          class="life-reload"
+          :aria-label="isRunning ? 'Pause simulation' : 'Resume simulation'"
+          :title="isRunning ? 'Pause' : 'Play'"
+          @click="togglePlay"
         >
-          <path d="M21 12a9 9 0 1 1-2.64-6.36" />
-          <polyline points="21 3 21 9 15 9" />
-        </svg>
-      </button>
+          <svg
+            v-if="isRunning"
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <rect x="6" y="4" width="4" height="16" />
+            <rect x="14" y="4" width="4" height="16" />
+          </svg>
+          <svg
+            v-else
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <polygon points="5 3 19 12 5 21 5 3" />
+          </svg>
+        </button>
+        <button
+          type="button"
+          class="life-reload"
+          aria-label="Start fresh"
+          title="Start fresh"
+          @click="randomize"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M21 12a9 9 0 1 1-2.64-6.36" />
+            <polyline points="21 3 21 9 15 9" />
+          </svg>
+        </button>
+      </div>
     </div>
 
     <div class="life-canvas">
@@ -178,6 +227,7 @@ onBeforeUnmount(() => {
       <div class="life-stats">
         <span>Generation {{ generation }}</span>
         <span>{{ population }} living cells</span>
+        <span v-if="fps > 0">{{ fps }} FPS</span>
       </div>
     </div>
 
@@ -241,6 +291,12 @@ onBeforeUnmount(() => {
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
+}
+
+.life-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
 }
 
 .life-reload,

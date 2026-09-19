@@ -59,9 +59,13 @@ function draw(context, state, theme) {
     context.fillText(`${budgetMs.toFixed(1)} ms`, paddingX + 55, y + 4);
   }
 
+  const liveFps = Math.round(state.fps || 0);
+  const liveDelta = ((state.delta || 0) * 1000).toFixed(1);
+  const liveInfo = liveFps > 0 ? `   [LoopR: ${liveFps} FPS / ${liveDelta}ms]` : '';
+
   label(
     context,
-    `Time.fpsToMillisec()   60 FPS: 16.7ms   30 FPS: 33.3ms   12 FPS: 83.3ms`,
+    `Time.fpsToMillisec()   60 FPS: 16.7ms   30 FPS: 33.3ms   12 FPS: 83.3ms${liveInfo}`,
     theme.text
   );
 }
