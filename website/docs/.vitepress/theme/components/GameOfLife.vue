@@ -1,6 +1,5 @@
 <script setup>
 import { onBeforeUnmount, onMounted, ref } from 'vue';
-import { withBase } from 'vitepress';
 import { Grid, NumArray, Rand, Rect, Time, Utils, Vec2 } from '@1pizzateam/spock';
 import { startCanvas } from '../canvas.js';
 
@@ -230,31 +229,6 @@ onBeforeUnmount(() => {
         <span v-if="fps > 0">{{ fps }} FPS</span>
       </div>
     </div>
-
-    <p class="life-more">
-      <a
-        class="life-icon"
-        :href="withBase('/guide/examples')"
-        aria-label="More demos"
-        title="More demos"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="20"
-          height="20"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          aria-hidden="true"
-        >
-          <line x1="4" y1="12" x2="19" y2="12" />
-          <polyline points="13 6 19 12 13 18" />
-        </svg>
-      </a>
-    </p>
   </section>
 </template>
 
@@ -299,8 +273,7 @@ onBeforeUnmount(() => {
   align-items: center;
 }
 
-.life-reload,
-.life-icon {
+.life-reload {
   display: inline-flex;
   flex: none;
   align-items: center;
@@ -319,15 +292,13 @@ onBeforeUnmount(() => {
     color 0.2s;
 }
 
-.life-reload:hover,
-.life-icon:hover {
+.life-reload:hover {
   border-color: var(--vp-c-brand-1);
   background: var(--vp-c-bg-alt);
   color: var(--vp-c-brand-1);
 }
 
-.life-reload:focus-visible,
-.life-icon:focus-visible {
+.life-reload:focus-visible {
   outline: 2px solid var(--vp-c-brand-1);
   outline-offset: 3px;
 }
@@ -359,21 +330,6 @@ onBeforeUnmount(() => {
   color: var(--vp-c-text-2);
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 12px;
-}
-
-.life-more {
-  margin: 16px 0 0;
-  text-align: right;
-}
-
-.life-more a {
-  color: var(--vp-c-brand-1);
-  font-size: 15px;
-  font-weight: 600;
-}
-
-.life-more a:hover {
-  color: var(--vp-c-brand-2);
 }
 
 @media (max-width: 640px) {
