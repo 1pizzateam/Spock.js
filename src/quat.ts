@@ -28,22 +28,25 @@ export class Quat {
 
   /** Rotation of angle radians about a (possibly unnormalized) axis. */
   public setAxisAngle(axis: Vec3, angle: number): Quat {
-    this.vector.copy(axis);
-    const length = this.vector.getMagnitude();
-    if (!length) {
+    const length = axis.getMagnitude();
+    if (!length)
       return this.identity();
-    }
     const half = angle * 0.5;
-    this.vector.scale(Math.sin(half) / length);
+    this.vector.scaleVector(axis, Math.sin(half) / length);
     this.w = Math.cos(half);
     return this;
   }
 
-  /** Set from x, y, and z Euler angles in radians. */
-  public setFromEuler(x: number, y: number, z: number): Quat {
-    const hx = x * 0.5;
-    const hy = y * 0.5;
-    const hz = z * 0.5;
+  /** Set from Euler angles in radians. Accepts Vec3 or (x, y, z). */
+  public setFromEuler(euler: Vec3): Quat;
+  public setFromEuler(x: number, y: number, z: number): Quat;
+  public setFromEuler(xOrEuler: Vec3 | number, y?: number, z?: number): Quat {
+    const ex = xOrEuler instanceof Vec3 ? xOrEuler.x : xOrEuler;
+    const ey = xOrEuler instanceof Vec3 ? xOrEuler.y : y!;
+    const ez = xOrEuler instanceof Vec3 ? xOrEuler.z : z!;
+    const hx = ex * 0.5;
+    const hy = ey * 0.5;
+    const hz = ez * 0.5;
     const cx = Math.cos(hx);
     const cy = Math.cos(hy);
     const cz = Math.cos(hz);
@@ -64,7 +67,7 @@ export class Quat {
       axis.setScalar(1, 0, 0);
       return 0;
     }
-    axis.copy(this.vector).scale(1 / length);
+    axis.normalizeVector(this.vector);
     return 2 * Math.acos(Utils.clamp(this.w, -1, 1));
   }
 
@@ -121,9 +124,8 @@ export class Quat {
   /** Invert in place; unchanged if zero. */
   public invert(): Quat {
     const squared = this.getMagnitude(true);
-    if (!squared) {
+    if (!squared)
       return this;
-    }
     this.conjugate();
     if (squared !== 1) {
       const inv = 1 / squared;
@@ -195,12 +197,10 @@ export class Quat {
 
   /** Spherical interpolate toward q by t in [0, 1]. */
   public slerp(q: Quat, t: number): Quat {
-    if (t === 0) {
+    if (t === 0)
       return this;
-    }
-    if (t === 1) {
+    if (t === 1)
       return this.copy(q);
-    }
 
     let bx = q.vector.x, by = q.vector.y, bz = q.vector.z, bw = q.w;
     const ax = this.vector.x, ay = this.vector.y, az = this.vector.z, aw = this.w;

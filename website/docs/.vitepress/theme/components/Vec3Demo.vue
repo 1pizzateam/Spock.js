@@ -39,7 +39,7 @@ function draw(context, state, theme) {
 
   vecA.setScalar(Math.cos(tA), Math.sin(tA) * 0.4, Math.sin(tA * 0.7) * 0.5).normalize();
   vecB.setScalar(Math.cos(tB) * 0.3, Math.cos(tB * 0.8), Math.sin(tB)).normalize();
-  vecC.copy(vecA).cross(vecB).normalize();
+  vecC.crossVectors(vecA, vecB).normalize();
 
   const angleRad = vecA.getAngle(vecB);
   const angleDeg = angleRad !== false ? Math.round(Trigo.radianToDegree(angleRad)) : 0;
@@ -58,7 +58,7 @@ function draw(context, state, theme) {
   polyline(context, [pOrigin, pZ], theme.grid, 1);
 
   // Plane spanned by a and b
-  vecAB.copy(vecA).add(vecB);
+  vecAB.addVectors(vecA, vecB);
   const pAB = project(vecAB, width, height);
   context.fillStyle = theme.dark ? 'rgba(91, 140, 255, 0.08)' : 'rgba(91, 140, 255, 0.12)';
   context.beginPath();

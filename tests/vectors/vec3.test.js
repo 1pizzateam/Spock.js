@@ -184,4 +184,224 @@ describe('Vec3', () => {
     expect(new Vec3().quadraticBezierParameterAtLength(p0, p1, p2, 5)).toBeCloseTo(0.5, 5);
   });
 
+  it('should compute sign component-wise in-place', () => {
+    const v = new Vec3(-8.2, 0, 4.5).sign();
+    expect(v.x).toBe(-1);
+    expect(v.y).toBe(0);
+    expect(v.z).toBe(1);
+  });
+
+  it('should clampScalar between min and max numbers', () => {
+    const v = new Vec3(-5, 15, 8).clampScalar(0, 10);
+    expect(v.x).toBe(0);
+    expect(v.y).toBe(10);
+    expect(v.z).toBe(8);
+  });
+
+  it('should check isInBounds for points in 3D box', () => {
+    const min = new Vec3(-5, -5, -5);
+    const max = new Vec3(5, 5, 5);
+
+    expect(new Vec3(0, 0, 0).isInBounds(min, max)).toBe(true);
+    expect(new Vec3(-5, 5, 0).isInBounds(min, max)).toBe(true);
+    expect(new Vec3(0, 0, 5.1).isInBounds(min, max)).toBe(false);
+
+    // Reversed bounds order
+    expect(new Vec3(1, 2, 3).isInBounds(max, min)).toBe(true);
+  });
+
+  it('should support binary target operations (addVectors, subVectors, etc.)', () => {
+    const a = new Vec3(10, 20, 30);
+    const b = new Vec3(3, 4, 5);
+    const dest = new Vec3();
+
+    expect(dest.addVectors(a, b)).toBe(dest);
+    expect(dest.x).toBe(13);
+    expect(dest.y).toBe(24);
+    expect(dest.z).toBe(35);
+
+    dest.subVectors(a, b);
+    expect(dest.x).toBe(7);
+    expect(dest.y).toBe(16);
+    expect(dest.z).toBe(25);
+
+    dest.multiplyVectors(a, b);
+    expect(dest.x).toBe(30);
+    expect(dest.y).toBe(80);
+    expect(dest.z).toBe(150);
+
+    dest.scaleVector(a, 0.5);
+    expect(dest.x).toBe(5);
+    expect(dest.y).toBe(10);
+    expect(dest.z).toBe(15);
+
+    dest.divideVectors(a, b);
+    expect(dest.x).toBeCloseTo(10 / 3);
+    expect(dest.y).toBe(5);
+    expect(dest.z).toBe(6);
+
+    dest.minVectors(new Vec3(1, 10, 50), new Vec3(5, 2, 100));
+    expect(dest.x).toBe(1);
+    expect(dest.y).toBe(2);
+    expect(dest.z).toBe(50);
+
+    dest.maxVectors(new Vec3(1, 10, 50), new Vec3(5, 2, 100));
+    expect(dest.x).toBe(5);
+    expect(dest.y).toBe(10);
+    expect(dest.z).toBe(100);
+
+    dest.clampVectors(new Vec3(-10, 50, 5), new Vec3(0, 0, 0), new Vec3(10, 20, 10));
+    expect(dest.x).toBe(0);
+    expect(dest.y).toBe(20);
+    expect(dest.z).toBe(5);
+  });
+
+  it('should support unary target operations and crossVectors (oppositeVector, absoluteVector, normalizeVector, crossVectors)', () => {
+    const v = new Vec3(-2, 3, -6);
+    const dest = new Vec3();
+
+    expect(dest.oppositeVector(v)).toBe(dest);
+    expect(dest.x).toBe(2);
+    expect(dest.y).toBe(-3);
+    expect(dest.z).toBe(6);
+
+    dest.absoluteVector(v);
+    expect(dest.x).toBe(2);
+    expect(dest.y).toBe(3);
+    expect(dest.z).toBe(6);
+
+    dest.normalizeVector(v);
+    // |-2, 3, -6| = sqrt(4 + 9 + 36) = sqrt(49) = 7
+    expect(dest.x).toBeCloseTo(-2 / 7);
+    expect(dest.y).toBeCloseTo(3 / 7);
+    expect(dest.z).toBeCloseTo(-6 / 7);
+    expect(dest.getMagnitude()).toBeCloseTo(1);
+
+    dest.normalizeVector(new Vec3(0, 0, 0));
+    expect(dest.x).toBe(0);
+    expect(dest.y).toBe(0);
+    expect(dest.z).toBe(0);
+
+    const a = new Vec3(1, 0, 0);
+    const b = new Vec3(0, 1, 0);
+    dest.crossVectors(a, b);
+    expect(dest.x).toBe(0);
+    expect(dest.y).toBe(0);
+    expect(dest.z).toBe(1);
+  });
+
+  it('should scale to exact length with setLength and setLengthVector', () => {
+    const v = new Vec3(0, 3, 4);
+    expect(v.setLength(10)).toBe(v);
+    expect(v.x).toBeCloseTo(0);
+    expect(v.y).toBeCloseTo(6);
+    expect(v.z).toBeCloseTo(8);
+    expect(v.getMagnitude()).toBeCloseTo(10);
+
+    const dest = new Vec3();
+    expect(dest.setLengthVector(new Vec3(0, 0, 5), 2)).toBe(dest);
+    expect(dest.x).toBeCloseTo(0);
+    expect(dest.y).toBeCloseTo(0);
+    expect(dest.z).toBeCloseTo(2);
+    expect(dest.getMagnitude()).toBeCloseTo(2);
+  });
+
+  it('should project and reflect with in-place and target operations', () => {
+    const v = new Vec3(1, 2, 3);
+    const normalZ = new Vec3(0, 0, 1);
+
+    const proj = v.clone().project(normalZ);
+    expect(proj.x).toBe(0);
+    expect(proj.y).toBe(0);
+    expect(proj.z).toBe(3);
+
+    const refl = v.clone().reflect(normalZ);
+    expect(refl.x).toBe(1);
+    expect(refl.y).toBe(2);
+    expect(refl.z).toBe(-3);
+
+    const dest = new Vec3();
+    expect(dest.projectVector(v, normalZ)).toBe(dest);
+    expect(dest.x).toBe(0);
+    expect(dest.y).toBe(0);
+    expect(dest.z).toBe(3);
+
+    expect(dest.reflectVector(v, normalZ)).toBe(dest);
+    expect(dest.x).toBe(1);
+    expect(dest.y).toBe(2);
+    expect(dest.z).toBe(-3);
+  });
+
+  it('should clamp to symmetric extent with clampToExtent and clampToExtentVectors', () => {
+    const v = new Vec3(15, -25, 35);
+    const extent = new Vec3(10, 20, 30);
+
+    expect(v.clampToExtent(extent)).toBe(v);
+    expect(v.x).toBe(10);
+    expect(v.y).toBe(-20);
+    expect(v.z).toBe(30);
+
+    const dest = new Vec3();
+    expect(dest.clampToExtentVectors(new Vec3(-50, 50, -50), extent)).toBe(dest);
+    expect(dest.x).toBe(-10);
+    expect(dest.y).toBe(20);
+    expect(dest.z).toBe(-30);
+  });
+
+  it('should support in-place lerp and target lerpVectors', () => {
+    const a = new Vec3(0, 10, 20);
+    const b = new Vec3(10, 20, 30);
+
+    a.lerp(b, 0.5);
+    expect(a.x).toBe(5);
+    expect(a.y).toBe(15);
+    expect(a.z).toBe(25);
+
+    const dest = new Vec3();
+    expect(dest.lerpVectors(new Vec3(0, 0, 0), new Vec3(10, 20, 30), 0.5)).toBe(dest);
+    expect(dest.x).toBe(5);
+    expect(dest.y).toBe(10);
+    expect(dest.z).toBe(15);
+  });
+
+  it('should support fallback in normalize and normalizeVector when length is 0', () => {
+    const v = new Vec3(0, 0, 0);
+    const fallback = new Vec3(0, 0, 1);
+
+    v.normalize(fallback);
+    expect(v.x).toBe(0);
+    expect(v.y).toBe(0);
+    expect(v.z).toBe(1);
+
+    const dest = new Vec3();
+    dest.normalizeVector(new Vec3(0, 0, 0), new Vec3(1, 0, 0));
+    expect(dest.x).toBe(1);
+    expect(dest.y).toBe(0);
+    expect(dest.z).toBe(0);
+  });
+
+  it('should support quadratic and cubic bezier split', () => {
+    const p0 = new Vec3(0, 0, 0);
+    const p1 = new Vec3(5, 10, 5);
+    const p2 = new Vec3(10, 0, 10);
+    const leftQuad = [];
+    const rightQuad = [];
+    new Vec3().quadraticBezierSplit(p0, p1, p2, 0.5, leftQuad, rightQuad);
+    expect(leftQuad).toHaveLength(3);
+    expect(rightQuad).toHaveLength(3);
+    expect(leftQuad[0].x).toBe(0);
+    expect(rightQuad[2].z).toBe(10);
+    expect(leftQuad[2].x).toBeCloseTo(rightQuad[0].x, 5);
+
+    const p3 = new Vec3(15, 5, 15);
+    const leftCubic = [];
+    const rightCubic = [];
+    new Vec3().cubicBezierSplit(p0, p1, p2, p3, 0.5, leftCubic, rightCubic);
+    expect(leftCubic).toHaveLength(4);
+    expect(rightCubic).toHaveLength(4);
+    expect(leftCubic[0].x).toBe(0);
+    expect(rightCubic[3].z).toBe(15);
+    expect(leftCubic[3].x).toBeCloseTo(rightCubic[0].x, 5);
+  });
+
 });

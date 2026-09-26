@@ -14,13 +14,12 @@ export function setLookAtAxes(
   yAxis: Vec3,
   zAxis: Vec3
 ): boolean {
-  zAxis.copy(eye).subtract(target);
-  const zLength = zAxis.getMagnitude();
-  if (!zLength)
+  zAxis.subVectors(eye, target);
+  if (!zAxis.getMagnitude(true))
     return false;
-  zAxis.scale(1 / zLength);
+  zAxis.normalize();
 
-  xAxis.copy(up).cross(zAxis);
+  xAxis.crossVectors(up, zAxis);
   if (xAxis.getMagnitude(true) < PARALLEL) {
     if (Math.abs(zAxis.y) < 0.999)
       xAxis.setScalar(0, 1, 0).cross(zAxis);
@@ -28,6 +27,6 @@ export function setLookAtAxes(
       xAxis.setScalar(1, 0, 0).cross(zAxis);
   }
   xAxis.normalize();
-  yAxis.copy(zAxis).cross(xAxis);
+  yAxis.crossVectors(zAxis, xAxis);
   return true;
 }

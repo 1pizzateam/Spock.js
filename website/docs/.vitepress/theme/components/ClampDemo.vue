@@ -16,19 +16,17 @@ function draw(context, state, theme) {
   if (state.width !== width || state.height !== height) {
     width = state.width;
     height = state.height;
-    bounds = new Rect(width * 0.58, height * 0.58, width * 0.5, height * 0.54);
+    bounds = new Rect(new Vec2(width * 0.58, height * 0.58), new Vec2(width * 0.5, height * 0.54));
     inner = new Rect(
-      bounds.size.x - RADIUS * 2,
-      bounds.size.y - RADIUS * 2,
-      bounds.position.x,
-      bounds.position.y
+      new Vec2(bounds.size.x - RADIUS * 2, bounds.size.y - RADIUS * 2),
+      bounds.position
     );
-    circle = new Circ(RADIUS, bounds.position.x, bounds.position.y);
+    circle = new Circ(RADIUS, bounds.position);
   }
   if (!bounds) return;
 
   if (state.pointer)
-    pointer.setScalar(state.pointer.x, state.pointer.y);
+    pointer.copy(state.pointer);
   else
     pointer.setScalar(
       width * 0.5 + Math.cos(state.time * 0.7) * width * 0.42,
@@ -38,7 +36,7 @@ function draw(context, state, theme) {
   clamped.copy(pointer).clamp(inner);
   circle.setPosition(clamped);
 
-  const inside = bounds.isIn(pointer);
+  const inside = pointer.isInBounds(bounds);
   const distance = pointer.getDistance(bounds.position);
 
   bounds.draw(context, '', theme.guide, 1);
@@ -69,7 +67,7 @@ function draw(context, state, theme) {
   <DemoFrame :draw="draw">
     Move the pointer around the rectangle. The ghost is the unconstrained point; the filled
     circle is that same <code>Vec2</code> after <code>clamp()</code> against the inner box,
-    so the disc never crosses the outer edge. The caption is
+    tested with <code>pointer.isInBounds(bounds)</code>, so the disc never crosses the outer edge. The caption is
     <code>getDistance()</code> from the pointer to the rectangle centre.
   </DemoFrame>
 </template>

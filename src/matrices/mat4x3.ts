@@ -179,9 +179,15 @@ export class Mat4x3 {
 
   /** Right-handed look-at view matrix; identity if eye equals target. */
   public lookAtRH(eye: Vec3, target: Vec3, up: Vec3): Mat4x3 {
-    const zAxis = this.zAxis ??= new Vec3();
-    const xAxis = this.xAxis ??= new Vec3();
-    const yAxis = this.yAxis ??= new Vec3();
+    if (!this.zAxis)
+      this.zAxis = new Vec3();
+    if (!this.xAxis)
+      this.xAxis = new Vec3();
+    if (!this.yAxis)
+      this.yAxis = new Vec3();
+    const zAxis = this.zAxis;
+    const xAxis = this.xAxis;
+    const yAxis = this.yAxis;
     if (!setLookAtAxes(eye, target, up, xAxis, yAxis, zAxis))
       return this.identity();
 

@@ -77,6 +77,11 @@ export const Utils = {
     return Math.min(Math.max(x, min), max);
   },
 
+  /** Clamp x symmetrically to [-extent, extent]. */
+  clampToExtent(x: number, extent: number): number {
+    return Math.min(Math.max(x, -extent), extent);
+  },
+
   /** Map x from [min, max] into [0, 1]. */
   normalize,
 

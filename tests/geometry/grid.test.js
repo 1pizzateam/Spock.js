@@ -1,4 +1,5 @@
 import { Grid } from '../../build/es6/geometry/grid.js';
+import { Vec2 } from '../../build/es6/vectors/vec2.js';
 
 describe('Grid', () => {
 
@@ -7,6 +8,12 @@ describe('Grid', () => {
     expect(grid.cellSize).toBe(10);
     expect(grid.len.x).toBe(10);
     expect(grid.len.y).toBe(5);
+
+    const gridFromVec = new Grid(new Vec2(100, 50), 10);
+    expect(gridFromVec.cellSize).toBe(10);
+    expect(gridFromVec.len.x).toBe(10);
+    expect(gridFromVec.len.y).toBe(5);
+    expect(gridFromVec.getCell(new Vec2(15, 25))).toBe(gridFromVec.getCell(15, 25));
   });
 
   it('should detect overlapping positive cell indexes', () => {
@@ -83,6 +90,17 @@ describe('Grid', () => {
     const outOfBounds = grid.getCellCoords(999);
     expect(outOfBounds.x).toBe(Grid.emptyCell);
     expect(outOfBounds.y).toBe(Grid.emptyCell);
+  });
+
+  it('should support spatial query helpers getCellAt, getCellsForBounds, getCellsForCircle', () => {
+    const grid = new Grid(100, 100, 10); // 10 cols, 10 rows
+    expect(grid.getCellAt(new Vec2(25, 15))).toBe(12);
+
+    const boundsCells = grid.getCellsForBounds(new Vec2(5, 5), new Vec2(15, 15));
+    expect(boundsCells).toEqual([0, 1, 10, 11]);
+
+    const circleCells = grid.getCellsForCircle(new Vec2(10, 10), 5);
+    expect(circleCells).toEqual([0, 1, 10, 11]);
   });
 
 });

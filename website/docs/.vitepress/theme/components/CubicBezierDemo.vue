@@ -44,7 +44,7 @@ function draw(context, state, theme) {
 
   const t = (state.time * 0.25) % 1;
   scratch.cubicBezier(p0, p1, p2, p3, t);
-  tangent.cubicBezierDerivative(p0, p1, p2, p3, t).normalize().scale(44);
+  tangent.cubicBezierDerivative(p0, p1, p2, p3, t).setLength(44);
   polyline(
     context,
     [[scratch.x - tangent.x, scratch.y - tangent.y], [scratch.x + tangent.x, scratch.y + tangent.y]],

@@ -27,9 +27,10 @@ const travelled = position.getDistance(start);
 | Category | Methods |
 | :--- | :--- |
 | **Creation & Component State** | [`new Vec2()`](#constructor) · [`setScalar()`](#vec2-setscalar) · [`setArray()`](#vec2-setarray) · [`copy()`](#vec2-copy) · [`clone()`](#vec2-clone) · [`toArray()`](#vec2-toarray) · [`toString()`](#vec2-tostring) · [`isOrigin()`](#vec2-isorigin) · [`origin()`](#vec2-origin) · [`equals()`](#vec2-equals) · [`isEqualTo()`](#vec2-isequalto) · [`isPositive()`](#vec2-ispositive) |
-| **Arithmetic & Modification** | [`add()`](#vec2-add) · [`addScaledVector()`](#vec2-addscaledvector) · [`addScalar()`](#vec2-addscalar) · [`addComponents()`](#vec2-addcomponents) · [`subtract()`](#vec2-subtract) · [`subtractScaledVector()`](#vec2-subtractscaledvector) · [`subtractScalar()`](#vec2-subtractscalar) · [`multiply()`](#vec2-multiply) · [`multiplyScaledVector()`](#vec2-multiplyscaledvector) · [`scale()`](#vec2-scale) · [`divide()`](#vec2-divide) · [`divideScaledVector()`](#vec2-dividescaledvector) · [`divideScalar()`](#vec2-dividescalar) · [`halve()`](#vec2-halve) · [`opposite()`](#vec2-opposite) · [`absolute()`](#vec2-absolute) · [`floor()`](#vec2-floor) · [`ceil()`](#vec2-ceil) · [`max()`](#vec2-max) · [`min()`](#vec2-min) · [`maxScalar()`](#vec2-maxscalar) · [`minScalar()`](#vec2-minscalar) |
-| **Geometric & Spatial Operations** | [`getMagnitude()`](#vec2-getmagnitude) · [`getDistance()`](#vec2-getdistance) · [`normalize()`](#vec2-normalize) · [`dotProduct()`](#vec2-dotproduct) · [`crossProduct()`](#vec2-crossproduct) · [`perp()`](#vec2-perp) · [`perpCW()`](#vec2-perpcw) · [`project()`](#vec2-project) · [`reflect()`](#vec2-reflect) · [`clamp()`](#vec2-clamp) · [`lerp()`](#vec2-lerp) |
-| **Angles & Axes** | [`getAngle()`](#vec2-getangle) · [`setRadian()`](#vec2-setradian) · [`setDegree()`](#vec2-setdegree) · [`setMinAxis()`](#vec2-setminaxis) · [`setMaxAxis()`](#vec2-setmaxaxis) · [`isolateMinAxis()`](#vec2-isolateminaxis) · [`isolateMaxAxis()`](#vec2-isolatemaxaxis) · [`setOppositeAxis()`](#vec2-setoppositeaxis) · [`getMinAxis()`](#vec2-getminaxis) · [`getMaxAxis()`](#vec2-getmaxaxis) |
+| **Arithmetic & Modification** | [`add()`](#vec2-add) · [`addScaledVector()`](#vec2-addscaledvector) · [`addScalar()`](#vec2-addscalar) · [`addComponents()`](#vec2-addcomponents) · [`subtract()`](#vec2-subtract) · [`subtractScaledVector()`](#vec2-subtractscaledvector) · [`subtractScalar()`](#vec2-subtractscalar) · [`multiply()`](#vec2-multiply) · [`multiplyScaledVector()`](#vec2-multiplyscaledvector) · [`scale()`](#vec2-scale) · [`divide()`](#vec2-divide) · [`divideScaledVector()`](#vec2-dividescaledvector) · [`divideScalar()`](#vec2-dividescalar) · [`halve()`](#vec2-halve) · [`opposite()`](#vec2-opposite) · [`absolute()`](#vec2-absolute) · [`sign()`](#vec2-sign) · [`floor()`](#vec2-floor) · [`ceil()`](#vec2-ceil) · [`max()`](#vec2-max) · [`min()`](#vec2-min) · [`maxScalar()`](#vec2-maxscalar) · [`minScalar()`](#vec2-minscalar) |
+| **Target Operations** | [`addVectors()`](#vec2-addvectors) · [`subVectors()`](#vec2-subvectors) · [`multiplyVectors()`](#vec2-multiplyvectors) · [`scaleVector()`](#vec2-scalevector) · [`divideVectors()`](#vec2-dividevectors) · [`minVectors()`](#vec2-minvectors) · [`maxVectors()`](#vec2-maxvectors) · [`clampVectors()`](#vec2-clampvectors) · [`oppositeVector()`](#vec2-oppositevector) · [`absoluteVector()`](#vec2-absolutevector) · [`normalizeVector()`](#vec2-normalizevector) · [`perpVector()`](#vec2-perpvector) · [`perpCWVector()`](#vec2-perpcwvector) |
+| **Geometric & Spatial Operations** | [`getMagnitude()`](#vec2-getmagnitude) · [`getDistance()`](#vec2-getdistance) · [`normalize()`](#vec2-normalize) · [`dotProduct()`](#vec2-dotproduct) · [`crossProduct()`](#vec2-crossproduct) · [`perp()`](#vec2-perp) · [`perpCW()`](#vec2-perpcw) · [`project()`](#vec2-project) · [`reflect()`](#vec2-reflect) · [`clamp()`](#vec2-clamp) · [`clampScalar()`](#vec2-clampscalar) · [`isInBounds()`](#vec2-isinbounds) · [`lerp()`](#vec2-lerp) |
+| **Angles & Axes** | [`getAngle()`](#vec2-getangle) · [`setRadian()`](#vec2-setradian) · [`setDegree()`](#vec2-setdegree) · [`setMinAxis()`](#vec2-setminaxis) · [`setMaxAxis()`](#vec2-setmaxaxis) · [`isolateMinAxis()`](#vec2-isolateminaxis) · [`isolateMaxAxis()`](#vec2-isolatemaxaxis) · [`projectToMinAxis()`](#vec2-projecttominaxis) · [`projectToMaxAxis()`](#vec2-projecttomaxaxis) · [`setOppositeAxis()`](#vec2-setoppositeaxis) · [`getMinAxis()`](#vec2-getminaxis) · [`getMaxAxis()`](#vec2-getmaxaxis) |
 | **Bézier Curves** | [`quadraticBezier()`](#vec2-quadraticbezier) · [`cubicBezier()`](#vec2-cubicbezier) · [`quadraticBezierDerivative()`](#vec2-quadraticbezierderivative) · [`cubicBezierDerivative()`](#vec2-cubicbezierderivative) · [`quadraticBezierSplit()`](#vec2-quadraticbeziersplit) · [`cubicBezierSplit()`](#vec2-cubicbeziersplit) · [`quadraticBezierLength()`](#vec2-quadraticbezierlength) · [`cubicBezierLength()`](#vec2-cubicbezierlength) · [`quadraticBezierParameterAtLength()`](#vec2-quadraticbezierparameteratlength) · [`cubicBezierParameterAtLength()`](#vec2-cubicbezierparameteratlength) |
 
 ---
@@ -801,6 +802,26 @@ import { Vec2 } from '@1pizzateam/spock';
 const result = new Vec2().absolute('x');
 ```
 
+### Vec2.sign()
+
+Replace each component with its sign (-1, 0, or 1) in-place.
+
+```ts
+sign(): Vec2
+```
+
+#### Returns
+
+`Vec2` — this vector with components replaced by `Math.sign`
+
+#### Example
+
+```js
+import { Vec2 } from '@1pizzateam/spock';
+
+const v = new Vec2(-15, 0).sign(); // (-1, 0)
+```
+
 ### Vec2.floor()
 
 Floor, optionally on one axis.
@@ -963,6 +984,423 @@ import { Vec2 } from '@1pizzateam/spock';
 const result = new Vec2().minScalar(1);
 ```
 
+## Target Operations
+
+Target operations compute an operation directly into the receiver (`this`) in a single pass without copying or allocating intermediate vectors.
+
+### Vec2.addVectors()
+
+Set this vector to `a + b`.
+
+```ts
+addVectors(a: Vec2, b: Vec2): Vec2
+```
+
+#### Parameters
+
+- `a` — `Vec2`. First vector
+- `b` — `Vec2`. Second vector
+
+#### Returns
+
+`Vec2` — this vector set to `a + b`
+
+#### Example
+
+```js
+import { Vec2 } from '@1pizzateam/spock';
+
+const dest = new Vec2();
+dest.addVectors(new Vec2(10, 20), new Vec2(5, 5)); // (15, 25)
+```
+
+### Vec2.subVectors()
+
+Set this vector to `a - b`.
+
+```ts
+subVectors(a: Vec2, b: Vec2): Vec2
+```
+
+#### Parameters
+
+- `a` — `Vec2`. Left vector
+- `b` — `Vec2`. Right vector to subtract from `a`
+
+#### Returns
+
+`Vec2` — this vector set to `a - b`
+
+#### Example
+
+```js
+import { Vec2 } from '@1pizzateam/spock';
+
+const delta = new Vec2();
+delta.subVectors(posB, posA);
+```
+
+### Vec2.multiplyVectors()
+
+Set this vector to component-wise `a * b`.
+
+```ts
+multiplyVectors(a: Vec2, b: Vec2): Vec2
+```
+
+#### Parameters
+
+- `a` — `Vec2`. First vector
+- `b` — `Vec2`. Second vector
+
+#### Returns
+
+`Vec2` — this vector set to `(a.x * b.x, a.y * b.y)`
+
+#### Example
+
+```js
+import { Vec2 } from '@1pizzateam/spock';
+
+const dest = new Vec2();
+dest.multiplyVectors(new Vec2(2, 4), new Vec2(3, 5)); // (6, 20)
+```
+
+### Vec2.scaleVector()
+
+Set this vector to `vector * scalar`.
+
+```ts
+scaleVector(vector: Vec2, scalar: number): Vec2
+```
+
+#### Parameters
+
+- `vector` — `Vec2`. Source vector
+- `scalar` — `number`. Scaling factor
+
+#### Returns
+
+`Vec2` — this vector set to `(vector.x * scalar, vector.y * scalar)`
+
+#### Example
+
+```js
+import { Vec2 } from '@1pizzateam/spock';
+
+const impulse = new Vec2();
+impulse.scaleVector(contactNormal, magnitude);
+```
+
+### Vec2.divideVectors()
+
+Set this vector to component-wise `a / b`.
+
+```ts
+divideVectors(a: Vec2, b: Vec2): Vec2
+```
+
+#### Parameters
+
+- `a` — `Vec2`. Numerator vector
+- `b` — `Vec2`. Denominator vector
+
+#### Returns
+
+`Vec2` — this vector set to `(a.x / b.x, a.y / b.y)`
+
+#### Example
+
+```js
+import { Vec2 } from '@1pizzateam/spock';
+
+const dest = new Vec2();
+dest.divideVectors(new Vec2(10, 20), new Vec2(2, 4)); // (5, 5)
+```
+
+### Vec2.minVectors()
+
+Set this vector to component-wise `min(a, b)`.
+
+```ts
+minVectors(a: Vec2, b: Vec2): Vec2
+```
+
+#### Parameters
+
+- `a` — `Vec2`. First vector
+- `b` — `Vec2`. Second vector
+
+#### Returns
+
+`Vec2` — this vector set to `(min(a.x, b.x), min(a.y, b.y))`
+
+#### Example
+
+```js
+import { Vec2 } from '@1pizzateam/spock';
+
+const boxMin = new Vec2().minVectors(cornerA, cornerB);
+```
+
+### Vec2.maxVectors()
+
+Set this vector to component-wise `max(a, b)`.
+
+```ts
+maxVectors(a: Vec2, b: Vec2): Vec2
+```
+
+#### Parameters
+
+- `a` — `Vec2`. First vector
+- `b` — `Vec2`. Second vector
+
+#### Returns
+
+`Vec2` — this vector set to `(max(a.x, b.x), max(a.y, b.y))`
+
+#### Example
+
+```js
+import { Vec2 } from '@1pizzateam/spock';
+
+const boxMax = new Vec2().maxVectors(cornerA, cornerB);
+```
+
+### Vec2.clampVectors()
+
+Set this vector to `value` clamped between `min` and `max` bounds.
+
+```ts
+clampVectors(value: Vec2, min: Vec2, max: Vec2): Vec2
+```
+
+#### Parameters
+
+- `value` — `Vec2`. Point to clamp
+- `min` — `Vec2`. Lower bounds
+- `max` — `Vec2`. Upper bounds
+
+#### Returns
+
+`Vec2` — this vector set to clamped coordinates
+
+#### Example
+
+```js
+import { Vec2 } from '@1pizzateam/spock';
+
+const closest = new Vec2().clampVectors(circlePos, boxMin, boxMax);
+```
+
+### Vec2.clampToExtentVectors()
+
+Set this vector to `vector` clamped symmetrically between `-extent` and `extent`.
+
+```ts
+clampToExtentVectors(vector: Vec2, extent: Vec2): Vec2
+```
+
+#### Parameters
+
+- `vector` — `Vec2`. Source vector to clamp.
+- `extent` — `Vec2`. Half-size extents `(hx, hy)`.
+
+#### Returns
+
+`Vec2` — this vector clamped to `[-extent, extent]`.
+
+### Vec2.oppositeVector()
+
+Set this vector to `-vector`.
+
+```ts
+oppositeVector(vector: Vec2): Vec2
+```
+
+#### Parameters
+
+- `vector` — `Vec2`. Source vector
+
+#### Returns
+
+`Vec2` — this vector set to negated vector coordinates
+
+#### Example
+
+```js
+import { Vec2 } from '@1pizzateam/spock';
+
+const boundsMin = new Vec2().oppositeVector(halfSize);
+```
+
+### Vec2.absoluteVector()
+
+Set this vector to component-wise `Math.abs(vector)`.
+
+```ts
+absoluteVector(vector: Vec2): Vec2
+```
+
+#### Parameters
+
+- `vector` — `Vec2`. Source vector
+
+#### Returns
+
+`Vec2` — this vector set to absolute vector coordinates
+
+#### Example
+
+```js
+import { Vec2 } from '@1pizzateam/spock';
+
+const absOffset = new Vec2().absoluteVector(offset);
+```
+
+### Vec2.normalizeVector()
+
+Set this vector to unit length in the direction of `vector` with optional fallback. If `vector` is at the origin, sets this vector to `fallback` (or `(0, 0)` if omitted).
+
+```ts
+normalizeVector(vector: Vec2, fallback?: Vec2): Vec2
+```
+
+#### Parameters
+
+- `vector` — `Vec2`. Source vector
+- `fallback` — `Vec2` *(optional)*. Vector to copy if `vector` has zero length
+
+#### Returns
+
+`Vec2` — this vector normalized
+
+#### Example
+
+```js
+import { Vec2 } from '@1pizzateam/spock';
+
+const direction = new Vec2().normalizeVector(velocity, new Vec2(1, 0));
+```
+
+### Vec2.perpVector()
+
+Set this vector to the 90-degree counter-clockwise perpendicular of `vector` (`-vector.y, vector.x`).
+
+```ts
+perpVector(vector: Vec2): Vec2
+```
+
+#### Parameters
+
+- `vector` — `Vec2`. Source vector
+
+#### Returns
+
+`Vec2` — this vector set to `(-vector.y, vector.x)`
+
+#### Example
+
+```js
+import { Vec2 } from '@1pizzateam/spock';
+
+const tangent = new Vec2().perpVector(normal);
+```
+
+### Vec2.perpCWVector()
+
+Set this vector to the 90-degree clockwise perpendicular of `vector` (`vector.y, -vector.x`).
+
+```ts
+perpCWVector(vector: Vec2): Vec2
+```
+
+#### Parameters
+
+- `vector` — `Vec2`. Source vector
+
+#### Returns
+
+`Vec2` — this vector set to `(vector.y, -vector.x)`
+
+#### Example
+
+```js
+import { Vec2 } from '@1pizzateam/spock';
+
+const tangentCW = new Vec2().perpCWVector(normal);
+```
+
+### Vec2.setLengthVector()
+
+Set this vector to `vector` scaled to the given `length`.
+
+```ts
+setLengthVector(vector: Vec2, length: number): Vec2
+```
+
+#### Parameters
+
+- `vector` — `Vec2`. Source vector.
+- `length` — `number`. Desired length.
+
+#### Returns
+
+`Vec2` — this vector scaled to `length`.
+
+### Vec2.projectVector()
+
+Set this vector to the projection of `vector` onto `normal`.
+
+```ts
+projectVector(vector: Vec2, normal: Vec2): Vec2
+```
+
+#### Parameters
+
+- `vector` — `Vec2`. Source vector.
+- `normal` — `Vec2`. Unit normal vector.
+
+#### Returns
+
+`Vec2` — this vector set to the projection.
+
+### Vec2.reflectVector()
+
+Set this vector to the reflection of `vector` across `normal`.
+
+```ts
+reflectVector(vector: Vec2, normal: Vec2): Vec2
+```
+
+#### Parameters
+
+- `vector` — `Vec2`. Source vector.
+- `normal` — `Vec2`. Unit surface normal.
+
+#### Returns
+
+`Vec2` — this vector set to the reflection.
+
+### Vec2.lerpVectors()
+
+Set this vector to linear interpolation between `a` and `b` by `t`.
+
+```ts
+lerpVectors(a: Vec2, b: Vec2, t: number): Vec2
+```
+
+#### Parameters
+
+- `a` — `Vec2`. Start vector.
+- `b` — `Vec2`. End vector.
+- `t` — `number`. Interpolation factor.
+
+#### Returns
+
+`Vec2` — this vector set to `a + (b - a) * t`.
+
 ## Geometric & Spatial Operations
 
 ### Vec2.getMagnitude()
@@ -1022,30 +1460,46 @@ const result = new Vec2().getDistance(new Vec2(1, 2), false);
 
 ### Vec2.normalize()
 
-Scale to unit length.
+Scale to unit length with optional fallback.
 
-Scales to unit length while keeping direction. A zero-length vector is left untouched rather than becoming `NaN`, and a vector already at length 1 is skipped.
+Scales to unit length while keeping direction. If the vector has zero length, it adopts the optional `fallback` vector or remains unchanged if omitted. A vector already at length 1 is skipped.
 
 ```ts
-normalize(): Vec2
+normalize(fallback?: Vec2): Vec2
 ```
 
 #### Parameters
 
-None.
+- `fallback` — `Vec2` *(optional)*. Vector to copy if this vector has zero length.
 
 #### Returns
 
-`Vec2` — The vector with its new values
+`Vec2` — This vector for chaining
 
 #### Example
 
 ```js
 import { Vec2 } from '@1pizzateam/spock';
 
-
-const result = new Vec2().normalize();
+const unit = new Vec2(3, 4).normalize(); // (0.6, 0.8)
+const safe = new Vec2(0, 0).normalize(new Vec2(1, 0)); // (1, 0)
 ```
+
+### Vec2.setLength()
+
+Scale this vector to the given length in-place.
+
+```ts
+setLength(length: number): Vec2
+```
+
+#### Parameters
+
+- `length` — `number`. Desired vector length.
+
+#### Returns
+
+`Vec2` — this vector scaled to `length`.
 
 ### Vec2.dotProduct()
 
@@ -1158,55 +1612,138 @@ reflect(normal: Vec2): Vec2
 
 ### Vec2.clamp()
 
-Clamp this point inside a rectangle.
+Clamp this point inside a rectangle or between min and max bounds.
 
-Confines this point to a `Rect`, reading the rectangle's cached corners. A point already inside is left untouched.
+Confines this point to a `Rect` or between `(min, max)` vector corners. A point already inside is left untouched.
 
 ```ts
 clamp(rect: Rect): Vec2
+clamp(min: Vec2, max: Vec2): Vec2
 ```
 
 #### Parameters
 
-- `rect` — `Rect`.
+- `rect` — `Rect`. Rectangle bounds
+- `min` — `Vec2`. Lower-left bounds
+- `max` — `Vec2`. Upper-right bounds
 
 #### Returns
 
-`Vec2` — The vector with its new values
+`Vec2` — this vector clamped within bounds
 
 #### Example
 
 ```js
 import { Vec2, Rect } from '@1pizzateam/spock';
 
-
-const result = new Vec2().clamp(new Rect(10, 10, 0, 0));
+const pos = new Vec2(150, -20);
+pos.clamp(new Rect(100, 100, 0, 0)); // clamped to rectangle
+pos.clamp(new Vec2(0, 0), new Vec2(100, 100)); // clamped between min and max
 ```
 
-### Vec2.lerp()
+### Vec2.clampScalar()
 
-Linear interpolate from min to max by amount.
-
-Interpolates from `min` to `max` by `amount` and writes the result here. `amount` is not clamped, so values outside 0–1 extrapolate past the ends.
+Clamp each component between min and max numbers in-place.
 
 ```ts
-lerp(min: Vec2, max: Vec2, amount: number): Vec2
+clampScalar(min: number, max: number): Vec2
 ```
 
 #### Parameters
 
-- `min` — `Vec2`.
-- `max` — `Vec2`.
-- `amount` — `number`. the amount of interpolation; some value between 0.0 (old vector) and 1.0 (new vector). 0.9 is very near the new vector. 0.5 is halfway in between.
+- `min` — `number`. Minimum scalar bound
+- `max` — `number`. Maximum scalar bound
 
 #### Returns
 
-`Vec2` — The vector with its new values
+`Vec2` — this vector with clamped coordinates
 
 #### Example
 
 ```js
 import { Vec2 } from '@1pizzateam/spock';
+
+const v = new Vec2(-5, 12).clampScalar(0, 10); // (0, 10)
+```
+
+### Vec2.clampToExtent()
+
+Clamp each component symmetrically between `-extent` and `extent` in-place.
+
+```ts
+clampToExtent(extent: Vec2): Vec2
+```
+
+#### Parameters
+
+- `extent` — `Vec2`. Half-size extents `(hx, hy)`.
+
+#### Returns
+
+`Vec2` — this vector clamped to `[-extent, extent]`.
+
+### Vec2.isInBounds()
+
+True if this point lies inside or on the axis-aligned bounds defined by min and max corners, or inside a `Rect`.
+
+```ts
+isInBounds(rect: Rect): boolean
+isInBounds(min: Vec2, max: Vec2): boolean
+```
+
+#### Parameters
+
+- `rect` — `Rect`. Rectangle to test containment against
+- `min` — `Vec2`. First bounding corner
+- `max` — `Vec2`. Opposite bounding corner
+
+#### Returns
+
+`boolean` — `true` if point lies within or on the bounding box
+
+#### Example
+
+```js
+import { Vec2, Rect } from '@1pizzateam/spock';
+
+const rect = new Rect(new Vec2(100, 100), new Vec2(50, 50));
+const insideRect = new Vec2(50, 50).isInBounds(rect); // true
+
+const min = new Vec2(0, 0);
+const max = new Vec2(100, 100);
+const inside = new Vec2(50, 50).isInBounds(min, max); // true
+```
+
+### Vec2.lerp()
+
+Linearly interpolate towards target or between two vectors.
+
+Interpolates in-place towards `target` by `amount`, or sets this vector to the interpolation from `min` to `max`.
+
+```ts
+lerp(target: Vec2, amount: number): Vec2
+lerp(min: Vec2, max: Vec2, amount: number): Vec2
+```
+
+#### Parameters
+
+- `targetOrMin` — `Vec2`. Target vector to lerp towards, or `min` start vector.
+- `amountOrMax` — `number | Vec2`. Interpolation factor `t` in `[0, 1]`, or `max` end vector.
+- `amount` — `number` (optional). Interpolation factor when 3 arguments are passed.
+
+#### Returns
+
+`Vec2` — This vector with its updated values.
+
+#### Example
+
+```js
+import { Vec2 } from '@1pizzateam/spock';
+
+const current = new Vec2(0, 0);
+const target = new Vec2(100, 100);
+current.lerp(target, 0.1); // moves 10% towards target
+```
 
 
 const result = new Vec2().lerp(new Vec2(1, 2), new Vec2(1, 2), 0.5);
@@ -1389,6 +1926,56 @@ import { Vec2 } from '@1pizzateam/spock';
 
 const v = new Vec2(5, 2);
 const maxAxis = v.isolateMaxAxis(); // 'x', v is now (5, 0)
+```
+
+### Vec2.projectToMinAxis()
+
+Zero the non-principal (larger) axis in-place and orient along shallowest penetration with optional reference vector.
+
+```ts
+projectToMinAxis(reference?: Vec2): Vec2
+```
+
+#### Parameters
+
+- `reference` — `Vec2`. Optional direction reference vector
+
+#### Returns
+
+`Vec2` — this vector projected onto its minimum axis
+
+#### Example
+
+```js
+import { Vec2 } from '@1pizzateam/spock';
+
+const penetration = new Vec2(12, 4);
+penetration.projectToMinAxis(); // (0, 4)
+```
+
+### Vec2.projectToMaxAxis()
+
+Zero the non-principal (smaller) axis in-place and orient along largest axis with optional reference vector.
+
+```ts
+projectToMaxAxis(reference?: Vec2): Vec2
+```
+
+#### Parameters
+
+- `reference` — `Vec2`. Optional direction reference vector
+
+#### Returns
+
+`Vec2` — this vector projected onto its maximum axis
+
+#### Example
+
+```js
+import { Vec2 } from '@1pizzateam/spock';
+
+const normal = new Vec2(12, 4);
+normal.projectToMaxAxis(); // (12, 0)
 ```
 
 ### Vec2.setOppositeAxis()
@@ -1625,8 +2212,9 @@ quadraticBezierSplit(p0: Vec2, p1: Vec2, p2: Vec2, t: number, left: Vec2[], righ
 ```js
 import { Vec2 } from '@1pizzateam/spock';
 
-
-const result = new Vec2().quadraticBezierSplit(new Vec2(1, 2), new Vec2(1, 2), new Vec2(1, 2), 0.5, new Vec2(1, 2), new Vec2(1, 2));
+const left = [];
+const right = [];
+new Vec2().quadraticBezierSplit(p0, p1, p2, 0.5, left, right);
 ```
 
 ### Vec2.cubicBezierSplit()
@@ -1658,8 +2246,9 @@ cubicBezierSplit(p0: Vec2, p1: Vec2, p2: Vec2, p3: Vec2, t: number, left: Vec2[]
 ```js
 import { Vec2 } from '@1pizzateam/spock';
 
-
-const result = new Vec2().cubicBezierSplit(new Vec2(1, 2), new Vec2(1, 2), new Vec2(1, 2), new Vec2(1, 2), 0.5, new Vec2(1, 2), new Vec2(1, 2));
+const left = [];
+const right = [];
+new Vec2().cubicBezierSplit(p0, p1, p2, p3, 0.5, left, right);
 ```
 
 ### Vec2.quadraticBezierLength()

@@ -1,4 +1,64 @@
 
+Version 4.2.0 (September 25th 2026)
+-----------------------------
+ * Utils:
+    * Add `Utils.clampToExtent(x: number, extent: number): number` clamping a scalar symmetrically to `[-extent, extent]`
+ * Vec2:
+    * Add target operations to eliminate copy-mutate overhead:
+      * Binary: `addVectors(a, b)`, `subVectors(a, b)`, `multiplyVectors(a, b)`, `scaleVector(vector, scalar)`, `divideVectors(a, b)`, `minVectors(a, b)`, `maxVectors(a, b)`, `clampVectors(value, min, max)`, `clampToExtentVectors(vector, extent)`, `lerpVectors(min, max, t)`
+      * Unary: `oppositeVector(vector)`, `absoluteVector(vector)`, `normalizeVector(vector, fallback?)`, `perpVector(vector)`, `perpCWVector(vector)`, `setLengthVector(vector, length)`, `projectVector(vector, normal)`, `reflectVector(vector, normal)`
+    * Add optional `fallback?: Vec2` parameter to `normalize(fallback?)` and `normalizeVector(vector, fallback?)` when vector length is zero
+    * Add `setLength(length: number)` scaling vector to exact magnitude in-place
+    * Add `clampToExtent(extent: Vec2)` clamping components symmetrically to `[-extent, extent]` in-place
+    * Overload `lerp(target, t)` for in-place interpolation and `lerp(min, max, t)` for backwards compatibility
+    * Add `sign()` setting components to their `Math.sign` in-place
+    * Add `projectToMinAxis(reference?: Vec2)` and `projectToMaxAxis(reference?: Vec2)` zeroing non-principal components in-place with optional reference sign direction for SAT / AABB shallowest penetration resolution
+    * Extend `clamp()` to accept either a `Rect` or `(min: Vec2, max: Vec2)` bounds
+    * Add `clampScalar(min: number, max: number)` clamping each component between scalar boundaries
+    * Add `isInBounds(rect: Rect)` and `isInBounds(min: Vec2, max: Vec2)` checking point containment within axis-aligned bounds or Rect
+    * Implement zero-allocation De Casteljau `quadraticBezierSplit()` and `cubicBezierSplit()` using vector interpolation (`lerpVectors`)
+    * Implement `project`, `projectVector`, `reflect`, and `reflectVector` via vector operations (`scaleVector`, `subtractScaledVector`)
+ * Vec3:
+    * Add target operations matching Vec2:
+      * Binary: `addVectors`, `subVectors`, `multiplyVectors`, `scaleVector`, `divideVectors`, `minVectors`, `maxVectors`, `clampVectors`, `clampToExtentVectors`, `lerpVectors`, `crossVectors(a, b)`
+      * Unary: `oppositeVector`, `absoluteVector`, `normalizeVector(vector, fallback?)`, `setLengthVector`, `projectVector`, `reflectVector`
+    * Add optional `fallback?: Vec3` parameter to `normalize(fallback?)` and `normalizeVector(vector, fallback?)` when vector length is zero
+    * Add `setLength(length: number)` scaling vector to exact magnitude in-place
+    * Add `project(normal: Vec3)` and `reflect(normal: Vec3)` in-place operations via `scaleVector` and `subtractScaledVector`
+    * Add `clampToExtent(extent: Vec3)` clamping components symmetrically to `[-extent, extent]` in-place
+    * Overload `lerp(target, t)` for in-place interpolation and `lerp(min, max, t)`
+    * Add `sign()` setting components to their `Math.sign` in-place
+    * Add `clampScalar(min: number, max: number)`
+    * Add `isInBounds(min: Vec3, max: Vec3)`
+    * Implement zero-allocation De Casteljau `quadraticBezierSplit()` and `cubicBezierSplit()` using vector interpolation (`lerpVectors`)
+ * Quat:
+    * Add vector overload `setFromEuler(euler: Vec3)`
+    * Modernize `setAxisAngle` using `scaleVector`
+    * Modernize `getAxisAngle` using `normalizeVector`
+ * LookAt:
+    * Implement `setLookAtAxes` using zero-allocation vector math (`subVectors`, `normalize()`, and `crossVectors`)
+ * Geometry (Circ & Rect):
+    * Vector-first constructors: `new Circ(radius, position: Vec2)` and `new Rect(size: Vec2, position?: Vec2)`
+    * Add `Rect.setSize(size: Vec2)` overload accepting a dimension vector
+    * Add `Circ.halfSize` (`Vec2`) representing circle half-extents `(radius, radius)`, automatically synchronized on radius/diameter mutations and `copy()`
+    * Add zero-allocation bounding box API: `Circ.getBounds(outMin, outMax)`, `Rect.getBounds(outMin, outMax)`, and `boundsMin` / `boundsMax` getters
+    * Add 2D segment raycasting: `Circ.raycast(start, end, target?)` and `Rect.raycast(start, end, target?)` returning `{ fraction, point, normal }` with target reuse and inside-shape handling
+    * Add `Circ.overlapsBounds(min: Vec2, max: Vec2)` and `Rect.overlapsBounds(min: Vec2, max: Vec2)` for zero-allocation AABB boundary overlap checks
+    * Add `Rect.overlapsRect(rect: Rect)` for AABB-AABB spatial overlap queries
+    * Add `Rect.overlapsCircle(center: Vec2, radius: number)` and `Rect.overlapsCircle(circ: Circ)` for box-circle queries
+    * Add `Circ.overlapsCircle(center: Vec2, radius: number)` and `Circ.overlapsCircle(circ: Circ)` for circle-circle queries
+    * Add `Circ.overlapsRect(rect: Rect)` for circle-box queries
+    * Vector-first internal geometry: `setCorners()` via `subVectors`/`addVectors`, `setHalfSize()` via `scaleVector`, and `setGridPos()` via `getCellsForBounds`
+ * Grid:
+    * Add vector-first constructor: `new Grid(size: Vec2, cellSize: number)`
+    * Add vector overload: `getCell(point: Vec2)`
+    * Add `getCellAt(point: Vec2)` returning cell index for a 2D position vector
+    * Add `getCellsForBounds(min: Vec2, max: Vec2, out?: number[])` querying all grid cells overlapping an AABB
+    * Add `getCellsForCircle(center: Vec2, radius: number, out?: number[])` querying all grid cells overlapping a circle
+ * Time:
+    * Add `target` parameter to `Time.subSteps(delta, fixedStep, maxSubSteps, target?)` for zero-allocation fixed-step calculations
+    * Add `Accumulator` class for deterministic fixed-timestep game/physics loops with `.step(delta, tick)`, `.alpha`, and `.reset()`
+
 Version 4.1.0 (September 19th 2026)
 -----------------------------
  * Geometry (Circ & Rect):

@@ -192,20 +192,76 @@ smoothFps(currentFps: number, instantFps: number, alpha?: number): number
 
 Compute fixed-timestep simulation sub-steps and accumulator remainder.
 
-Facilitates deterministic, fixed-timestep game loops and physics accumulators.
+Facilitates deterministic, fixed-timestep game loops and physics accumulators. Pass an optional `target` object `{ steps: number; remainder: number }` to reuse memory with zero allocations.
 
 ```ts
-subSteps(delta: number, fixedStep: number, maxSubSteps?: number): { steps: number; remainder: number }
+subSteps(
+  delta: number,
+  fixedStep: number,
+  maxSubSteps?: number,
+  target?: { steps: number; remainder: number }
+): { steps: number; remainder: number }
 ```
 
 ### Parameters
 
-- `delta` — `number`. Elapsed duration in milliseconds.
-- `fixedStep` — `number`. Fixed step duration in milliseconds (e.g. `16.666`).
+- `delta` — `number`. Elapsed duration in milliseconds (or seconds).
+- `fixedStep` — `number`. Fixed step duration in milliseconds (or seconds, e.g. `1 / 60`).
 - `maxSubSteps` — `number`. Maximum sub-steps permitted (default: `4`).
+- `target` — `{ steps: number; remainder: number }` (optional). Output object to store steps and remainder into.
 
 ### Returns
 
 `{ steps: number, remainder: number }`
+
+---
+
+# Accumulator
+
+Deterministic fixed-timestep loop accumulator.
+
+Accumulates variable frame elapsed time and consumes it in discrete fixed time steps, preventing spiral-of-death by clamping to `fixedStep * maxSubSteps`.
+
+```ts
+import { Accumulator } from '@1pizzateam/spock';
+
+const acc = new Accumulator(1 / 60, 5);
+
+function loop(deltaTime) {
+  acc.step(deltaTime, (fixedStep) => {
+    physics.update(fixedStep);
+  });
+
+  // Render interpolation factor [0, 1]
+  render(acc.alpha);
+}
+```
+
+## Constructor
+
+```ts
+new Accumulator(fixedStep?: number, maxSubSteps?: number)
+```
+
+- `fixedStep` — `number`. Fixed timestep duration in seconds (default: `1 / 60`).
+- `maxSubSteps` — `number`. Maximum sub-steps per frame (default: `5`).
+
+## Properties
+
+- `fixedStep` — `number`. Fixed step size.
+- `maxSubSteps` — `number`. Maximum steps allowed.
+- `value` — `number`. Current accumulated remainder time.
+- `alpha` — `number`. Interpolation factor between the previous and next physics state in `[0, 1]`.
+
+## Methods
+
+### `step(delta: number, tick: (fixedStep: number) => void): number`
+
+Advance accumulator by `delta`. Calls `tick(fixedStep)` for each completed fixed timestep. Returns number of steps executed.
+
+### `reset(): void`
+
+Reset accumulated time to 0.
+
 
 

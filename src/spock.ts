@@ -1,7 +1,7 @@
 
 export { Trigo } from './trigo';
 export { Utils }        from './utils';
-export { Time }         from './time';
+export { Time, Accumulator } from './time';
 export { Rand }       from './rand';
 export { NumArray, RollingAverage } from './array';
 export { Bezier }       from './bezier';

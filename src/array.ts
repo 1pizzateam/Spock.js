@@ -1,9 +1,8 @@
 /** Sum of every value in array. */
 function sum(array: number[]): number {
   let total = 0;
-  for (let i = 0; i < array.length; i++) {
+  for (let i = 0; i < array.length; i++)
     total += array[i];
-  }
   return total;
 }
 
@@ -15,10 +14,9 @@ export const NumArray = {
     if (array.length === 0)
       return NaN;
     let m = Infinity;
-    for (let i = 0; i < array.length; i++) {
+    for (let i = 0; i < array.length; i++)
       if (array[i] < m)
         m = array[i];
-    }
     return m;
   },
 
@@ -27,10 +25,9 @@ export const NumArray = {
     if (array.length === 0)
       return NaN;
     let m = -Infinity;
-    for (let i = 0; i < array.length; i++) {
+    for (let i = 0; i < array.length; i++)
       if (array[i] > m)
         m = array[i];
-    }
     return m;
   },
 
@@ -40,9 +37,8 @@ export const NumArray = {
   /** Product of every value. */
   multiply(array: number[]): number {
     let product = 1;
-    for (let i = 0; i < array.length; i++) {
+    for (let i = 0; i < array.length; i++)
       product *= array[i];
-    }
     return product;
   },
 
@@ -88,7 +84,8 @@ export class RollingAverage {
 
   /** Add a value to the window in O(1) and return the updated average. */
   public push(value: number): number {
-    if (this.itemsCount < this.values.length) this.itemsCount++;
+    if (this.itemsCount < this.values.length)
+      this.itemsCount++;
     this.totalSum -= this.values[this.head];
     this.values[this.head] = value;
     this.totalSum += value;

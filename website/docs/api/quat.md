@@ -136,16 +136,18 @@ const result = new Quat().setAxisAngle(new Vec3(1, 2, 3), Math.PI / 4);
 
 ## Quat.setFromEuler()
 
-Set from x, y, and z Euler angles in radians.
+Set from a `Vec3` or from x, y, and z Euler angles in radians.
 
-Builds a rotation from three Euler angles in radians. Euler input is convenient for authoring, but the quaternion is what you should store and interpolate.
+Builds a rotation from three Euler angles in radians (or a `Vec3(pitch, yaw, roll)`). Euler input is convenient for authoring, but the quaternion is what you should store and interpolate.
 
 ```ts
+setFromEuler(euler: Vec3): Quat
 setFromEuler(x: number, y: number, z: number): Quat
 ```
 
 ### Parameters
 
+- `euler` — `Vec3`. Vector containing Euler angles in radians.
 - `x` — `number`.
 - `y` — `number`.
 - `z` — `number`.
@@ -157,10 +159,13 @@ setFromEuler(x: number, y: number, z: number): Quat
 ### Example
 
 ```js
-import { Quat } from '@1pizzateam/spock';
+import { Quat, Vec3 } from '@1pizzateam/spock';
 
+// Vector-first
+const result = new Quat().setFromEuler(new Vec3(0, 0, Math.PI / 2));
 
-const result = new Quat().setFromEuler(1, 1, 1);
+// Scalar overload
+const scalarResult = new Quat().setFromEuler(0, 0, Math.PI / 2);
 ```
 
 ## Quat.getAxisAngle()

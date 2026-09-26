@@ -30,6 +30,7 @@ let animationTime = 0;
 let stop = null;
 let seedOffset = 0;
 const seedPos = new Vec2();
+const seedSize = new Vec2();
 
 function togglePlay() {
   if (!stop?.player) return;
@@ -48,8 +49,9 @@ function randomize() {
   const blobs = Utils.clamp(Math.round(cells.length / 260), 6, 48);
   for (let i = 0; i < blobs; i++) {
     const side = generator.integer(6, 14) * CELL_SIZE;
+    seedSize.setScalar(side, side);
     seedPos.setScalar(generator.float(0, width), generator.float(0, height));
-    seeder.setSize(side, side).setPosition(seedPos);
+    seeder.setSize(seedSize).setPosition(seedPos);
     for (const cell of seeder.gridCells)
       if (cell !== Grid.emptyCell) cells[cell] = generator.pick(1, 0);
   }
@@ -62,9 +64,9 @@ function randomize() {
 function rebuild(canvasWidth, canvasHeight) {
   width = canvasWidth;
   height = canvasHeight;
-  grid = new Grid(width, height, CELL_SIZE);
-  seeder = new Rect(0, 0, 0, 0).setGrid(grid);
-  const size = grid.len.x * grid.len.y;
+  grid = new Grid(new Vec2(width, height), CELL_SIZE);
+  seeder = new Rect(new Vec2(0, 0), new Vec2(0, 0)).setGrid(grid);
+  const size = grid.totalCells;
   cells = new Uint8Array(size);
   nextCells = new Uint8Array(size);
   ages = new Uint8Array(size);

@@ -47,13 +47,23 @@ export class Grid {
   cellSize: number;
   len: Vec2;
 
-  /** Divide width × height into cells of cellSize. */
-  constructor(width: number, height: number, cellSize: number) {
-    this.cellSize = cellSize;
-    this.len = new Vec2(
-      Math.ceil(width / cellSize),
-      Math.ceil(height / cellSize)
-    );
+  /** Divide width × height or size vector into cells of cellSize. */
+  constructor(size: Vec2, cellSize: number);
+  constructor(width: number, height: number, cellSize: number);
+  constructor(widthOrSize: Vec2 | number, heightOrCellSize: number, cellSize?: number) {
+    if (widthOrSize instanceof Vec2) {
+      this.cellSize = heightOrCellSize;
+      this.len = new Vec2(
+        Math.ceil(widthOrSize.x / this.cellSize),
+        Math.ceil(widthOrSize.y / this.cellSize)
+      );
+    } else {
+      this.cellSize = cellSize!;
+      this.len = new Vec2(
+        Math.ceil(widthOrSize / this.cellSize),
+        Math.ceil(heightOrCellSize / this.cellSize)
+      );
+    }
   }
 
   /** Total number of cells in the lattice (cols × rows). */
@@ -65,21 +75,27 @@ export class Grid {
   public testCells(aCells: number[], bCells: number[]): boolean {
     const aLen = aCells.length;
     const bLen = bCells.length;
-    if (!aLen || !bLen) return false;
+    if (!aLen || !bLen)
+      return false;
 
     let a = 0;
     let b = 0;
-    while (a < aLen && aCells[a] === GRID_EMPTY_CELL) a++;
-    while (b < bLen && bCells[b] === GRID_EMPTY_CELL) b++;
+    while (a < aLen && aCells[a] === GRID_EMPTY_CELL)
+      a++;
+    while (b < bLen && bCells[b] === GRID_EMPTY_CELL)
+      b++;
     if (a === aLen || b === bLen || aCells[a] > bCells[bLen - 1] || bCells[b] > aCells[aLen - 1])
       return false;
 
     while (a < aLen && b < bLen) {
       const ca = aCells[a];
       const cb = bCells[b];
-      if (ca === cb) return true;
-      if (ca < cb) a++;
-      else b++;
+      if (ca === cb)
+        return true;
+      if (ca < cb)
+        a++;
+      else
+        b++;
     }
     return false;
   }
@@ -88,38 +104,68 @@ export class Grid {
   public getFirstCommonCell(aCells: number[], bCells: number[]): number {
     const aLen = aCells.length;
     const bLen = bCells.length;
-    if (!aLen || !bLen) return GRID_EMPTY_CELL;
+    if (!aLen || !bLen)
+      return GRID_EMPTY_CELL;
 
     let a = 0;
     let b = 0;
-    while (a < aLen && aCells[a] === GRID_EMPTY_CELL) a++;
-    while (b < bLen && bCells[b] === GRID_EMPTY_CELL) b++;
+    while (a < aLen && aCells[a] === GRID_EMPTY_CELL)
+      a++;
+    while (b < bLen && bCells[b] === GRID_EMPTY_CELL)
+      b++;
     if (a === aLen || b === bLen || aCells[a] > bCells[bLen - 1] || bCells[b] > aCells[aLen - 1])
       return GRID_EMPTY_CELL;
 
     while (a < aLen && b < bLen) {
       const ca = aCells[a];
       const cb = bCells[b];
-      if (ca === cb) return ca;
-      if (ca < cb) a++;
-      else b++;
+      if (ca === cb)
+        return ca;
+      if (ca < cb)
+        a++;
+      else
+        b++;
     }
     return GRID_EMPTY_CELL;
   }
 
   /** Fast deduplication check: true if cellId is the first common cell between a and b. */
   public isFirstCommonCell(aCells: number[], bCells: number[], cellId: number): boolean {
-    if (aCells[0] === cellId || bCells[0] === cellId) return true;
+    if (aCells[0] === cellId || bCells[0] === cellId)
+      return true;
     return this.getFirstCommonCell(aCells, bCells) === cellId;
   }
 
-  /** Get cell index at (x, y) coordinates, or -1 if out of bounds. */
-  public getCell(x: number, y: number): number {
-    if (x < 0 || y < 0) return GRID_EMPTY_CELL;
-    const col = Math.floor(x / this.cellSize);
-    const row = Math.floor(y / this.cellSize);
-    if (col >= this.len.x || row >= this.len.y) return GRID_EMPTY_CELL;
+  /** Get cell index at (x, y) coordinates or point vector, or -1 if out of bounds. */
+  public getCell(point: Vec2): number;
+  public getCell(x: number, y: number): number;
+  public getCell(xOrPoint: Vec2 | number, y?: number): number {
+    const px = xOrPoint instanceof Vec2 ? xOrPoint.x : xOrPoint;
+    const py = xOrPoint instanceof Vec2 ? xOrPoint.y : y!;
+    if (px < 0 || py < 0)
+      return GRID_EMPTY_CELL;
+    const col = Math.floor(px / this.cellSize);
+    const row = Math.floor(py / this.cellSize);
+    if (col >= this.len.x || row >= this.len.y)
+      return GRID_EMPTY_CELL;
     return row * this.len.x + col;
+  }
+
+  /** Get cell index at point position, or -1 if out of bounds. */
+  public getCellAt(point: Vec2): number {
+    return this.getCell(point);
+  }
+
+  /** Fill target array with every cell overlapping the bounds [min, max]. */
+  public getCellsForBounds(min: Vec2, max: Vec2, out: number[] = []): number[] {
+    fillGridCells(this, min.x, min.y, max.x, max.y, out);
+    return out;
+  }
+
+  /** Fill target array with every cell overlapping the circle. */
+  public getCellsForCircle(center: Vec2, radius: number, out: number[] = []): number[] {
+    fillGridCells(this, center.x - radius, center.y - radius, center.x + radius, center.y + radius, out);
+    return out;
   }
 
   /** Decompose a cell index into (col, row) coordinates. */

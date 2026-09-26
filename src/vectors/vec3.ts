@@ -7,6 +7,8 @@ export class Vec3 {
   public y: number;
   public z: number;
 
+  private static readonly scratchSplit1 = new Vec3();
+
   /** Create a 3D vector (defaults to the origin). */
   constructor(x: number = 0, y: number = 0, z: number = 0) {
     this.x = x;
@@ -103,6 +105,14 @@ export class Vec3 {
     return this;
   }
 
+  /** Set this vector to a + b. */
+  public addVectors(a: Vec3, b: Vec3): Vec3 {
+    this.x = a.x + b.x;
+    this.y = a.y + b.y;
+    this.z = a.z + b.z;
+    return this;
+  }
+
   /** Add vector scaled by scalar. */
   public addScaledVector(vector: Vec3, scalar: number): Vec3 {
     this.x += vector.x * scalar;
@@ -132,6 +142,14 @@ export class Vec3 {
     return this;
   }
 
+  /** Set this vector to a - b. */
+  public subVectors(a: Vec3, b: Vec3): Vec3 {
+    this.x = a.x - b.x;
+    this.y = a.y - b.y;
+    this.z = a.z - b.z;
+    return this;
+  }
+
   /** Subtract vector scaled by scalar. */
   public subtractScaledVector(vector: Vec3, scalar: number): Vec3 {
     this.x -= vector.x * scalar;
@@ -156,6 +174,14 @@ export class Vec3 {
     return this;
   }
 
+  /** Set this vector to component-wise a * b. */
+  public multiplyVectors(a: Vec3, b: Vec3): Vec3 {
+    this.x = a.x * b.x;
+    this.y = a.y * b.y;
+    this.z = a.z * b.z;
+    return this;
+  }
+
   /** Component-wise multiply by vector * scalar. */
   public multiplyScaledVector(vector: Vec3, scalar: number): Vec3 {
     this.x *= vector.x * scalar;
@@ -176,11 +202,27 @@ export class Vec3 {
     return this;
   }
 
+  /** Set this vector to vector * scalar. */
+  public scaleVector(vector: Vec3, scalar: number): Vec3 {
+    this.x = vector.x * scalar;
+    this.y = vector.y * scalar;
+    this.z = vector.z * scalar;
+    return this;
+  }
+
   /** Component-wise divide. */
   public divide(vector: Vec3): Vec3 {
     this.x /= vector.x;
     this.y /= vector.y;
     this.z /= vector.z;
+    return this;
+  }
+
+  /** Set this vector to component-wise a / b. */
+  public divideVectors(a: Vec3, b: Vec3): Vec3 {
+    this.x = a.x / b.x;
+    this.y = a.y / b.y;
+    this.z = a.z / b.z;
     return this;
   }
 
@@ -224,6 +266,22 @@ export class Vec3 {
     return this;
   }
 
+  /** Set this vector to component-wise min(a, b). */
+  public minVectors(a: Vec3, b: Vec3): Vec3 {
+    this.x = Math.min(a.x, b.x);
+    this.y = Math.min(a.y, b.y);
+    this.z = Math.min(a.z, b.z);
+    return this;
+  }
+
+  /** Set this vector to component-wise max(a, b). */
+  public maxVectors(a: Vec3, b: Vec3): Vec3 {
+    this.x = Math.max(a.x, b.x);
+    this.y = Math.max(a.y, b.y);
+    this.z = Math.max(a.z, b.z);
+    return this;
+  }
+
   /** Raise each component to at least scalar. */
   public maxScalar(scalar: number): Vec3 {
     this.x = Math.max(this.x, scalar);
@@ -240,16 +298,52 @@ export class Vec3 {
     return this;
   }
 
-  /** Scale to unit length. */
-  public normalize(): Vec3 {
+  /** Scale to unit length. If length is 0 and fallback is provided, sets to fallback. */
+  public normalize(fallback?: Vec3): Vec3 {
     const length = Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
-    if (length && length !== 1) {
-      const inv = 1 / length;
-      this.x *= inv;
-      this.y *= inv;
-      this.z *= inv;
+    if (length) {
+      if (length !== 1) {
+        const inv = 1 / length;
+        this.x *= inv;
+        this.y *= inv;
+        this.z *= inv;
+      }
+    } else if (fallback) {
+      this.x = fallback.x;
+      this.y = fallback.y;
+      this.z = fallback.z;
     }
     return this;
+  }
+
+  /** Set this vector to normalized vector. If length is 0 and fallback is provided, sets to fallback. */
+  public normalizeVector(vector: Vec3, fallback?: Vec3): Vec3 {
+    const length = Math.sqrt(vector.x * vector.x + vector.y * vector.y + vector.z * vector.z);
+    if (length) {
+      const inv = 1 / length;
+      this.x = vector.x * inv;
+      this.y = vector.y * inv;
+      this.z = vector.z * inv;
+    } else if (fallback) {
+      this.x = fallback.x;
+      this.y = fallback.y;
+      this.z = fallback.z;
+    } else {
+      this.x = 0;
+      this.y = 0;
+      this.z = 0;
+    }
+    return this;
+  }
+
+  /** Scale this vector to the given length in place. */
+  public setLength(length: number): Vec3 {
+    return this.normalize().scale(length);
+  }
+
+  /** Set this vector to vector scaled to the given length. */
+  public setLengthVector(vector: Vec3, length: number): Vec3 {
+    return this.normalizeVector(vector).scale(length);
   }
 
   /** Absolute value, optionally on one axis. */
@@ -264,6 +358,14 @@ export class Vec3 {
     return this;
   }
 
+  /** Set this vector to component-wise Math.abs(vector). */
+  public absoluteVector(vector: Vec3): Vec3 {
+    this.x = Math.abs(vector.x);
+    this.y = Math.abs(vector.y);
+    this.z = Math.abs(vector.z);
+    return this;
+  }
+
   /** Negate, optionally on one axis. */
   public opposite(axis?: 'x' | 'y' | 'z'): Vec3 {
     if (!axis) {
@@ -273,6 +375,22 @@ export class Vec3 {
       return this;
     }
     this[axis] = -this[axis];
+    return this;
+  }
+
+  /** Set this vector to -vector. */
+  public oppositeVector(vector: Vec3): Vec3 {
+    this.x = -vector.x;
+    this.y = -vector.y;
+    this.z = -vector.z;
+    return this;
+  }
+
+  /** Set each component to its Math.sign (-1, 0, or 1). */
+  public sign(): Vec3 {
+    this.x = Math.sign(this.x);
+    this.y = Math.sign(this.y);
+    this.z = Math.sign(this.z);
     return this;
   }
 
@@ -319,6 +437,16 @@ export class Vec3 {
     return this;
   }
 
+  /** Set this vector to cross product a x b. */
+  public crossVectors(a: Vec3, b: Vec3): Vec3 {
+    const ax = a.x, ay = a.y, az = a.z;
+    const bx = b.x, by = b.y, bz = b.z;
+    this.x = ay * bz - az * by;
+    this.y = az * bx - ax * bz;
+    this.z = ax * by - ay * bx;
+    return this;
+  }
+
   /** Angle in radians between this and vector, or false if either is zero. */
   public getAngle(vector: Vec3): number | false {
     const magnitudes = this.getMagnitude() * vector.getMagnitude();
@@ -361,42 +489,63 @@ export class Vec3 {
 
   /** Split a quadratic at t into left and right. */
   public quadraticBezierSplit(p0: Vec3, p1: Vec3, p2: Vec3, t: number, left: Vec3[], right: Vec3[]): void {
-    const lx: number[] = [];
-    const ly: number[] = [];
-    const lz: number[] = [];
-    const rx: number[] = [];
-    const ry: number[] = [];
-    const rz: number[] = [];
-    Bezier.quadraticSplit(p0.x, p1.x, p2.x, t, lx, rx);
-    Bezier.quadraticSplit(p0.y, p1.y, p2.y, t, ly, ry);
-    Bezier.quadraticSplit(p0.z, p1.z, p2.z, t, lz, rz);
-    for (let i = 0; i < 3; i++) {
-      left[i] ??= new Vec3();
-      right[i] ??= new Vec3();
-      left[i].setScalar(lx[i], ly[i], lz[i]);
-      right[i].setScalar(rx[i], ry[i], rz[i]);
-    }
-    left.length = right.length = 3;
+    if (!left[0])
+      left[0] = new Vec3();
+    if (!left[1])
+      left[1] = new Vec3();
+    if (!left[2])
+      left[2] = new Vec3();
+    if (!right[0])
+      right[0] = new Vec3();
+    if (!right[1])
+      right[1] = new Vec3();
+    if (!right[2])
+      right[2] = new Vec3();
+
+    left[0].copy(p0);
+    const p01 = left[1].lerpVectors(p0, p1, t);
+    const p12 = right[1].lerpVectors(p1, p2, t);
+    const mid = left[2].lerpVectors(p01, p12, t);
+    right[0].copy(mid);
+    right[2].copy(p2);
+
+    left.length = 3;
+    right.length = 3;
   }
 
   /** Split a cubic at t into left and right. */
   public cubicBezierSplit(p0: Vec3, p1: Vec3, p2: Vec3, p3: Vec3, t: number, left: Vec3[], right: Vec3[]): void {
-    const lx: number[] = [];
-    const ly: number[] = [];
-    const lz: number[] = [];
-    const rx: number[] = [];
-    const ry: number[] = [];
-    const rz: number[] = [];
-    Bezier.cubicSplit(p0.x, p1.x, p2.x, p3.x, t, lx, rx);
-    Bezier.cubicSplit(p0.y, p1.y, p2.y, p3.y, t, ly, ry);
-    Bezier.cubicSplit(p0.z, p1.z, p2.z, p3.z, t, lz, rz);
-    for (let i = 0; i < 4; i++) {
-      left[i] ??= new Vec3();
-      right[i] ??= new Vec3();
-      left[i].setScalar(lx[i], ly[i], lz[i]);
-      right[i].setScalar(rx[i], ry[i], rz[i]);
-    }
-    left.length = right.length = 4;
+    if (!left[0])
+      left[0] = new Vec3();
+    if (!left[1])
+      left[1] = new Vec3();
+    if (!left[2])
+      left[2] = new Vec3();
+    if (!left[3])
+      left[3] = new Vec3();
+    if (!right[0])
+      right[0] = new Vec3();
+    if (!right[1])
+      right[1] = new Vec3();
+    if (!right[2])
+      right[2] = new Vec3();
+    if (!right[3])
+      right[3] = new Vec3();
+
+    left[0].copy(p0);
+    const p01 = left[1].lerpVectors(p0, p1, t);
+    const p12 = Vec3.scratchSplit1.lerpVectors(p1, p2, t);
+    const p23 = right[2].lerpVectors(p2, p3, t);
+
+    const p012 = left[2].lerpVectors(p01, p12, t);
+    const p123 = right[1].lerpVectors(p12, p23, t);
+
+    const mid = left[3].lerpVectors(p012, p123, t);
+    right[0].copy(mid);
+    right[3].copy(p3);
+
+    left.length = 4;
+    right.length = 4;
   }
 
   /** Sampled arc length of a quadratic. */
@@ -443,14 +592,94 @@ export class Vec3 {
 
   /** Clamp each component between min and max. */
   public clamp(min: Vec3, max: Vec3): Vec3 {
-    this.x = Utils.clamp(this.x, min.x, max.x);
-    this.y = Utils.clamp(this.y, min.y, max.y);
-    this.z = Utils.clamp(this.z, min.z, max.z);
+    return this.clampVectors(this, min, max);
+  }
+
+  /** Set this vector to value clamped between min and max bounds. */
+  public clampVectors(value: Vec3, min: Vec3, max: Vec3): Vec3 {
+    this.x = Utils.clamp(value.x, min.x, max.x);
+    this.y = Utils.clamp(value.y, min.y, max.y);
+    this.z = Utils.clamp(value.z, min.z, max.z);
     return this;
   }
 
-  /** Linear interpolate from min to max by amount. */
-  public lerp(min: Vec3, max: Vec3, amount: number): Vec3 {
+  /** Project this vector onto a normal in-place. */
+  public project(normal: Vec3): Vec3 {
+    return this.scaleVector(normal, this.dotProduct(normal));
+  }
+
+  /** Set this vector to vector projected onto a normal. */
+  public projectVector(vector: Vec3, normal: Vec3): Vec3 {
+    return this.scaleVector(normal, vector.dotProduct(normal));
+  }
+
+  /** Reflect this vector across a surface normal in-place. */
+  public reflect(normal: Vec3): Vec3 {
+    return this.subtractScaledVector(normal, 2 * this.dotProduct(normal));
+  }
+
+  /** Set this vector to vector reflected across a surface normal. */
+  public reflectVector(vector: Vec3, normal: Vec3): Vec3 {
+    return this.copy(vector).subtractScaledVector(normal, 2 * vector.dotProduct(normal));
+  }
+
+  /** Clamp each component between min and max scalars. */
+  public clampScalar(min: number, max: number): Vec3 {
+    this.x = Utils.clamp(this.x, min, max);
+    this.y = Utils.clamp(this.y, min, max);
+    this.z = Utils.clamp(this.z, min, max);
+    return this;
+  }
+
+  /** Clamp this vector component-wise to [-extent, extent]. */
+  public clampToExtent(extent: Vec3): Vec3 {
+    this.x = Utils.clamp(this.x, -extent.x, extent.x);
+    this.y = Utils.clamp(this.y, -extent.y, extent.y);
+    this.z = Utils.clamp(this.z, -extent.z, extent.z);
+    return this;
+  }
+
+  /** Set this vector to vector clamped component-wise to [-extent, extent]. */
+  public clampToExtentVectors(vector: Vec3, extent: Vec3): Vec3 {
+    this.x = Utils.clamp(vector.x, -extent.x, extent.x);
+    this.y = Utils.clamp(vector.y, -extent.y, extent.y);
+    this.z = Utils.clamp(vector.z, -extent.z, extent.z);
+    return this;
+  }
+
+  /** True if this point lies inside or on the axis-aligned bounds defined by min and max corners. */
+  public isInBounds(min: Vec3, max: Vec3): boolean {
+    const minX = Math.min(min.x, max.x);
+    const maxX = Math.max(min.x, max.x);
+    const minY = Math.min(min.y, max.y);
+    const maxY = Math.max(min.y, max.y);
+    const minZ = Math.min(min.z, max.z);
+    const maxZ = Math.max(min.z, max.z);
+    return (
+      this.x >= minX && this.x <= maxX &&
+      this.y >= minY && this.y <= maxY &&
+      this.z >= minZ && this.z <= maxZ
+    );
+  }
+
+  /** Linear interpolate toward target by amount, or from min to max by amount. */
+  public lerp(target: Vec3, amount: number): Vec3;
+  public lerp(min: Vec3, max: Vec3, amount: number): Vec3;
+  public lerp(minOrTarget: Vec3, maxOrAmount: Vec3 | number, amount?: number): Vec3 {
+    if (typeof maxOrAmount === 'number') {
+      this.x = Utils.lerp(this.x, minOrTarget.x, maxOrAmount);
+      this.y = Utils.lerp(this.y, minOrTarget.y, maxOrAmount);
+      this.z = Utils.lerp(this.z, minOrTarget.z, maxOrAmount);
+      return this;
+    }
+    this.x = Utils.lerp(minOrTarget.x, maxOrAmount.x, amount!);
+    this.y = Utils.lerp(minOrTarget.y, maxOrAmount.y, amount!);
+    this.z = Utils.lerp(minOrTarget.z, maxOrAmount.z, amount!);
+    return this;
+  }
+
+  /** Set this vector to linear interpolation between min and max by amount. */
+  public lerpVectors(min: Vec3, max: Vec3, amount: number): Vec3 {
     this.x = Utils.lerp(min.x, max.x, amount);
     this.y = Utils.lerp(min.y, max.y, amount);
     this.z = Utils.lerp(min.z, max.z, amount);

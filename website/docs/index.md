@@ -43,13 +43,13 @@ const CELL = 8;
 const GROW = 4;
 const STEP = Time.millisecToSec(Time.fpsToMillisec(3));
 
-const grid = new Grid(canvas.width, canvas.height, CELL);
+const grid = new Grid(new Vec2(canvas.width, canvas.height), CELL);
 const cols = grid.len.x;
 const rows = grid.len.y;
-let cells = new Uint8Array(cols * rows);
+let cells = new Uint8Array(grid.totalCells);
 let next = new Uint8Array(cells.length);
 const ages = new Uint8Array(cells.length);
-const seeder = new Rect(0, 0, 0, 0).setGrid(grid);
+const seeder = new Rect(new Vec2(0, 0), new Vec2(0, 0)).setGrid(grid);
 
 function randomize(seed) {
   const rand = Rand.create(seed);
@@ -58,7 +58,7 @@ function randomize(seed) {
   const blobs = Utils.clamp(Math.round(cells.length / 260), 6, 48);
   for (let i = 0; i < blobs; i++) {
     const side = rand.integer(6, 14) * CELL;
-    seeder.setSize(side, side).setPosition(
+    seeder.setSize(new Vec2(side, side)).setPosition(
       new Vec2(rand.float(0, canvas.width), rand.float(0, canvas.height))
     );
     for (const cell of seeder.gridCells)

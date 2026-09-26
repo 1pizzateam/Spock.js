@@ -36,6 +36,11 @@ export default defineConfig({
     resolve: { alias },
   },
   head: [
+    ['link', { rel: 'icon', type: 'image/svg+xml', href: `${base}favicon.svg` }],
+    ['link', { rel: 'icon', type: 'image/png', sizes: '32x32', href: `${base}favicon-32x32.png` }],
+    ['link', { rel: 'icon', type: 'image/png', sizes: '16x16', href: `${base}favicon-16x16.png` }],
+    ['link', { rel: 'icon', type: 'image/x-icon', href: `${base}favicon.ico` }],
+    ['link', { rel: 'apple-touch-icon', sizes: '180x180', href: `${base}apple-touch-icon.png` }],
     ['meta', { name: 'theme-color', content: '#5b8cff' }],
   ],
   themeConfig: {

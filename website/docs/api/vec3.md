@@ -23,8 +23,9 @@ const angle = forward.getAngle(up); // radians, or false for a zero-length vecto
 | Category | Methods |
 | :--- | :--- |
 | **Creation & Component State** | [`new Vec3()`](#constructor) · [`setScalar()`](#vec3-setscalar) · [`setArray()`](#vec3-setarray) · [`copy()`](#vec3-copy) · [`clone()`](#vec3-clone) · [`toArray()`](#vec3-toarray) · [`toString()`](#vec3-tostring) · [`isOrigin()`](#vec3-isorigin) · [`origin()`](#vec3-origin) · [`equals()`](#vec3-equals) · [`isEqualTo()`](#vec3-isequalto) · [`isPositive()`](#vec3-ispositive) |
-| **Arithmetic & Modification** | [`add()`](#vec3-add) · [`addScaledVector()`](#vec3-addscaledvector) · [`addScalar()`](#vec3-addscalar) · [`addComponents()`](#vec3-addcomponents) · [`subtract()`](#vec3-subtract) · [`subtractScaledVector()`](#vec3-subtractscaledvector) · [`subtractScalar()`](#vec3-subtractscalar) · [`multiply()`](#vec3-multiply) · [`multiplyScaledVector()`](#vec3-multiplyscaledvector) · [`scale()`](#vec3-scale) · [`divide()`](#vec3-divide) · [`divideScaledVector()`](#vec3-dividescaledvector) · [`divideScalar()`](#vec3-dividescalar) · [`halve()`](#vec3-halve) · [`opposite()`](#vec3-opposite) · [`absolute()`](#vec3-absolute) · [`floor()`](#vec3-floor) · [`ceil()`](#vec3-ceil) · [`max()`](#vec3-max) · [`min()`](#vec3-min) · [`maxScalar()`](#vec3-maxscalar) · [`minScalar()`](#vec3-minscalar) |
-| **Geometric & Spatial Operations** | [`getMagnitude()`](#vec3-getmagnitude) · [`getDistance()`](#vec3-getdistance) · [`normalize()`](#vec3-normalize) · [`dotProduct()`](#vec3-dotproduct) · [`cross()`](#vec3-cross) · [`getAngle()`](#vec3-getangle) · [`clamp()`](#vec3-clamp) · [`lerp()`](#vec3-lerp) |
+| **Arithmetic & Modification** | [`add()`](#vec3-add) · [`addScaledVector()`](#vec3-addscaledvector) · [`addScalar()`](#vec3-addscalar) · [`addComponents()`](#vec3-addcomponents) · [`subtract()`](#vec3-subtract) · [`subtractScaledVector()`](#vec3-subtractscaledvector) · [`subtractScalar()`](#vec3-subtractscalar) · [`multiply()`](#vec3-multiply) · [`multiplyScaledVector()`](#vec3-multiplyscaledvector) · [`scale()`](#vec3-scale) · [`divide()`](#vec3-divide) · [`divideScaledVector()`](#vec3-dividescaledvector) · [`divideScalar()`](#vec3-dividescalar) · [`halve()`](#vec3-halve) · [`opposite()`](#vec3-opposite) · [`absolute()`](#vec3-absolute) · [`sign()`](#vec3-sign) · [`floor()`](#vec3-floor) · [`ceil()`](#vec3-ceil) · [`max()`](#vec3-max) · [`min()`](#vec3-min) · [`maxScalar()`](#vec3-maxscalar) · [`minScalar()`](#vec3-minscalar) |
+| **Target Operations** | [`addVectors()`](#vec3-addvectors) · [`subVectors()`](#vec3-subvectors) · [`multiplyVectors()`](#vec3-multiplyvectors) · [`scaleVector()`](#vec3-scalevector) · [`divideVectors()`](#vec3-dividevectors) · [`minVectors()`](#vec3-minvectors) · [`maxVectors()`](#vec3-maxvectors) · [`clampVectors()`](#vec3-clampvectors) · [`oppositeVector()`](#vec3-oppositevector) · [`absoluteVector()`](#vec3-absolutevector) · [`normalizeVector()`](#vec3-normalizevector) · [`crossVectors()`](#vec3-crossvectors) |
+| **Geometric & Spatial Operations** | [`getMagnitude()`](#vec3-getmagnitude) · [`getDistance()`](#vec3-getdistance) · [`normalize()`](#vec3-normalize) · [`dotProduct()`](#vec3-dotproduct) · [`cross()`](#vec3-cross) · [`getAngle()`](#vec3-getangle) · [`clamp()`](#vec3-clamp) · [`clampScalar()`](#vec3-clampscalar) · [`isInBounds()`](#vec3-isinbounds) · [`lerp()`](#vec3-lerp) |
 | **Bézier Curves** | [`quadraticBezier()`](#vec3-quadraticbezier) · [`cubicBezier()`](#vec3-cubicbezier) · [`quadraticBezierDerivative()`](#vec3-quadraticbezierderivative) · [`cubicBezierDerivative()`](#vec3-cubicbezierderivative) · [`quadraticBezierSplit()`](#vec3-quadraticbeziersplit) · [`cubicBezierSplit()`](#vec3-cubicbeziersplit) · [`quadraticBezierLength()`](#vec3-quadraticbezierlength) · [`cubicBezierLength()`](#vec3-cubicbezierlength) · [`quadraticBezierParameterAtLength()`](#vec3-quadraticbezierparameteratlength) · [`cubicBezierParameterAtLength()`](#vec3-cubicbezierparameteratlength) |
 
 ---
@@ -798,6 +799,26 @@ import { Vec3 } from '@1pizzateam/spock';
 const result = new Vec3().absolute('x');
 ```
 
+### Vec3.sign()
+
+Replace each component with its sign (-1, 0, or 1) in-place.
+
+```ts
+sign(): Vec3
+```
+
+#### Returns
+
+`Vec3` — this vector with components replaced by `Math.sign`
+
+#### Example
+
+```js
+import { Vec3 } from '@1pizzateam/spock';
+
+const v = new Vec3(-15, 0, 8).sign(); // (-1, 0, 1)
+```
+
 ### Vec3.floor()
 
 Floor, optionally on one axis.
@@ -960,6 +981,432 @@ import { Vec3 } from '@1pizzateam/spock';
 const result = new Vec3().minScalar(1);
 ```
 
+## Target Operations
+
+Target operations compute an operation directly into the receiver (`this`) in a single pass without copying or allocating intermediate vectors.
+
+### Vec3.addVectors()
+
+Set this vector to `a + b`.
+
+```ts
+addVectors(a: Vec3, b: Vec3): Vec3
+```
+
+#### Parameters
+
+- `a` — `Vec3`. First vector
+- `b` — `Vec3`. Second vector
+
+#### Returns
+
+`Vec3` — this vector set to `a + b`
+
+#### Example
+
+```js
+import { Vec3 } from '@1pizzateam/spock';
+
+const dest = new Vec3();
+dest.addVectors(new Vec3(10, 20, 30), new Vec3(1, 2, 3)); // (11, 22, 33)
+```
+
+### Vec3.subVectors()
+
+Set this vector to `a - b`.
+
+```ts
+subVectors(a: Vec3, b: Vec3): Vec3
+```
+
+#### Parameters
+
+- `a` — `Vec3`. Left vector
+- `b` — `Vec3`. Right vector to subtract from `a`
+
+#### Returns
+
+`Vec3` — this vector set to `a - b`
+
+#### Example
+
+```js
+import { Vec3 } from '@1pizzateam/spock';
+
+const delta = new Vec3();
+delta.subVectors(posB, posA);
+```
+
+### Vec3.multiplyVectors()
+
+Set this vector to component-wise `a * b`.
+
+```ts
+multiplyVectors(a: Vec3, b: Vec3): Vec3
+```
+
+#### Parameters
+
+- `a` — `Vec3`. First vector
+- `b` — `Vec3`. Second vector
+
+#### Returns
+
+`Vec3` — this vector set to `(a.x * b.x, a.y * b.y, a.z * b.z)`
+
+#### Example
+
+```js
+import { Vec3 } from '@1pizzateam/spock';
+
+const dest = new Vec3();
+dest.multiplyVectors(new Vec3(2, 4, 6), new Vec3(3, 5, 2)); // (6, 20, 12)
+```
+
+### Vec3.scaleVector()
+
+Set this vector to `vector * scalar`.
+
+```ts
+scaleVector(vector: Vec3, scalar: number): Vec3
+```
+
+#### Parameters
+
+- `vector` — `Vec3`. Source vector
+- `scalar` — `number`. Scaling factor
+
+#### Returns
+
+`Vec3` — this vector set to `(vector.x * scalar, vector.y * scalar, vector.z * scalar)`
+
+#### Example
+
+```js
+import { Vec3 } from '@1pizzateam/spock';
+
+const impulse = new Vec3();
+impulse.scaleVector(contactNormal, magnitude);
+```
+
+### Vec3.divideVectors()
+
+Set this vector to component-wise `a / b`.
+
+```ts
+divideVectors(a: Vec3, b: Vec3): Vec3
+```
+
+#### Parameters
+
+- `a` — `Vec3`. Numerator vector
+- `b` — `Vec3`. Denominator vector
+
+#### Returns
+
+`Vec3` — this vector set to `(a.x / b.x, a.y / b.y, a.z / b.z)`
+
+#### Example
+
+```js
+import { Vec3 } from '@1pizzateam/spock';
+
+const dest = new Vec3();
+dest.divideVectors(new Vec3(10, 20, 30), new Vec3(2, 4, 5)); // (5, 5, 6)
+```
+
+### Vec3.minVectors()
+
+Set this vector to component-wise `min(a, b)`.
+
+```ts
+minVectors(a: Vec3, b: Vec3): Vec3
+```
+
+#### Parameters
+
+- `a` — `Vec3`. First vector
+- `b` — `Vec3`. Second vector
+
+#### Returns
+
+`Vec3` — this vector set to `(min(a.x, b.x), min(a.y, b.y), min(a.z, b.z))`
+
+#### Example
+
+```js
+import { Vec3 } from '@1pizzateam/spock';
+
+const boxMin = new Vec3().minVectors(cornerA, cornerB);
+```
+
+### Vec3.maxVectors()
+
+Set this vector to component-wise `max(a, b)`.
+
+```ts
+maxVectors(a: Vec3, b: Vec3): Vec3
+```
+
+#### Parameters
+
+- `a` — `Vec3`. First vector
+- `b` — `Vec3`. Second vector
+
+#### Returns
+
+`Vec3` — this vector set to `(max(a.x, b.x), max(a.y, b.y), max(a.z, b.z))`
+
+#### Example
+
+```js
+import { Vec3 } from '@1pizzateam/spock';
+
+const boxMax = new Vec3().maxVectors(cornerA, cornerB);
+```
+
+### Vec3.clampVectors()
+
+Set this vector to `value` clamped between `min` and `max` bounds.
+
+```ts
+clampVectors(value: Vec3, min: Vec3, max: Vec3): Vec3
+```
+
+#### Parameters
+
+- `value` — `Vec3`. Point to clamp
+- `min` — `Vec3`. Lower bounds
+- `max` — `Vec3`. Upper bounds
+
+#### Returns
+
+`Vec3` — this vector set to clamped coordinates
+
+#### Example
+
+```js
+import { Vec3 } from '@1pizzateam/spock';
+
+const closest = new Vec3().clampVectors(point, boxMin, boxMax);
+```
+
+### Vec3.clampToExtentVectors()
+
+Set this vector to `vector` clamped symmetrically between `-extent` and `extent`.
+
+```ts
+clampToExtentVectors(vector: Vec3, extent: Vec3): Vec3
+```
+
+#### Parameters
+
+- `vector` — `Vec3`. Source vector.
+- `extent` — `Vec3`. Half-size extents `(hx, hy, hz)`.
+
+#### Returns
+
+`Vec3` — this vector clamped to `[-extent, extent]`.
+
+### Vec3.oppositeVector()
+
+Set this vector to `-vector`.
+
+```ts
+oppositeVector(vector: Vec3): Vec3
+```
+
+#### Parameters
+
+- `vector` — `Vec3`. Source vector
+
+#### Returns
+
+`Vec3` — this vector set to negated vector coordinates
+
+#### Example
+
+```js
+import { Vec3 } from '@1pizzateam/spock';
+
+const neg = new Vec3().oppositeVector(offset);
+```
+
+### Vec3.absoluteVector()
+
+Set this vector to component-wise `Math.abs(vector)`.
+
+```ts
+absoluteVector(vector: Vec3): Vec3
+```
+
+#### Parameters
+
+- `vector` — `Vec3`. Source vector
+
+#### Returns
+
+`Vec3` — this vector set to absolute vector coordinates
+
+#### Example
+
+```js
+import { Vec3 } from '@1pizzateam/spock';
+
+const absOffset = new Vec3().absoluteVector(offset);
+```
+
+### Vec3.normalizeVector()
+
+Set this vector to unit length in the direction of `vector` with optional fallback. If `vector` is at the origin, sets this vector to `fallback` (or `(0, 0, 0)` if omitted).
+
+```ts
+normalizeVector(vector: Vec3, fallback?: Vec3): Vec3
+```
+
+#### Parameters
+
+- `vector` — `Vec3`. Source vector
+- `fallback` — `Vec3` *(optional)*. Vector to copy if `vector` has zero length
+
+#### Returns
+
+`Vec3` — this vector normalized
+
+#### Example
+
+```js
+import { Vec3 } from '@1pizzateam/spock';
+
+const direction = new Vec3().normalizeVector(velocity, new Vec3(0, 0, 1));
+```
+
+### Vec3.crossVectors()
+
+Set this vector to the cross product `a x b`.
+
+```ts
+crossVectors(a: Vec3, b: Vec3): Vec3
+```
+
+#### Parameters
+
+- `a` — `Vec3`. First vector
+- `b` — `Vec3`. Second vector
+
+#### Returns
+
+`Vec3` — this vector set to `a x b`
+
+#### Example
+
+```js
+import { Vec3 } from '@1pizzateam/spock';
+
+const normal = new Vec3().crossVectors(tangent, bitangent);
+```
+
+### Vec3.setLengthVector()
+
+Set this vector to `vector` scaled to the given `length`.
+
+```ts
+setLengthVector(vector: Vec3, length: number): Vec3
+```
+
+#### Parameters
+
+- `vector` — `Vec3`. Source vector.
+- `length` — `number`. Desired length.
+
+#### Returns
+
+`Vec3` — this vector scaled to `length`.
+
+### Vec3.project()
+
+Project this vector onto a normal vector in-place ($(v \cdot n) n$).
+
+```ts
+project(normal: Vec3): Vec3
+```
+
+#### Parameters
+
+- `normal` — `Vec3`. Unit normal vector.
+
+#### Returns
+
+`Vec3` — this vector projected onto normal.
+
+### Vec3.reflect()
+
+Reflect this vector across a surface normal in-place ($v - 2(v \cdot n) n$).
+
+```ts
+reflect(normal: Vec3): Vec3
+```
+
+#### Parameters
+
+- `normal` — `Vec3`. Unit surface normal.
+
+#### Returns
+
+`Vec3` — this vector reflected across normal.
+
+### Vec3.projectVector()
+
+Set this vector to the projection of `vector` onto `normal`.
+
+```ts
+projectVector(vector: Vec3, normal: Vec3): Vec3
+```
+
+#### Parameters
+
+- `vector` — `Vec3`. Source vector.
+- `normal` — `Vec3`. Unit normal vector.
+
+#### Returns
+
+`Vec3` — this vector set to the projection.
+
+### Vec3.reflectVector()
+
+Set this vector to the reflection of `vector` across `normal`.
+
+```ts
+reflectVector(vector: Vec3, normal: Vec3): Vec3
+```
+
+#### Parameters
+
+- `vector` — `Vec3`. Source vector.
+- `normal` — `Vec3`. Unit surface normal.
+
+#### Returns
+
+`Vec3` — this vector set to the reflection.
+
+### Vec3.lerpVectors()
+
+Set this vector to linear interpolation between `a` and `b` by `t`.
+
+```ts
+lerpVectors(a: Vec3, b: Vec3, t: number): Vec3
+```
+
+#### Parameters
+
+- `a` — `Vec3`. Start vector.
+- `b` — `Vec3`. End vector.
+- `t` — `number`. Interpolation factor.
+
+#### Returns
+
+`Vec3` — this vector set to `a + (b - a) * t`.
+
 ## Geometric & Spatial Operations
 
 ### Vec3.getMagnitude()
@@ -1019,30 +1466,46 @@ const result = new Vec3().getDistance(new Vec3(1, 2, 3), false);
 
 ### Vec3.normalize()
 
-Scale to unit length.
+Scale to unit length with optional fallback.
 
-Scales to unit length while keeping direction. A zero-length vector is left untouched rather than becoming `NaN`, and a vector already at length 1 is skipped.
+Scales to unit length while keeping direction. If the vector has zero length, it adopts the optional `fallback` vector or remains unchanged if omitted. A vector already at length 1 is skipped.
 
 ```ts
-normalize(): Vec3
+normalize(fallback?: Vec3): Vec3
 ```
 
 #### Parameters
 
-None.
+- `fallback` — `Vec3` *(optional)*. Vector to copy if this vector has zero length.
 
 #### Returns
 
-`Vec3` — The vector with its new values
+`Vec3` — This vector for chaining
 
 #### Example
 
 ```js
 import { Vec3 } from '@1pizzateam/spock';
 
-
-const result = new Vec3().normalize();
+const unit = new Vec3(0, 3, 4).normalize(); // (0, 0.6, 0.8)
+const safe = new Vec3(0, 0, 0).normalize(new Vec3(0, 0, 1)); // (0, 0, 1)
 ```
+
+### Vec3.setLength()
+
+Scale this vector to the given length in-place.
+
+```ts
+setLength(length: number): Vec3
+```
+
+#### Parameters
+
+- `length` — `number`. Desired vector length.
+
+#### Returns
+
+`Vec3` — this vector scaled to `length`.
 
 ### Vec3.dotProduct()
 
@@ -1153,30 +1616,104 @@ import { Vec3 } from '@1pizzateam/spock';
 const result = new Vec3().clamp(new Vec3(1, 2, 3), new Vec3(1, 2, 3));
 ```
 
-### Vec3.lerp()
+### Vec3.clampScalar()
 
-Linear interpolate from min to max by amount.
-
-Interpolates from `min` to `max` by `amount` and writes the result here. `amount` is not clamped, so values outside 0–1 extrapolate past the ends.
+Clamp each component between min and max numbers in-place.
 
 ```ts
-lerp(min: Vec3, max: Vec3, amount: number): Vec3
+clampScalar(min: number, max: number): Vec3
 ```
 
 #### Parameters
 
-- `min` — `Vec3`.
-- `max` — `Vec3`.
-- `amount` — `number`.
+- `min` — `number`. Minimum scalar bound
+- `max` — `number`. Maximum scalar bound
 
 #### Returns
 
-`Vec3`
+`Vec3` — this vector with clamped coordinates
 
 #### Example
 
 ```js
 import { Vec3 } from '@1pizzateam/spock';
+
+const v = new Vec3(-5, 12, 3).clampScalar(0, 10); // (0, 10, 3)
+```
+
+### Vec3.clampToExtent()
+
+Clamp each component symmetrically between `-extent` and `extent` in-place.
+
+```ts
+clampToExtent(extent: Vec3): Vec3
+```
+
+#### Parameters
+
+- `extent` — `Vec3`. Half-size extents `(hx, hy, hz)`.
+
+#### Returns
+
+`Vec3` — this vector clamped to `[-extent, extent]`.
+
+### Vec3.isInBounds()
+
+True if this point lies inside or on the axis-aligned bounds defined by min and max corners.
+
+```ts
+isInBounds(min: Vec3, max: Vec3): boolean
+```
+
+#### Parameters
+
+- `min` — `Vec3`. First bounding corner
+- `max` — `Vec3`. Opposite bounding corner
+
+#### Returns
+
+`boolean` — `true` if point lies within or on the bounding box
+
+#### Example
+
+```js
+import { Vec3 } from '@1pizzateam/spock';
+
+const min = new Vec3(0, 0, 0);
+const max = new Vec3(100, 100, 100);
+const inside = new Vec3(50, 50, 50).isInBounds(min, max); // true
+```
+
+### Vec3.lerp()
+
+Linearly interpolate towards target or between two vectors.
+
+Interpolates in-place towards `target` by `amount`, or sets this vector to the interpolation from `min` to `max`.
+
+```ts
+lerp(target: Vec3, amount: number): Vec3
+lerp(min: Vec3, max: Vec3, amount: number): Vec3
+```
+
+#### Parameters
+
+- `targetOrMin` — `Vec3`. Target vector to lerp towards, or `min` start vector.
+- `amountOrMax` — `number | Vec3`. Interpolation factor `t` in `[0, 1]`, or `max` end vector.
+- `amount` — `number` (optional). Interpolation factor when 3 arguments are passed.
+
+#### Returns
+
+`Vec3` — This vector with its updated values.
+
+#### Example
+
+```js
+import { Vec3 } from '@1pizzateam/spock';
+
+const current = new Vec3(0, 0, 0);
+const target = new Vec3(100, 100, 100);
+current.lerp(target, 0.1); // moves 10% towards target
+```
 
 
 const result = new Vec3().lerp(new Vec3(1, 2, 3), new Vec3(1, 2, 3), 0.5);
@@ -1334,8 +1871,9 @@ quadraticBezierSplit(p0: Vec3, p1: Vec3, p2: Vec3, t: number, left: Vec3[], righ
 ```js
 import { Vec3 } from '@1pizzateam/spock';
 
-
-const result = new Vec3().quadraticBezierSplit(new Vec3(1, 2, 3), new Vec3(1, 2, 3), new Vec3(1, 2, 3), 0.5, new Vec3(1, 2, 3), new Vec3(1, 2, 3));
+const left = [];
+const right = [];
+new Vec3().quadraticBezierSplit(p0, p1, p2, 0.5, left, right);
 ```
 
 ### Vec3.cubicBezierSplit()
@@ -1367,8 +1905,9 @@ cubicBezierSplit(p0: Vec3, p1: Vec3, p2: Vec3, p3: Vec3, t: number, left: Vec3[]
 ```js
 import { Vec3 } from '@1pizzateam/spock';
 
-
-const result = new Vec3().cubicBezierSplit(new Vec3(1, 2, 3), new Vec3(1, 2, 3), new Vec3(1, 2, 3), new Vec3(1, 2, 3), 0.5, new Vec3(1, 2, 3), new Vec3(1, 2, 3));
+const left = [];
+const right = [];
+new Vec3().cubicBezierSplit(p0, p1, p2, p3, 0.5, left, right);
 ```
 
 ### Vec3.quadraticBezierLength()

@@ -3,18 +3,21 @@ import { Circ, Trigo, Vec2 } from '@1pizzateam/spock';
 import DemoFrame from './DemoFrame.vue';
 import { dot, label, polyline } from '../canvas.js';
 
-const circle = new Circ(65, 0, 0);
+const circle = new Circ(65, new Vec2(0, 0));
 const target = new Vec2();
 const closest = new Vec2();
 const center = new Vec2();
+const boundsMin = new Vec2();
+const boundsMax = new Vec2();
 
 function draw(context, state, theme) {
   const { width, height, pointer, time } = state;
   center.setScalar(width * 0.5, height * 0.5);
   circle.setPosition(center);
+  circle.getBounds(boundsMin, boundsMax);
 
   if (pointer)
-    target.setScalar(pointer.x, pointer.y);
+    target.copy(pointer);
   else {
     const orbit = time * 1.2;
     target.setScalar(
@@ -25,6 +28,11 @@ function draw(context, state, theme) {
 
   circle.getClosestPoint(target, closest);
   const isInside = circle.isIn(target);
+
+  // Draw axis-aligned bounding box from getBounds()
+  context.strokeStyle = theme.grid;
+  context.lineWidth = 1;
+  context.strokeRect(boundsMin.x, boundsMin.y, circle.diameter, circle.diameter);
 
   context.fillStyle = isInside
     ? (theme.dark ? 'rgba(56, 199, 147, 0.18)' : 'rgba(56, 199, 147, 0.22)')
@@ -45,7 +53,7 @@ function draw(context, state, theme) {
   const dist = target.getDistance(circle.position);
   label(
     context,
-    `circ.isIn(): ${isInside}   distance: ${dist.toFixed(1)}px   radius: ${circle.radius}px`,
+    `circ.isIn(): ${isInside}   distance: ${dist.toFixed(1)}px   halfSize: (${circle.halfSize.x}, ${circle.halfSize.y})`,
     theme.text
   );
 }
@@ -53,7 +61,8 @@ function draw(context, state, theme) {
 
 <template>
   <DemoFrame :draw="draw">
-    Interactive circle containment test with <code>circ.isIn()</code> and boundary projection
-    with <code>circ.getClosestPoint()</code>. Move your pointer over the canvas to test points.
+    Interactive circle containment test with <code>circ.isIn()</code>, boundary projection
+    with <code>circ.getClosestPoint()</code>, and zero-allocation AABB computation via
+    <code>circ.getBounds()</code> and synchronized <code>circ.halfSize</code>.
   </DemoFrame>
 </template>

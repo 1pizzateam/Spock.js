@@ -17,6 +17,7 @@ const EDGES = [
 const rotation = new Quat();
 const axis = new Vec3(0.4, 1, 0.25);
 const rotated = new Vec3();
+const FORWARD = new Vec3(0, 0, 1);
 
 function draw(context, state, theme) {
   const { width, height } = state;
@@ -36,7 +37,7 @@ function draw(context, state, theme) {
   for (const [from, to] of EDGES)
     polyline(context, [projected[from], projected[to]], theme.accent, 2);
 
-  rotation.multiplyVector(new Vec3(0, 0, 1), rotated);
+  rotation.multiplyVector(FORWARD, rotated);
   polyline(
     context,
     [[width * 0.5, height * 0.5], [width * 0.5 + rotated.x * scale, height * 0.5 + rotated.y * scale]],

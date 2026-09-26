@@ -15,11 +15,15 @@ Spock.js is an open-source mathematics library written in TypeScript. It provide
 ## Quick start
 
 ```js
-import { Vec2, Utils } from '@1pizzateam/spock';
+import { Vec2, Rect, Utils } from '@1pizzateam/spock';
 
-const position = new Vec2(10, 20)
-  .add(new Vec2(5, -2))
-  .scale(2);
+// Zero-allocation vector arithmetic
+const velocity = new Vec2(5, -2);
+const position = new Vec2().addVectors(new Vec2(10, 20), velocity).scale(2);
+
+// Vector-first shapes and boundary tests
+const bounds = new Rect(new Vec2(100, 100), new Vec2(50, 50));
+const inside = position.isInBounds(bounds);
 
 const opacity = Utils.clamp(1.25, 0, 1);
 ```

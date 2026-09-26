@@ -82,4 +82,104 @@ describe('Rect', () => {
     expect(outside.y).toBe(-5);
   });
 
+  it('should test overlapsRect', () => {
+    const r1 = new Rect(10, 10, 0, 0); // [-5, 5] x [-5, 5]
+    const r2 = new Rect(10, 10, 4, 0); // [-1, 9] x [-5, 5] (overlapping)
+    const r3 = new Rect(10, 10, 20, 0); // disjoint
+
+    expect(r1.overlapsRect(r2)).toBe(true);
+    expect(r1.overlapsRect(r3)).toBe(false);
+  });
+
+  it('should test overlapsCircle with center+radius and Circ instance', () => {
+    const rect = new Rect(10, 10, 0, 0); // [-5, 5] x [-5, 5]
+    // Circle overlapping top-right edge
+    expect(rect.overlapsCircle(new Vec2(7, 0), 3)).toBe(true);
+    expect(rect.overlapsCircle(new Vec2(15, 0), 2)).toBe(false);
+
+    // Overlapping corner
+    expect(rect.overlapsCircle(new Vec2(8, 8), 5)).toBe(true);
+    expect(rect.overlapsCircle(new Vec2(8, 8), 1)).toBe(false);
+  });
+
+  it('should test overlapsBounds with min and max vectors', () => {
+    const rect = new Rect(10, 10, 0, 0); // [-5, 5] x [-5, 5]
+    const min1 = new Vec2(3, -2);
+    const max1 = new Vec2(10, 2);
+    expect(rect.overlapsBounds(min1, max1)).toBe(true);
+
+    const min2 = new Vec2(10, 10);
+    const max2 = new Vec2(20, 20);
+    expect(rect.overlapsBounds(min2, max2)).toBe(false);
+  });
+
+  it('should support vector-first constructor and setSize(Vec2)', () => {
+    const size = new Vec2(40, 20);
+    const pos = new Vec2(100, 50);
+    const rect = new Rect(size, pos);
+    expect(rect.size.x).toBe(40);
+    expect(rect.size.y).toBe(20);
+    expect(rect.position.x).toBe(100);
+    expect(rect.position.y).toBe(50);
+    expect(rect.halfSize.x).toBe(20);
+    expect(rect.halfSize.y).toBe(10);
+    expect(rect.topLeftCorner.x).toBe(80);
+    expect(rect.bottomRightCorner.x).toBe(120);
+
+    rect.setSize(new Vec2(60, 30));
+    expect(rect.size.x).toBe(60);
+    expect(rect.size.y).toBe(30);
+    expect(rect.halfSize.x).toBe(30);
+    expect(rect.halfSize.y).toBe(15);
+  });
+
+  it('should compute bounds with getBounds, boundsMin, and boundsMax', () => {
+    const rect = new Rect(20, 40, 10, 20);
+    const min = new Vec2();
+    const max = new Vec2();
+    rect.getBounds(min, max);
+    expect(min.x).toBe(0);
+    expect(min.y).toBe(0);
+    expect(max.x).toBe(20);
+    expect(max.y).toBe(40);
+
+    expect(rect.boundsMin.x).toBe(0);
+    expect(rect.boundsMin.y).toBe(0);
+    expect(rect.boundsMax.x).toBe(20);
+    expect(rect.boundsMax.y).toBe(40);
+  });
+
+  it('should raycast against rectangle with hit, miss, and inside start', () => {
+    // Rect from x=[40, 60], y=[-10, 10]
+    const rect = new Rect(20, 20, 50, 0);
+
+    // Hit from left
+    const hit = rect.raycast(new Vec2(0, 0), new Vec2(100, 0));
+    expect(hit).not.toBeNull();
+    expect(hit.fraction).toBeCloseTo(0.4, 5);
+    expect(hit.point.x).toBeCloseTo(40, 5);
+    expect(hit.point.y).toBeCloseTo(0, 5);
+    expect(hit.normal.x).toBe(-1);
+    expect(hit.normal.y).toBe(0);
+
+    // Miss above
+    const miss = rect.raycast(new Vec2(0, 30), new Vec2(100, 30));
+    expect(miss).toBeNull();
+
+    // Start inside AABB
+    const inside = rect.raycast(new Vec2(55, 0), new Vec2(100, 0));
+    expect(inside).not.toBeNull();
+    expect(inside.fraction).toBe(0);
+    expect(inside.point.x).toBe(55);
+    expect(inside.point.y).toBe(0);
+    expect(inside.normal.x).toBe(1); // Closest to right face (dist 5 vs dist 15)
+    expect(inside.normal.y).toBe(0);
+
+    // Target reuse
+    const target = { fraction: 0, point: new Vec2(), normal: new Vec2() };
+    const res = rect.raycast(new Vec2(0, 0), new Vec2(100, 0), target);
+    expect(res).toBe(target);
+    expect(target.point.x).toBeCloseTo(40, 5);
+  });
+
 });

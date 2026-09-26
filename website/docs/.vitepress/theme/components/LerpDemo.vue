@@ -15,7 +15,7 @@ function draw(context, state, theme) {
   const cycle = (state.time * 0.25) % 1;
   const t = cycle < 0.5 ? cycle * 2 : 2 - cycle * 2;
 
-  point.lerp(start, end, t);
+  point.lerpVectors(start, end, t);
   const radius = Utils.lerp(8, 30, t);
   const alpha = Utils.lerp(0.25, 1, t);
 
@@ -42,7 +42,7 @@ function draw(context, state, theme) {
 
 <template>
   <DemoFrame :draw="draw">
-    <code>Vec2.lerp()</code> moves the disc between the two anchors while
+    <code>Vec2.lerpVectors()</code> moves the disc between the two anchors while
     <code>Utils.lerp()</code> interpolates its radius and opacity from the same <code>t</code>.
   </DemoFrame>
 </template>

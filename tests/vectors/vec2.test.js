@@ -282,4 +282,260 @@ describe('Vec2', () => {
     expect(v4.y).toBe(8);
   });
 
+  it('should compute sign component-wise in-place', () => {
+    const v = new Vec2(-10.5, 4.2).sign();
+    expect(v.x).toBe(-1);
+    expect(v.y).toBe(1);
+
+    const zero = new Vec2(0, -0).sign();
+    expect(zero.x).toBe(0);
+    expect(zero.y).toBe(-0);
+  });
+
+  it('should project to min and max axes with optional reference signs', () => {
+    // Min axis without reference
+    const a = new Vec2(10, 4).projectToMinAxis();
+    expect(a.x).toBe(0);
+    expect(a.y).toBe(4);
+
+    const b = new Vec2(2, 9).projectToMinAxis();
+    expect(b.x).toBe(2);
+    expect(b.y).toBe(0);
+
+    // Min axis with reference
+    const c = new Vec2(5, 3).projectToMinAxis(new Vec2(-1, -1));
+    expect(c.x).toBe(0);
+    expect(c.y).toBe(-3);
+
+    const d = new Vec2(2, 7).projectToMinAxis(new Vec2(-10, 5));
+    expect(d.x).toBe(-2);
+    expect(d.y).toBe(0);
+
+    // Max axis without reference
+    const e = new Vec2(10, 4).projectToMaxAxis();
+    expect(e.x).toBe(10);
+    expect(e.y).toBe(0);
+
+    const f = new Vec2(2, 9).projectToMaxAxis();
+    expect(f.x).toBe(0);
+    expect(f.y).toBe(9);
+
+    // Max axis with reference
+    const g = new Vec2(10, 4).projectToMaxAxis(new Vec2(-1, 1));
+    expect(g.x).toBe(-10);
+    expect(g.y).toBe(0);
+
+    const h = new Vec2(2, 9).projectToMaxAxis(new Vec2(1, -5));
+    expect(h.x).toBe(0);
+    expect(h.y).toBe(-9);
+  });
+
+  it('should clamp inside a Rect or between min and max Vec2', () => {
+    const rect = new Rect(10, 10, 0, 0); // [-5, 5] x [-5, 5]
+    const v1 = new Vec2(12, -8).clamp(rect);
+    expect(v1.x).toBe(5);
+    expect(v1.y).toBe(-5);
+
+    const min = new Vec2(-10, 0);
+    const max = new Vec2(10, 20);
+    const v2 = new Vec2(-15, 25).clamp(min, max);
+    expect(v2.x).toBe(-10);
+    expect(v2.y).toBe(20);
+  });
+
+  it('should clampScalar between min and max numbers', () => {
+    const v = new Vec2(-5, 15).clampScalar(0, 10);
+    expect(v.x).toBe(0);
+    expect(v.y).toBe(10);
+  });
+
+  it('should check isInBounds for points within or outside bounds', () => {
+    const min = new Vec2(-5, -5);
+    const max = new Vec2(5, 5);
+
+    expect(new Vec2(0, 0).isInBounds(min, max)).toBe(true);
+    expect(new Vec2(-5, 5).isInBounds(min, max)).toBe(true);
+    expect(new Vec2(5.1, 0).isInBounds(min, max)).toBe(false);
+    expect(new Vec2(0, -5.1).isInBounds(min, max)).toBe(false);
+
+    // Reversed bounds order
+    expect(new Vec2(0, 0).isInBounds(max, min)).toBe(true);
+  });
+
+  it('should support binary target operations (addVectors, subVectors, etc.)', () => {
+    const a = new Vec2(10, 20);
+    const b = new Vec2(3, 4);
+    const dest = new Vec2();
+
+    expect(dest.addVectors(a, b)).toBe(dest);
+    expect(dest.x).toBe(13);
+    expect(dest.y).toBe(24);
+
+    dest.subVectors(a, b);
+    expect(dest.x).toBe(7);
+    expect(dest.y).toBe(16);
+
+    dest.multiplyVectors(a, b);
+    expect(dest.x).toBe(30);
+    expect(dest.y).toBe(80);
+
+    dest.scaleVector(a, 0.5);
+    expect(dest.x).toBe(5);
+    expect(dest.y).toBe(10);
+
+    dest.divideVectors(a, b);
+    expect(dest.x).toBeCloseTo(10 / 3);
+    expect(dest.y).toBe(5);
+
+    dest.minVectors(new Vec2(1, 10), new Vec2(5, 2));
+    expect(dest.x).toBe(1);
+    expect(dest.y).toBe(2);
+
+    dest.maxVectors(new Vec2(1, 10), new Vec2(5, 2));
+    expect(dest.x).toBe(5);
+    expect(dest.y).toBe(10);
+
+    dest.clampVectors(new Vec2(-10, 50), new Vec2(0, 0), new Vec2(10, 20));
+    expect(dest.x).toBe(0);
+    expect(dest.y).toBe(20);
+  });
+
+  it('should support unary target operations (oppositeVector, absoluteVector, normalizeVector, perpVector, perpCWVector)', () => {
+    const v = new Vec2(-3, 4);
+    const dest = new Vec2();
+
+    expect(dest.oppositeVector(v)).toBe(dest);
+    expect(dest.x).toBe(3);
+    expect(dest.y).toBe(-4);
+
+    dest.absoluteVector(v);
+    expect(dest.x).toBe(3);
+    expect(dest.y).toBe(4);
+
+    dest.normalizeVector(v);
+    expect(dest.x).toBeCloseTo(-0.6);
+    expect(dest.y).toBeCloseTo(0.8);
+    expect(dest.getMagnitude()).toBeCloseTo(1);
+
+    dest.normalizeVector(new Vec2(0, 0));
+    expect(dest.x).toBe(0);
+    expect(dest.y).toBe(0);
+
+    dest.perpVector(v);
+    expect(dest.x).toBe(-4);
+    expect(dest.y).toBe(-3);
+
+    dest.perpCWVector(v);
+    expect(dest.x).toBe(4);
+    expect(dest.y).toBe(3);
+  });
+
+  it('should scale to exact length with setLength and setLengthVector', () => {
+    const v = new Vec2(3, 4);
+    expect(v.setLength(10)).toBe(v);
+    expect(v.x).toBeCloseTo(6);
+    expect(v.y).toBeCloseTo(8);
+    expect(v.getMagnitude()).toBeCloseTo(10);
+
+    const dest = new Vec2();
+    expect(dest.setLengthVector(new Vec2(0, 5), 2)).toBe(dest);
+    expect(dest.x).toBeCloseTo(0);
+    expect(dest.y).toBeCloseTo(2);
+    expect(dest.getMagnitude()).toBeCloseTo(2);
+  });
+
+  it('should support target projectVector and reflectVector', () => {
+    const v = new Vec2(3, 4);
+    const normalY = new Vec2(0, 1);
+    const dest = new Vec2();
+
+    expect(dest.projectVector(v, normalY)).toBe(dest);
+    expect(dest.x).toBe(0);
+    expect(dest.y).toBe(4);
+
+    expect(dest.reflectVector(v, normalY)).toBe(dest);
+    expect(dest.x).toBe(3);
+    expect(dest.y).toBe(-4);
+  });
+
+  it('should clamp to symmetric extent with clampToExtent and clampToExtentVectors', () => {
+    const v = new Vec2(15, -25);
+    const extent = new Vec2(10, 20);
+
+    expect(v.clampToExtent(extent)).toBe(v);
+    expect(v.x).toBe(10);
+    expect(v.y).toBe(-20);
+
+    const dest = new Vec2();
+    expect(dest.clampToExtentVectors(new Vec2(-50, 50), extent)).toBe(dest);
+    expect(dest.x).toBe(-10);
+    expect(dest.y).toBe(20);
+  });
+
+  it('should support in-place lerp and target lerpVectors', () => {
+    const a = new Vec2(0, 10);
+    const b = new Vec2(10, 20);
+
+    // In-place lerp towards target
+    a.lerp(b, 0.5);
+    expect(a.x).toBe(5);
+    expect(a.y).toBe(15);
+
+    // Backwards-compatible 3-argument lerp
+    const c = new Vec2();
+    c.lerp(new Vec2(0, 0), new Vec2(100, 200), 0.25);
+    expect(c.x).toBe(25);
+    expect(c.y).toBe(50);
+
+    // Explicit lerpVectors
+    const dest = new Vec2();
+    expect(dest.lerpVectors(new Vec2(0, 0), new Vec2(10, 20), 0.5)).toBe(dest);
+    expect(dest.x).toBe(5);
+    expect(dest.y).toBe(10);
+  });
+
+  it('should support fallback in normalize and normalizeVector when length is 0', () => {
+    const v = new Vec2(0, 0);
+    const fallback = new Vec2(1, 0);
+
+    v.normalize(fallback);
+    expect(v.x).toBe(1);
+    expect(v.y).toBe(0);
+
+    const dest = new Vec2();
+    dest.normalizeVector(new Vec2(0, 0), new Vec2(0, 1));
+    expect(dest.x).toBe(0);
+    expect(dest.y).toBe(1);
+
+    // Normalizing non-zero vector ignores fallback
+    const v2 = new Vec2(10, 0);
+    v2.normalize(new Vec2(0, 1));
+    expect(v2.x).toBe(1);
+    expect(v2.y).toBe(0);
+  });
+
+  it('should support quadratic bezier split', () => {
+    const p0 = new Vec2(0, 0);
+    const p1 = new Vec2(5, 10);
+    const p2 = new Vec2(10, 0);
+    const left = [];
+    const right = [];
+    new Vec2().quadraticBezierSplit(p0, p1, p2, 0.5, left, right);
+    expect(left).toHaveLength(3);
+    expect(right).toHaveLength(3);
+    expect(left[0].x).toBe(0);
+    expect(right[2].x).toBe(10);
+    expect(left[2].x).toBeCloseTo(right[0].x, 5);
+    expect(left[2].y).toBeCloseTo(right[0].y, 5);
+  });
+
+  it('should support isInBounds with Rect', () => {
+    const rect = {
+      topLeftCorner: new Vec2(10, 10),
+      bottomRightCorner: new Vec2(20, 20)
+    };
+    expect(new Vec2(15, 15).isInBounds(rect)).toBe(true);
+    expect(new Vec2(5, 15).isInBounds(rect)).toBe(false);
+  });
+
 });

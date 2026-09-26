@@ -45,6 +45,12 @@ describe('Utils', () => {
     expect(Utils.clamp(5, 0, 10)).toBe(5);
   });
 
+  it('should clamp a value symmetrically with clampToExtent', () => {
+    expect(Utils.clampToExtent(15, 10)).toBe(10);
+    expect(Utils.clampToExtent(-15, 10)).toBe(-10);
+    expect(Utils.clampToExtent(5, 10)).toBe(5);
+  });
+
   it('should normalize a value to 0-1', () => {
     expect(Utils.normalize(5, 0, 10)).toBe(0.5);
   });

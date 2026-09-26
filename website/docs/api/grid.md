@@ -11,30 +11,31 @@ This is the spatial index behind `Circ` and `Rect` occupancy. Construct it with 
 ```js
 import { Circ, Grid, Vec2 } from '@1pizzateam/spock';
 
-const grid = new Grid(800, 600, 32);
-const circle = new Circ(38, 400, 300).setGrid(grid);
+const grid = new Grid(new Vec2(800, 600), 32);
+const circle = new Circ(38, new Vec2(400, 300)).setGrid(grid);
 
 circle.setPosition(new Vec2(120, 240));
 const occupied = circle.gridCells.filter(cell => cell !== Grid.emptyCell);
 
-const other = new Circ(20, 110, 96).setGrid(grid);
-if (grid.testCells(circle.gridCells, other.gridCells)) {
-  // close enough to be worth an exact narrow-phase test
-}
+const other = new Circ(20, new Vec2(110, 96)).setGrid(grid);
+if (grid.testCells(circle.gridCells, other.gridCells))
+  console.log('close enough for exact narrow-phase test');
 ```
 
 ## Constructor
 
-Divide width × height into cells of cellSize.
+Divide size (width × height) into cells of cellSize.
 
 Cell counts are rounded up, so the lattice always covers the whole area even when the size is not an exact multiple of the cell size. `len` holds the column and row counts as a `Vec2`.
 
 ```ts
+new Grid(size: Vec2, cellSize: number)
 new Grid(width: number, height: number, cellSize: number)
 ```
 
 ### Parameters
 
+- `size` — `Vec2`. Dimensions of the lattice.
 - `width` — `number`.
 - `height` — `number`.
 - `cellSize` — `number`.
@@ -46,9 +47,13 @@ new Grid(width: number, height: number, cellSize: number)
 ### Example
 
 ```js
-import { Grid } from '@1pizzateam/spock';
+import { Grid, Vec2 } from '@1pizzateam/spock';
 
-const value = new Grid(100, 100, 10);
+// Vector-first
+const grid = new Grid(new Vec2(100, 100), 10);
+
+// Scalar overload
+const scalarGrid = new Grid(100, 100, 10);
 ```
 
 ## Grid.totalCells
@@ -85,9 +90,9 @@ testCells(aCells: number[], bCells: number[]): boolean
 ### Example
 
 ```js
-import { Grid } from '@1pizzateam/spock';
+import { Grid, Vec2 } from '@1pizzateam/spock';
 
-const result = new Grid(100, 100, 10).testCells([1, 2, 3], [1, 2, 3]);
+const result = new Grid(new Vec2(100, 100), 10).testCells([1, 2, 3], [1, 2, 3]);
 ```
 
 ## Grid.getFirstCommonCell()
@@ -110,9 +115,9 @@ getFirstCommonCell(aCells: number[], bCells: number[]): number
 ### Example
 
 ```js
-import { Grid } from '@1pizzateam/spock';
+import { Grid, Vec2 } from '@1pizzateam/spock';
 
-const firstCell = new Grid(100, 100, 10).getFirstCommonCell([1, 4, 7], [4, 7, 9]); // 4
+const firstCell = new Grid(new Vec2(100, 100), 10).getFirstCommonCell([1, 4, 7], [4, 7, 9]); // 4
 ```
 
 ## Grid.isFirstCommonCell()
@@ -135,14 +140,16 @@ isFirstCommonCell(aCells: number[], bCells: number[], cellId: number): boolean
 
 ## Grid.getCell()
 
-Get cell index at (x, y) coordinates, or -1 if out of bounds.
+Get cell index at `point` or (x, y) coordinates, or -1 if out of bounds.
 
 ```ts
+getCell(point: Vec2): number
 getCell(x: number, y: number): number
 ```
 
 ### Parameters
 
+- `point` — `Vec2`.
 - `x` — `number`.
 - `y` — `number`.
 
@@ -153,9 +160,10 @@ getCell(x: number, y: number): number
 ### Example
 
 ```js
-import { Grid } from '@1pizzateam/spock';
+import { Grid, Vec2 } from '@1pizzateam/spock';
 
-const cellIndex = new Grid(100, 100, 10).getCell(25, 15); // cell at (2, 1) -> 12
+const grid = new Grid(new Vec2(100, 100), 10);
+const cellIndex = grid.getCell(new Vec2(25, 15)); // cell at (2, 1) -> 12
 ```
 
 ## Grid.getCellCoords()
@@ -205,5 +213,58 @@ const context = document.querySelector('canvas').getContext('2d');
 
 const result = new Grid(100, 100, 10).draw(context, '#5b8cff', '#5b8cff', 1);
 ```
+
+## Grid.getCellAt()
+
+Get the cell index for a 2D position vector.
+
+```ts
+getCellAt(point: Vec2): number
+```
+
+### Parameters
+
+- `point` — `Vec2`. Coordinates to query.
+
+### Returns
+
+`number` — Cell index, or `Grid.emptyCell` (-1) if outside grid bounds.
+
+## Grid.getCellsForBounds()
+
+Get all cell indices overlapping an Axis-Aligned Bounding Box (AABB).
+
+```ts
+getCellsForBounds(min: Vec2, max: Vec2, out?: number[]): number[]
+```
+
+### Parameters
+
+- `min` — `Vec2`. Minimum bounds corner.
+- `max` — `Vec2`. Maximum bounds corner.
+- `out` — `number[]` (optional). Output array to write cell indices into.
+
+### Returns
+
+`number[]` — Array of unique occupied cell indices.
+
+## Grid.getCellsForCircle()
+
+Get all cell indices overlapping a circle.
+
+```ts
+getCellsForCircle(center: Vec2, radius: number, out?: number[]): number[]
+```
+
+### Parameters
+
+- `center` — `Vec2`. Circle center.
+- `radius` — `number`. Circle radius.
+- `out` — `number[]` (optional). Output array to write cell indices into.
+
+### Returns
+
+`number[]` — Array of unique occupied cell indices.
+
 
 

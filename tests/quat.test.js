@@ -138,6 +138,10 @@ describe('Quat', () => {
     const fromAxis = new Quat().setAxisAngle(new Vec3(0, 0, 1), Math.PI / 2);
     expect(fromEuler.w).toBeCloseTo(fromAxis.w, 6);
     expect(fromEuler.vector.z).toBeCloseTo(fromAxis.vector.z, 6);
+
+    const fromVec = new Quat().setFromEuler(new Vec3(0, 0, Math.PI / 2));
+    expect(fromVec.w).toBeCloseTo(fromAxis.w, 6);
+    expect(fromVec.vector.z).toBeCloseTo(fromAxis.vector.z, 6);
   });
 
   it('should clone without sharing the vector', () => {

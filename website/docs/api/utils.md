@@ -271,6 +271,34 @@ import { Utils } from '@1pizzateam/spock';
 const result = Utils.clamp(1, 1, 1);
 ```
 
+## Utils.clampToExtent()
+
+Clamp x symmetrically to [-extent, extent].
+
+Confines a value symmetrically around zero. Ideal for friction impulses, speed limits, and symmetric boundary clamping.
+
+```ts
+clampToExtent(x: number, extent: number): number
+```
+
+### Parameters
+
+- `x` — `number`.
+- `extent` — `number`. The non-negative half-extent.
+
+### Returns
+
+`number` — the clamped result in `[-extent, extent]`.
+
+### Example
+
+```js
+import { Utils } from '@1pizzateam/spock';
+
+const impulse = Utils.clampToExtent(15, 10); // 10
+const negImpulse = Utils.clampToExtent(-15, 10); // -10
+```
+
 ## Utils.normalize()
 
 Map x from [min, max] into [0, 1].

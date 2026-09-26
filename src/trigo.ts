@@ -4,9 +4,8 @@ const SIN_LUT_QUARTER = SIN_LUT_SIZE >> 2;
 const INV_TWOPI = 1 / (Math.PI * 2);
 const SIN_LUT = new Float32Array(SIN_LUT_SIZE);
 
-for (let i = 0; i < SIN_LUT_SIZE; i++) {
+for (let i = 0; i < SIN_LUT_SIZE; i++)
   SIN_LUT[i] = Math.sin(i * Math.PI * 2 / SIN_LUT_SIZE);
-}
 
 /** Wrap angle in radians into a sine lookup-table index. */
 function lutIndex(angle: number): number {
