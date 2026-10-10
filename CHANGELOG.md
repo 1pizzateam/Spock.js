@@ -1,3 +1,28 @@
+Version 4.3.0 (October 10th 2026)
+-----------------------------
+ * Mat4x3:
+    * Add `compose(position, rotation, scale)` building translate * rotate * scale in a single pass
+    * Add `getTranslation(target?)`, `setTranslation(position)`, `getColumn(index, target?)` and `getScale(target?)`
+    * Add `transformPoint(vector, target?)` and `transformDirection(vector, target?)` (target may alias the input)
+    * Add `toNormalMatrix(target: Float32Array)` writing the column-major inverse transpose of the linear part (identity if singular)
+ * Mat4:
+    * Add `multiplyAffine(matrix4x3)`, `setFromMat4x3(matrix4x3)` and `transformPoint(vector, target?)` (with perspective divide)
+ * Quat:
+    * Add `setFromRotationMatrix(matrix4x3)` (scale ignored), `lookAt(eye, target, up)` and `getEuler(target?)` (inverse of `setFromEuler`)
+ * Vec3:
+    * Add `maxComponent()`, `minComponent()`, `setFromSpherical(radius, azimuth, elevation)` and `getSpherical(target?)`
+    * `setArray` accepts any `ArrayLike<number>` (e.g. `Float32Array`); `toArray(target, offset)` writes into number arrays and typed arrays at an offset
+ * Vec2:
+    * `setArray` accepts any `ArrayLike<number>`; `toArray(target, offset)` writes into number arrays and typed arrays at an offset
+ * 3D geometry (moved from RoostR.js, vector-first and allocation-free in queries):
+    * Add `Box` (axis-aligned box with `setFromPoints` for Vec3 lists or strided arrays, `applyMatrix4`, containment/intersection tests)
+    * Add `Sphere` (`setFromPoints`, `applyMatrix4`, sphere/box intersection) and `Plane`
+    * Add `Ray3` (`at`, ray/box slab test, ray/sphere, Möller-Trumbore ray/triangle) and `Ray2` (origin + unit direction, `at`, `intersectRect` / `intersectCirc` within a `maxDistance`, reporting a `RayHit2D`)
+    * Export the `RayHit2D` type
+    * Add `Frustum` (planes from a projection-view matrix, sphere/box/point tests)
+ * Matrices:
+    * Fix determinant calculation typo in `invertLinear3` (`a01 * b10 + a02 * b20` instead of `a10 * b10 + a20 * b20`) used by `Mat4x3.invertAffine()` and `Mat3.invert()`, preventing determinant collapse to zero and negative determinant inversion during 3D rotations which inverted normals and caused lighting/rendering glitches.
+    * Add unit tests verifying `Mat4x3.invertAffine()` preserves identity under multi-axis rotations and translations.
 
 Version 4.2.0 (September 25th 2026)
 -----------------------------

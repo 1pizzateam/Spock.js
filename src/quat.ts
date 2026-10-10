@@ -2,6 +2,11 @@ import { Vec3 } from './vectors/vec3';
 import { Mat4x3 } from './matrices/mat4x3';
 import { Mat4 } from './matrices/mat4';
 import { Utils } from './utils';
+import { setLookAtAxes } from './matrices/lookAt';
+
+const lookAtX = new Vec3();
+const lookAtY = new Vec3();
+const lookAtZ = new Vec3();
 
 /** Unit quaternion as w plus a vector (x, y, z). */
 export class Quat {
@@ -58,6 +63,54 @@ export class Quat {
     this.vector.y = cx * sy * cz - sx * cy * sz;
     this.vector.z = cx * cy * sz + sx * sy * cz;
     return this;
+  }
+
+  /** Set from the rotation part of an affine matrix; scale is ignored. */
+  public setFromRotationMatrix(matrix: Mat4x3): Quat {
+    const m = matrix.toArray();
+    const lx = Math.hypot(m[0], m[1], m[2]) || 1;
+    const ly = Math.hypot(m[4], m[5], m[6]) || 1;
+    const lz = Math.hypot(m[8], m[9], m[10]) || 1;
+    return this.setFromBasis(
+      m[0] / lx, m[1] / lx, m[2] / lx,
+      m[4] / ly, m[5] / ly, m[6] / ly,
+      m[8] / lz, m[9] / lz, m[10] / lz
+    );
+  }
+
+  /**
+   * Orientation of an object at eye whose -Z axis faces target (same convention as
+   * `Mat4x3.lookAtRH` inverted). Unchanged if eye equals target.
+   */
+  public lookAt(eye: Vec3, target: Vec3, up: Vec3): Quat {
+    if (!setLookAtAxes(eye, target, up, lookAtX, lookAtY, lookAtZ))
+      return this;
+    return this.setFromBasis(
+      lookAtX.x, lookAtX.y, lookAtX.z,
+      lookAtY.x, lookAtY.y, lookAtY.z,
+      lookAtZ.x, lookAtZ.y, lookAtZ.z
+    );
+  }
+
+  /** Write XYZ Euler angles in radians (inverse of `setFromEuler`) into target. */
+  public getEuler(target: Vec3 = new Vec3()): Vec3 {
+    const x = this.vector.x, y = this.vector.y, z = this.vector.z, w = this.w;
+    const x2 = x + x, y2 = y + y, z2 = z + z;
+    const m13 = x * z2 + w * y2;
+    const ey = Math.asin(Utils.clamp(m13, -1, 1));
+    if (Math.abs(m13) < 0.9999999)
+      target.setScalar(
+        Math.atan2(-(y * z2 - w * x2), 1 - (x * x2 + y * y2)),
+        ey,
+        Math.atan2(-(x * y2 - w * z2), 1 - (y * y2 + z * z2))
+      );
+    else
+      target.setScalar(
+        Math.atan2(y * z2 + w * x2, 1 - (x * x2 + z * z2)),
+        ey,
+        0
+      );
+    return target;
   }
 
   /** Write the rotation axis into axis; return the angle in radians. */
@@ -265,6 +318,29 @@ export class Quat {
   /** True if this is approximately identity. */
   public isIdentity(): boolean {
     return Math.abs(this.w - 1) < 1e-6 && this.vector.getMagnitude(true) < 1e-12;
+  }
+
+  /** Set from the orthonormal columns (x, y, z) of a rotation matrix. */
+  private setFromBasis(
+    m00: number, m10: number, m20: number,
+    m01: number, m11: number, m21: number,
+    m02: number, m12: number, m22: number
+  ): Quat {
+    const trace = m00 + m11 + m22;
+    if (trace > 0) {
+      const s = 0.5 / Math.sqrt(trace + 1);
+      return this.set(0.25 / s, (m21 - m12) * s, (m02 - m20) * s, (m10 - m01) * s);
+    }
+    if (m00 > m11 && m00 > m22) {
+      const s = 2 * Math.sqrt(1 + m00 - m11 - m22);
+      return this.set((m21 - m12) / s, 0.25 * s, (m01 + m10) / s, (m02 + m20) / s);
+    }
+    if (m11 > m22) {
+      const s = 2 * Math.sqrt(1 + m11 - m00 - m22);
+      return this.set((m02 - m20) / s, (m01 + m10) / s, 0.25 * s, (m12 + m21) / s);
+    }
+    const s = 2 * Math.sqrt(1 + m22 - m00 - m11);
+    return this.set((m10 - m01) / s, (m02 + m20) / s, (m12 + m21) / s, 0.25 * s);
   }
 
   /** Hamilton product of two quaternions into this one. */

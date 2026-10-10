@@ -2,6 +2,7 @@
 import {Vec3} from '../vectors/vec3';
 import { matrixToArray, transposeLinear3, determinantLinear3, invertLinear3 } from './buffer';
 import { setLookAtAxes } from './lookAt';
+import type { Quat } from '../quat';
 
 /** 4×3 affine transform stored in a 4×4 Float32Array. */
 export class Mat4x3 {
@@ -197,6 +198,104 @@ export class Mat4x3 {
               -xAxis.dotProduct(eye), -yAxis.dotProduct(eye), -zAxis.dotProduct(eye)
               );
     return this;
+  }
+
+  /** Set to translate * rotate * scale in a single pass. */
+  public compose(position: Vec3, rotation: Quat, scale: Vec3): Mat4x3 {
+    const m = this.m;
+    const x = rotation.vector.x, y = rotation.vector.y, z = rotation.vector.z, w = rotation.w;
+    const x2 = x + x, y2 = y + y, z2 = z + z;
+    const xx = x * x2, xy = x * y2, xz = x * z2;
+    const yy = y * y2, yz = y * z2, zz = z * z2;
+    const wx = w * x2, wy = w * y2, wz = w * z2;
+    const sx = scale.x, sy = scale.y, sz = scale.z;
+    m[ 0] = (1 - (yy + zz)) * sx;
+    m[ 1] = (xy + wz) * sx;
+    m[ 2] = (xz - wy) * sx;
+    m[ 3] = 0;
+    m[ 4] = (xy - wz) * sy;
+    m[ 5] = (1 - (xx + zz)) * sy;
+    m[ 6] = (yz + wx) * sy;
+    m[ 7] = 0;
+    m[ 8] = (xz + wy) * sz;
+    m[ 9] = (yz - wx) * sz;
+    m[10] = (1 - (xx + yy)) * sz;
+    m[11] = 0;
+    m[12] = position.x;
+    m[13] = position.y;
+    m[14] = position.z;
+    m[15] = 1;
+    return this;
+  }
+
+  /** Write the translation column into target. */
+  public getTranslation(target: Vec3 = new Vec3()): Vec3 {
+    const m = this.m;
+    return target.setScalar(m[12], m[13], m[14]);
+  }
+
+  /** Overwrite the translation column. */
+  public setTranslation(position: Vec3): Mat4x3 {
+    const m = this.m;
+    m[12] = position.x;
+    m[13] = position.y;
+    m[14] = position.z;
+    return this;
+  }
+
+  /** Write the linear axis column (0 = x, 1 = y, 2 = z) into target. */
+  public getColumn(index: 0 | 1 | 2, target: Vec3 = new Vec3()): Vec3 {
+    const o = index * 4;
+    const m = this.m;
+    return target.setScalar(m[o], m[o + 1], m[o + 2]);
+  }
+
+  /** Write the length of each linear axis column into target. */
+  public getScale(target: Vec3 = new Vec3()): Vec3 {
+    const m = this.m;
+    return target.setScalar(
+      Math.hypot(m[0], m[1], m[2]),
+      Math.hypot(m[4], m[5], m[6]),
+      Math.hypot(m[8], m[9], m[10])
+    );
+  }
+
+  /** Transform a point (rotation, scale and translation). target may be vector. */
+  public transformPoint(vector: Vec3, target: Vec3 = new Vec3()): Vec3 {
+    const m = this.m;
+    const x = vector.x, y = vector.y, z = vector.z;
+    target.x = m[0] * x + m[4] * y + m[ 8] * z + m[12];
+    target.y = m[1] * x + m[5] * y + m[ 9] * z + m[13];
+    target.z = m[2] * x + m[6] * y + m[10] * z + m[14];
+    return target;
+  }
+
+  /** Transform a direction (rotation and scale, no translation). target may be vector. */
+  public transformDirection(vector: Vec3, target: Vec3 = new Vec3()): Vec3 {
+    const m = this.m;
+    const x = vector.x, y = vector.y, z = vector.z;
+    target.x = m[0] * x + m[4] * y + m[ 8] * z;
+    target.y = m[1] * x + m[5] * y + m[ 9] * z;
+    target.z = m[2] * x + m[6] * y + m[10] * z;
+    return target;
+  }
+
+  /**
+   * Write the 3×3 normal matrix (inverse transpose of the linear part, column-major)
+   * into target. Identity if the linear part is singular.
+   */
+  public toNormalMatrix(target: Float32Array): Float32Array {
+    const m = this.m;
+    target[0] = m[0]; target[1] = m[1]; target[2] = m[2];
+    target[3] = m[4]; target[4] = m[5]; target[5] = m[6];
+    target[6] = m[8]; target[7] = m[9]; target[8] = m[10];
+    if (!invertLinear3(target, 3)) {
+      target.fill(0);
+      target[0] = target[4] = target[8] = 1;
+      return target;
+    }
+    transposeLinear3(target, 3);
+    return target;
   }
 
   /** Transpose the linear 3×3 part. */

@@ -439,3 +439,223 @@ import { Mat4x3 } from '@1pizzateam/spock';
 const result = new Mat4x3().invertAffine();
 ```
 
+## Mat4x3.compose()
+
+Set to translate × rotate × scale in a single pass.
+
+Builds the whole local transform from a position, a `Quat` rotation and a scale without intermediate matrices. It overwrites the current contents, so it replaces the usual `identity().translate().multiply(rotation).scale()` chain and is the cheapest way to rebuild a node's matrix each frame.
+
+```ts
+compose(position: Vec3, rotation: Quat, scale: Vec3): Mat4x3
+```
+
+### Parameters
+
+- `position` — `Vec3`. Translation.
+- `rotation` — `Quat`. Rotation; it should be a unit quaternion.
+- `scale` — `Vec3`. Per-axis scale applied before the rotation.
+
+### Returns
+
+`Mat4x3` — the Mat4x3 with its new values
+
+### Example
+
+```js
+import { Mat4x3, Quat, Vec3 } from '@1pizzateam/spock';
+
+const model = new Mat4x3().compose(
+  new Vec3(1, 2, 3),
+  new Quat().setFromEuler(0, Math.PI / 2, 0),
+  new Vec3(2, 2, 2)
+);
+```
+
+## Mat4x3.getTranslation()
+
+Write the translation column into target.
+
+Reads the position part of the transform. Pass a vector to reuse it; without a target a new `Vec3` is returned.
+
+```ts
+getTranslation(target: Vec3 = new Vec3()): Vec3
+```
+
+### Parameters
+
+- `target` — `Vec3`. Optional.
+
+### Returns
+
+`Vec3` — the target
+
+### Example
+
+```js
+import { Mat4x3, Vec3 } from '@1pizzateam/spock';
+
+const position = new Mat4x3().translate(new Vec3(1, 2, 3)).getTranslation(); // (1, 2, 3)
+```
+
+## Mat4x3.setTranslation()
+
+Overwrite the translation column.
+
+Replaces the position without touching rotation or scale. `translate()` composes a movement in local space; this sets the absolute position.
+
+```ts
+setTranslation(position: Vec3): Mat4x3
+```
+
+### Parameters
+
+- `position` — `Vec3`.
+
+### Returns
+
+`Mat4x3` — the Mat4x3 with its new values
+
+### Example
+
+```js
+import { Mat4x3, Vec3 } from '@1pizzateam/spock';
+
+const result = new Mat4x3().rotateY(1).setTranslation(new Vec3(10, 0, 0));
+```
+
+## Mat4x3.getColumn()
+
+Write a linear axis column into target.
+
+Column 0, 1 and 2 are the transformed X, Y and Z axes. Column 2 negated is a camera-style forward direction; normalize it when the matrix has scale.
+
+```ts
+getColumn(index: 0 | 1 | 2, target: Vec3 = new Vec3()): Vec3
+```
+
+### Parameters
+
+- `index` — `0 | 1 | 2`. The axis column.
+- `target` — `Vec3`. Optional.
+
+### Returns
+
+`Vec3` — the target
+
+### Example
+
+```js
+import { Mat4x3, Vec3 } from '@1pizzateam/spock';
+
+const xAxis = new Mat4x3().rotateZ(Math.PI / 2).getColumn(0); // (0, 1, 0)
+```
+
+## Mat4x3.getScale()
+
+Write the length of each axis column into target.
+
+Gives the per-axis scale of the transform. Its largest component is the factor to scale a bounding-sphere radius by.
+
+```ts
+getScale(target: Vec3 = new Vec3()): Vec3
+```
+
+### Parameters
+
+- `target` — `Vec3`. Optional.
+
+### Returns
+
+`Vec3` — the target
+
+### Example
+
+```js
+import { Mat4x3, Vec3 } from '@1pizzateam/spock';
+
+const scale = new Mat4x3().scale(new Vec3(1, 3, 2)).getScale().maxComponent(); // 3
+```
+
+## Mat4x3.transformPoint()
+
+Transform a point by rotation, scale, and translation.
+
+Use it for positions. The target may be the input vector, so `m.transformPoint(v, v)` transforms in place.
+
+```ts
+transformPoint(vector: Vec3, target: Vec3 = new Vec3()): Vec3
+```
+
+### Parameters
+
+- `vector` — `Vec3`. The point.
+- `target` — `Vec3`. Optional.
+
+### Returns
+
+`Vec3` — the target
+
+### Example
+
+```js
+import { Mat4x3, Vec3 } from '@1pizzateam/spock';
+
+const m = new Mat4x3().translate(new Vec3(10, 0, 0)).scale(new Vec3(2, 2, 2));
+const world = m.transformPoint(new Vec3(1, 1, 1)); // (12, 2, 2)
+```
+
+## Mat4x3.transformDirection()
+
+Transform a direction by rotation and scale, ignoring translation.
+
+Use it for vectors that have no position, such as velocities and axes. The target may be the input vector.
+
+```ts
+transformDirection(vector: Vec3, target: Vec3 = new Vec3()): Vec3
+```
+
+### Parameters
+
+- `vector` — `Vec3`. The direction.
+- `target` — `Vec3`. Optional.
+
+### Returns
+
+`Vec3` — the target
+
+### Example
+
+```js
+import { Mat4x3, Vec3 } from '@1pizzateam/spock';
+
+const m = new Mat4x3().translate(new Vec3(10, 0, 0)).scale(new Vec3(2, 2, 2));
+const direction = m.transformDirection(new Vec3(1, 1, 1)); // (2, 2, 2)
+```
+
+## Mat4x3.toNormalMatrix()
+
+Write the 3×3 normal matrix into target.
+
+The normal matrix is the inverse transpose of the linear part, stored column-major in a `Float32Array(9)` ready for `uniformMatrix3fv`. It keeps normals perpendicular under non-uniform scale. A singular matrix writes the identity.
+
+```ts
+toNormalMatrix(target: Float32Array): Float32Array
+```
+
+### Parameters
+
+- `target` — `Float32Array`. At least nine elements.
+
+### Returns
+
+`Float32Array` — the target
+
+### Example
+
+```js
+import { Mat4x3, Vec3 } from '@1pizzateam/spock';
+
+const normalMatrix = new Mat4x3().scale(new Vec3(2, 2, 2)).toNormalMatrix(new Float32Array(9));
+// diagonal 0.5
+```
+

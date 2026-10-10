@@ -504,3 +504,84 @@ import { Mat4, Vec3 } from '@1pizzateam/spock';
 const result = new Mat4().lookAtRH(new Vec3(1, 2, 3), new Vec3(1, 2, 3), new Vec3(1, 2, 3));
 ```
 
+## Mat4.multiplyAffine()
+
+Multiply by an affine 4×3 matrix.
+
+Sets `this = this × matrix4x3`. It is the way to build a projection-view matrix from a `Mat4` projection and a `Mat4x3` camera view without converting the view first.
+
+```ts
+multiplyAffine(matrix4x3: Mat4x3): Mat4
+```
+
+### Parameters
+
+- `matrix4x3` — `Mat4x3`.
+
+### Returns
+
+`Mat4` — the Mat4 with its new values
+
+### Example
+
+```js
+import { Mat4, Mat4x3, Vec3 } from '@1pizzateam/spock';
+
+const view = new Mat4x3().lookAtRH(new Vec3(0, 2, 6), new Vec3(0, 0, 0), new Vec3(0, 1, 0));
+const projectionView = new Mat4().perspective(60, 16 / 9, 0.1, 100).multiplyAffine(view);
+```
+
+## Mat4.setFromMat4x3()
+
+Copy an affine 4×3 matrix into this one.
+
+Overwrites the contents with the affine matrix; the last row becomes (0, 0, 0, 1).
+
+```ts
+setFromMat4x3(matrix4x3: Mat4x3): Mat4
+```
+
+### Parameters
+
+- `matrix4x3` — `Mat4x3`.
+
+### Returns
+
+`Mat4` — the Mat4 with its new values
+
+### Example
+
+```js
+import { Mat4, Mat4x3, Vec3 } from '@1pizzateam/spock';
+
+const full = new Mat4().setFromMat4x3(new Mat4x3().translate(new Vec3(1, 2, 3)));
+```
+
+## Mat4.transformPoint()
+
+Transform a point including the perspective divide.
+
+Multiplies the point as (x, y, z, 1) and divides by the resulting w. With an inverted projection-view matrix it unprojects normalized device coordinates to world space. The target may be the input vector.
+
+```ts
+transformPoint(vector: Vec3, target: Vec3 = new Vec3()): Vec3
+```
+
+### Parameters
+
+- `vector` — `Vec3`. The point.
+- `target` — `Vec3`. Optional.
+
+### Returns
+
+`Vec3` — the target
+
+### Example
+
+```js
+import { Mat4, Vec3 } from '@1pizzateam/spock';
+
+const inverse = new Mat4().perspective(60, 1, 0.1, 100).invert();
+const nearPoint = inverse.transformPoint(new Vec3(0, 0, -1)); // on the near plane
+```
+

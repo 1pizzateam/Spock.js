@@ -11,21 +11,27 @@ The classes — vectors, matrices, quaternions, and shapes — are mutable. Thei
 ## Vectors
 
 - [Vec2](./vec2) — mutable two-dimensional vector, the workhorse for positions, directions, and sizes
-- [Vec3](./vec3) — mutable three-dimensional vector, plus cross products and the type the 3D transforms speak
+- [Vec3](./vec3) — mutable three-dimensional vector, plus cross products, spherical coordinates, and the type the 3D transforms speak
 - `Vec` — TypeScript interface with `x`, `y`, and optional `z`, for code that accepts either vector
 
 ## Matrices and rotations
 
 - [Mat3](./mat3) — 3×3 matrix for 2D affine transforms
-- [Mat4x3](./mat4x3) — 4×3 affine 3D transform, no projection row, cheaper to invert
-- [Mat4](./mat4) — full 4×4 matrix, adds `perspective()` and `orthographic()`
-- [Quat](./quat) — rotation as a unit quaternion `[w, x, y, z]`, composable and interpolable with `slerp()`
+- [Mat4x3](./mat4x3) — 4×3 affine 3D transform, no projection row, cheaper to invert; `compose()`, point and direction transforms, normal matrix
+- [Mat4](./mat4) — full 4×4 matrix, adds `perspective()`, `orthographic()`, and perspective-divide point transforms
+- [Quat](./quat) — rotation as a unit quaternion `[w, x, y, z]`, composable and interpolable with `slerp()`, with `lookAt()` and matrix/Euler conversion
 
 ## Geometry
 
 - [Circ](./circ) — circle with a centre, a radius, and optional grid occupancy
 - [Rect](./rect) — axis-aligned rectangle with cached corners, also the bounds type for `Vec2.clamp()`
 - [Grid](./grid) — uniform cell lattice used as a broad-phase spatial index
+- [Box](./box) — axis-aligned 3D bounding box: fit, refit through a matrix, containment and overlap
+- [Sphere](./sphere) — 3D bounding sphere with matrix transforms and sphere/box tests
+- [Plane](./plane) — infinite plane with signed point distance
+- [Ray3](./ray3) — 3D ray tested against boxes, spheres, and triangles
+- [Frustum](./frustum) — six view-volume planes from a projection-view matrix, for culling
+- [Ray2](./ray2) — 2D ray with a unit direction, tested against `Rect` and `Circ`
 - `GRID_EMPTY_CELL` — `-1`, the sentinel used for empty occupancy, also exposed as `Grid.emptyCell`
 
 ## Curves

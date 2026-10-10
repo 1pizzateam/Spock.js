@@ -24,7 +24,7 @@ export class Vec2 {
   }
 
   /** Set x, y from array at offset. */
-  public setArray(array: number[], offset: number = 0): Vec2 {
+  public setArray(array: ArrayLike<number>, offset: number = 0): Vec2 {
     this.x = array[offset] ?? this.x;
     this.y = array[offset + 1] ?? this.y;
     return this;
@@ -58,10 +58,11 @@ export class Vec2 {
   }
 
   /** Write [x, y] into target (or a new array). */
-  public toArray(target: number[] = []): number[] {
-    target[0] = this.x;
-    target[1] = this.y;
-    target.length = 2;
+  public toArray<T extends number[] | Float32Array | Float64Array>(target: T = [] as unknown as T, offset: number = 0): T {
+    target[offset] = this.x;
+    target[offset + 1] = this.y;
+    if (offset === 0 && Array.isArray(target))
+      target.length = 2;
     return target;
   }
 

@@ -24,8 +24,8 @@ export class Vec3 {
     return this;
   }
 
-  /** Set x, y, z from array at offset. */
-  public setArray(array: number[], offset: number = 0): Vec3 {
+  /** Set x, y, z from an array or typed array at offset. */
+  public setArray(array: ArrayLike<number>, offset: number = 0): Vec3 {
     this.x = array[offset] ?? this.x;
     this.y = array[offset + 1] ?? this.y;
     this.z = array[offset + 2] ?? this.z;
@@ -60,12 +60,13 @@ export class Vec3 {
     return this.x === 0 && this.y === 0 && this.z === 0;
   }
 
-  /** Write [x, y, z] into target (or a new array). */
-  public toArray(target: number[] = []): number[] {
-    target[0] = this.x;
-    target[1] = this.y;
-    target[2] = this.z;
-    target.length = 3;
+  /** Write [x, y, z] into target at offset (or a new array). */
+  public toArray<T extends number[] | Float32Array | Float64Array>(target: T = [] as unknown as T, offset: number = 0): T {
+    target[offset] = this.x;
+    target[offset + 1] = this.y;
+    target[offset + 2] = this.z;
+    if (offset === 0 && Array.isArray(target))
+      target.length = 3;
     return target;
   }
 
@@ -684,6 +685,38 @@ export class Vec3 {
     this.y = Utils.lerp(min.y, max.y, amount);
     this.z = Utils.lerp(min.z, max.z, amount);
     return this;
+  }
+
+  /** Largest of x, y, z. */
+  public maxComponent(): number {
+    return Math.max(this.x, this.y, this.z);
+  }
+
+  /** Smallest of x, y, z. */
+  public minComponent(): number {
+    return Math.min(this.x, this.y, this.z);
+  }
+
+  /**
+   * Set from spherical coordinates (radians): azimuth about +Y measured from +Z
+   * toward +X, elevation above the XZ plane.
+   */
+  public setFromSpherical(radius: number, azimuth: number, elevation: number): Vec3 {
+    const horizontal = radius * Math.cos(elevation);
+    this.x = horizontal * Math.sin(azimuth);
+    this.y = radius * Math.sin(elevation);
+    this.z = horizontal * Math.cos(azimuth);
+    return this;
+  }
+
+  /** Write (radius, azimuth, elevation) into target; inverse of `setFromSpherical`. */
+  public getSpherical(target: Vec3 = new Vec3()): Vec3 {
+    const x = this.x, y = this.y, z = this.z;
+    const radius = this.getMagnitude();
+    target.x = radius;
+    target.y = Math.atan2(x, z);
+    target.z = radius ? Math.asin(Utils.clamp(y / radius, -1, 1)) : 0;
+    return target;
   }
 
 }

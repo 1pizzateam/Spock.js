@@ -145,7 +145,6 @@ onBeforeUnmount(() => {
   <section class="life-section">
     <div class="life-heading">
       <div>
-        <p class="life-eyebrow">Built with Spock.js</p>
         <h2>Conway's Game of Life demo</h2>
         <p>
           Each generation evolves on a <code>Grid</code>. Seeded
@@ -259,14 +258,6 @@ onBeforeUnmount(() => {
 .life-heading p {
   margin: 0;
   color: var(--vp-c-text-2);
-}
-
-.life-heading .life-eyebrow {
-  color: var(--vp-c-brand-1);
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
 }
 
 .life-actions {

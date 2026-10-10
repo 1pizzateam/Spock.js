@@ -1,11 +1,11 @@
 [![License: MIT](https://img.shields.io/npm/l/@1pizzateam/spock.svg)](https://opensource.org/licenses/MIT)
 [![npm version](https://badge.fury.io/js/%401pizzateam%2Fspock.svg)](https://www.npmjs.com/package/@1pizzateam/spock)
-![Jest:coverage](https://img.shields.io/badge/Jest:coverage-95%25-brightgreen.svg)
+![Jest:coverage](https://img.shields.io/badge/Jest:coverage-96%25-brightgreen.svg)
 
 ## Synopsis
 
 [Spock.js](https://github.com/1pizzateam/Spock.js) is an open source mathematics library written in TypeScript.
-Vectors, matrices, trigonometry, bezier curves, lerp, random distribution and so on.
+Vectors, matrices, quaternions, 2D and 3D geometry (rectangles, circles, boxes, spheres, rays, frustums), trigonometry, bezier curves, lerp, random distribution and so on.
 
 - No dependency
 - Very lightweight

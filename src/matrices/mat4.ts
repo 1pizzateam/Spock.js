@@ -3,6 +3,7 @@ import {Trigo} from '../trigo';
 import {Vec3} from '../vectors/vec3';
 import { matrixToArray, transpose4, determinant4, invert4 } from './buffer';
 import { setLookAtAxes } from './lookAt';
+import type { Mat4x3 } from './mat4x3';
 
 /** 4×4 matrix stored as a Float32Array. */
 export class Mat4 {
@@ -164,8 +165,34 @@ export class Mat4 {
 
   /** Multiply by another 4×4 matrix. */
   public multiply(matrix4x4: Mat4): Mat4 {
+    return this.multiplyBuffer(matrix4x4.m);
+  }
+
+  /** Multiply by an affine 4×3 matrix (this = this × matrix4x3). */
+  public multiplyAffine(matrix4x3: Mat4x3): Mat4 {
+    return this.multiplyBuffer(matrix4x3.toArray());
+  }
+
+  /** Copy an affine 4×3 matrix into this one. */
+  public setFromMat4x3(matrix4x3: Mat4x3): Mat4 {
+    matrixToArray(matrix4x3.toArray(), this.m);
+    return this;
+  }
+
+  /** Transform a point including the perspective divide. target may be vector. */
+  public transformPoint(vector: Vec3, target: Vec3 = new Vec3()): Vec3 {
+    const m = this.m;
+    const x = vector.x, y = vector.y, z = vector.z;
+    const w = m[3] * x + m[7] * y + m[11] * z + m[15];
+    const invW = w !== 0 ? 1 / w : 1;
+    target.x = (m[0] * x + m[4] * y + m[ 8] * z + m[12]) * invW;
+    target.y = (m[1] * x + m[5] * y + m[ 9] * z + m[13]) * invW;
+    target.z = (m[2] * x + m[6] * y + m[10] * z + m[14]) * invW;
+    return target;
+  }
+
+  private multiplyBuffer(b: Float32Array): Mat4 {
     const a = this.m;
-    const b = matrix4x4.m;
     const a00 = a[ 0], a01 = a[ 1], a02 = a[ 2], a03 = a[ 3];
     const a10 = a[ 4], a11 = a[ 5], a12 = a[ 6], a13 = a[ 7];
     const a20 = a[ 8], a21 = a[ 9], a22 = a[10], a23 = a[11];

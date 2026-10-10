@@ -710,3 +710,85 @@ import { Quat } from '@1pizzateam/spock';
 const result = new Quat().isIdentity();
 ```
 
+## Quat.setFromRotationMatrix()
+
+Set from the rotation part of an affine matrix.
+
+Extracts the orientation of a `Mat4x3` and ignores its scale and translation, so it works on a full model matrix. It is the inverse of `toMat4x3()`.
+
+```ts
+setFromRotationMatrix(matrix: Mat4x3): Quat
+```
+
+### Parameters
+
+- `matrix` — `Mat4x3`.
+
+### Returns
+
+`Quat` — the Quat with its new values
+
+### Example
+
+```js
+import { Mat4x3, Quat, Vec3 } from '@1pizzateam/spock';
+
+const model = new Mat4x3().translate(new Vec3(1, 2, 3)).rotateY(0.5).scale(new Vec3(2, 2, 2));
+const rotation = new Quat().setFromRotationMatrix(model);
+```
+
+## Quat.lookAt()
+
+Orientation of an object at `eye` whose -Z axis faces `target`.
+
+Builds the rotation directly, without a matrix, using the same convention as `Mat4x3.lookAtRH()` inverted. The quaternion is left unchanged when `eye` equals `target`.
+
+```ts
+lookAt(eye: Vec3, target: Vec3, up: Vec3): Quat
+```
+
+### Parameters
+
+- `eye` — `Vec3`. The object position.
+- `target` — `Vec3`. The point to face.
+- `up` — `Vec3`. The up direction, usually (0, 1, 0).
+
+### Returns
+
+`Quat` — the Quat with its new values
+
+### Example
+
+```js
+import { Quat, Vec3 } from '@1pizzateam/spock';
+
+const rotation = new Quat().lookAt(new Vec3(0, 0, 0), new Vec3(5, 0, 0), new Vec3(0, 1, 0));
+const forward = rotation.multiplyVector(new Vec3(0, 0, -1)); // (1, 0, 0)
+```
+
+## Quat.getEuler()
+
+Write XYZ Euler angles in radians into target.
+
+The inverse of `setFromEuler()`: feeding the result back reproduces the same rotation. At gimbal lock (Y = ±90°) Z is reported as 0.
+
+```ts
+getEuler(target: Vec3 = new Vec3()): Vec3
+```
+
+### Parameters
+
+- `target` — `Vec3`. Optional.
+
+### Returns
+
+`Vec3` — the target, holding (x, y, z) angles
+
+### Example
+
+```js
+import { Quat, Vec3 } from '@1pizzateam/spock';
+
+const euler = new Quat().setFromEuler(0.3, -0.7, 1.1).getEuler(); // ≈ (0.3, -0.7, 1.1)
+```
+

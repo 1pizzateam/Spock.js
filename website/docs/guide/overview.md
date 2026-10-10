@@ -35,7 +35,8 @@ Most vector, matrix, quaternion, Circ, and Rect operations mutate the instance a
 - [Vec2](/api/vec2) and [Vec3](/api/vec3)
 - [Mat3](/api/mat3), [Mat4x3](/api/mat4x3), and [Mat4](/api/mat4)
 - [Quat](/api/quat)
-- [Circ](/api/circ), [Rect](/api/rect), and [Grid](/api/grid)
+- [Circ](/api/circ), [Rect](/api/rect), [Grid](/api/grid), and [Ray2](/api/ray2) in 2D
+- [Box](/api/box), [Sphere](/api/sphere), [Plane](/api/plane), [Ray3](/api/ray3), and [Frustum](/api/frustum) in 3D
 - [Quadratic](/api/bezier-quadratic) and [Cubic Bézier](/api/bezier-cubic)
 - [Trigo](/api/trigo), [Rand](/api/rand), and [Utils](/api/utils)
 - [NumArray](/api/num-array), [RollingAverage](/api/rolling-average), and [Time](/api/time)

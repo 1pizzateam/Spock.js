@@ -1,6 +1,6 @@
 import { Vec2 } from '../vectors/vec2';
 import type { Circ } from './circ';
-import type { RayHit2D } from './ray';
+import type { RayHit2D } from './rayhit';
 import { type Grid, clearGridCells, GRID_EMPTY_CELL } from './grid';
 import { applyCanvasStyle } from './canvas';
 

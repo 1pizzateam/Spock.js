@@ -99,12 +99,12 @@ Set x, y from array at offset.
 Reads consecutive entries starting at `offset`, which makes it easy to pull one vertex out of a packed buffer. Entries past the end of the array leave that axis unchanged.
 
 ```ts
-setArray(array: number[], offset: number = 0): Vec2
+setArray(array: ArrayLike<number>, offset: number = 0): Vec2
 ```
 
 #### Parameters
 
-- `array` — `number[]`. The array containing values for X and Y axis
+- `array` — `ArrayLike<number>`. A `number[]` or typed array (e.g. `Float32Array`) containing values for X and Y
 - `offset` — `number`. Optional. the starting index of the array
 
 #### Returns
@@ -116,8 +116,8 @@ setArray(array: number[], offset: number = 0): Vec2
 ```js
 import { Vec2 } from '@1pizzateam/spock';
 
-
-const result = new Vec2().setArray([1, 2, 3], 0);
+const uvs = new Float32Array([0, 0, 1, 0, 1, 1]);
+const second = new Vec2().setArray(uvs, 2); // (1, 0)
 ```
 
 ### Vec2.copy()
@@ -178,27 +178,28 @@ const result = new Vec2().clone();
 
 Write [x, y] into target (or a new array).
 
-Passing a target array writes into it and returns it, so you can fill part of a larger buffer without allocating.
+Passing a target writes into it and returns it, so you can fill part of a larger buffer without allocating. The target can be a `number[]` or a typed array, and `offset` selects where in it the two values go; a plain array is only trimmed to length 2 when `offset` is 0.
 
 ```ts
-toArray(target: number[] = []): number[]
+toArray(target: number[] | Float32Array | Float64Array = [], offset: number = 0): typeof target
 ```
 
 #### Parameters
 
-- `target` — `number[]`. Optional.
+- `target` — `number[] | Float32Array | Float64Array`. Optional.
+- `offset` — `number`. Optional. index in `target` of the first value
 
 #### Returns
 
-`number[]` — The vector exported as an array
+`number[] | Float32Array | Float64Array` — the target (or a new array)
 
 #### Example
 
 ```js
 import { Vec2 } from '@1pizzateam/spock';
 
-
-const result = new Vec2().toArray([1, 2, 3]);
+const buffer = new Float32Array(4);
+new Vec2(1, 2).toArray(buffer, 2); // [0, 0, 1, 2]
 ```
 
 ### Vec2.toString()

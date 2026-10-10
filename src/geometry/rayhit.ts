@@ -1,4 +1,4 @@
-import { Vec2 } from '../vectors/vec2';
+import type { Vec2 } from '../vectors/vec2';
 
 /** 2D ray intersection hit result. */
 export interface RayHit2D {

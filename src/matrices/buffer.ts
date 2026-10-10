@@ -61,7 +61,7 @@ export function invertLinear3(m: Float32Array, stride: number): boolean {
   const b00 = a11 * a22 - a12 * a21;
   const b10 = a12 * a20 - a10 * a22;
   const b20 = a10 * a21 - a11 * a20;
-  const det = a00 * b00 + a10 * b10 + a20 * b20;
+  const det = a00 * b00 + a01 * b10 + a02 * b20;
   if (!det)
     return false;
   const inv = 1 / det;

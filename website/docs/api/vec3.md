@@ -25,7 +25,7 @@ const angle = forward.getAngle(up); // radians, or false for a zero-length vecto
 | **Creation & Component State** | [`new Vec3()`](#constructor) · [`setScalar()`](#vec3-setscalar) · [`setArray()`](#vec3-setarray) · [`copy()`](#vec3-copy) · [`clone()`](#vec3-clone) · [`toArray()`](#vec3-toarray) · [`toString()`](#vec3-tostring) · [`isOrigin()`](#vec3-isorigin) · [`origin()`](#vec3-origin) · [`equals()`](#vec3-equals) · [`isEqualTo()`](#vec3-isequalto) · [`isPositive()`](#vec3-ispositive) |
 | **Arithmetic & Modification** | [`add()`](#vec3-add) · [`addScaledVector()`](#vec3-addscaledvector) · [`addScalar()`](#vec3-addscalar) · [`addComponents()`](#vec3-addcomponents) · [`subtract()`](#vec3-subtract) · [`subtractScaledVector()`](#vec3-subtractscaledvector) · [`subtractScalar()`](#vec3-subtractscalar) · [`multiply()`](#vec3-multiply) · [`multiplyScaledVector()`](#vec3-multiplyscaledvector) · [`scale()`](#vec3-scale) · [`divide()`](#vec3-divide) · [`divideScaledVector()`](#vec3-dividescaledvector) · [`divideScalar()`](#vec3-dividescalar) · [`halve()`](#vec3-halve) · [`opposite()`](#vec3-opposite) · [`absolute()`](#vec3-absolute) · [`sign()`](#vec3-sign) · [`floor()`](#vec3-floor) · [`ceil()`](#vec3-ceil) · [`max()`](#vec3-max) · [`min()`](#vec3-min) · [`maxScalar()`](#vec3-maxscalar) · [`minScalar()`](#vec3-minscalar) |
 | **Target Operations** | [`addVectors()`](#vec3-addvectors) · [`subVectors()`](#vec3-subvectors) · [`multiplyVectors()`](#vec3-multiplyvectors) · [`scaleVector()`](#vec3-scalevector) · [`divideVectors()`](#vec3-dividevectors) · [`minVectors()`](#vec3-minvectors) · [`maxVectors()`](#vec3-maxvectors) · [`clampVectors()`](#vec3-clampvectors) · [`oppositeVector()`](#vec3-oppositevector) · [`absoluteVector()`](#vec3-absolutevector) · [`normalizeVector()`](#vec3-normalizevector) · [`crossVectors()`](#vec3-crossvectors) |
-| **Geometric & Spatial Operations** | [`getMagnitude()`](#vec3-getmagnitude) · [`getDistance()`](#vec3-getdistance) · [`normalize()`](#vec3-normalize) · [`dotProduct()`](#vec3-dotproduct) · [`cross()`](#vec3-cross) · [`getAngle()`](#vec3-getangle) · [`clamp()`](#vec3-clamp) · [`clampScalar()`](#vec3-clampscalar) · [`isInBounds()`](#vec3-isinbounds) · [`lerp()`](#vec3-lerp) |
+| **Geometric & Spatial Operations** | [`getMagnitude()`](#vec3-getmagnitude) · [`getDistance()`](#vec3-getdistance) · [`normalize()`](#vec3-normalize) · [`dotProduct()`](#vec3-dotproduct) · [`cross()`](#vec3-cross) · [`getAngle()`](#vec3-getangle) · [`clamp()`](#vec3-clamp) · [`clampScalar()`](#vec3-clampscalar) · [`isInBounds()`](#vec3-isinbounds) · [`lerp()`](#vec3-lerp) · [`maxComponent()`](#vec3-maxcomponent) · [`minComponent()`](#vec3-mincomponent) · [`setFromSpherical()`](#vec3-setfromspherical) · [`getSpherical()`](#vec3-getspherical) |
 | **Bézier Curves** | [`quadraticBezier()`](#vec3-quadraticbezier) · [`cubicBezier()`](#vec3-cubicbezier) · [`quadraticBezierDerivative()`](#vec3-quadraticbezierderivative) · [`cubicBezierDerivative()`](#vec3-cubicbezierderivative) · [`quadraticBezierSplit()`](#vec3-quadraticbeziersplit) · [`cubicBezierSplit()`](#vec3-cubicbeziersplit) · [`quadraticBezierLength()`](#vec3-quadraticbezierlength) · [`cubicBezierLength()`](#vec3-cubicbezierlength) · [`quadraticBezierParameterAtLength()`](#vec3-quadraticbezierparameteratlength) · [`cubicBezierParameterAtLength()`](#vec3-cubicbezierparameteratlength) |
 
 ---
@@ -96,12 +96,12 @@ Set x, y, z from array at offset.
 Reads consecutive entries starting at `offset`, which makes it easy to pull one vertex out of a packed buffer. Entries past the end of the array leave that axis unchanged.
 
 ```ts
-setArray(array: number[], offset: number = 0): Vec3
+setArray(array: ArrayLike<number>, offset: number = 0): Vec3
 ```
 
 #### Parameters
 
-- `array` — `number[]`. The array containing values for x, y and z axis
+- `array` — `ArrayLike<number>`. A `number[]` or typed array (e.g. `Float32Array`) containing values for x, y and z
 - `offset` — `number`. Optional. the starting index of the array
 
 #### Returns
@@ -113,8 +113,8 @@ setArray(array: number[], offset: number = 0): Vec3
 ```js
 import { Vec3 } from '@1pizzateam/spock';
 
-
-const result = new Vec3().setArray([1, 2, 3], 0);
+const vertices = new Float32Array([0, 0, 0, 1, 2, 3]);
+const second = new Vec3().setArray(vertices, 3); // (1, 2, 3)
 ```
 
 ### Vec3.copy()
@@ -175,27 +175,28 @@ const result = new Vec3().clone();
 
 Write [x, y, z] into target (or a new array).
 
-Passing a target array writes into it and returns it, so you can fill part of a larger buffer without allocating.
+Passing a target writes into it and returns it, so you can fill part of a larger buffer without allocating. The target can be a `number[]` or a typed array, and `offset` selects where in it the three values go; a plain array is only trimmed to length 3 when `offset` is 0.
 
 ```ts
-toArray(target: number[] = []): number[]
+toArray(target: number[] | Float32Array | Float64Array = [], offset: number = 0): typeof target
 ```
 
 #### Parameters
 
-- `target` — `number[]`. Optional.
+- `target` — `number[] | Float32Array | Float64Array`. Optional.
+- `offset` — `number`. Optional. index in `target` of the first value
 
 #### Returns
 
-`number[]` — The vector as an array
+`number[] | Float32Array | Float64Array` — the target (or a new array)
 
 #### Example
 
 ```js
 import { Vec3 } from '@1pizzateam/spock';
 
-
-const result = new Vec3().toArray([1, 2, 3]);
+const buffer = new Float32Array(6);
+new Vec3(1, 2, 3).toArray(buffer, 3); // [0, 0, 0, 1, 2, 3]
 ```
 
 ### Vec3.toString()
@@ -1717,6 +1718,110 @@ current.lerp(target, 0.1); // moves 10% towards target
 
 
 const result = new Vec3().lerp(new Vec3(1, 2, 3), new Vec3(1, 2, 3), 0.5);
+```
+
+### Vec3.maxComponent()
+
+Largest of `x`, `y`, and `z`.
+
+Reduces a vector to a scalar. Typical uses are the largest axis scale of a transform or the far end of a slab test.
+
+```ts
+maxComponent(): number
+```
+
+#### Parameters
+
+None.
+
+#### Returns
+
+`number` — the largest component
+
+#### Example
+
+```js
+import { Vec3 } from '@1pizzateam/spock';
+
+const result = new Vec3(-1, 5, 2).maxComponent(); // 5
+```
+
+### Vec3.minComponent()
+
+Smallest of `x`, `y`, and `z`.
+
+```ts
+minComponent(): number
+```
+
+#### Parameters
+
+None.
+
+#### Returns
+
+`number` — the smallest component
+
+#### Example
+
+```js
+import { Vec3 } from '@1pizzateam/spock';
+
+const result = new Vec3(-1, 5, 2).minComponent(); // -1
+```
+
+### Vec3.setFromSpherical()
+
+Set from spherical coordinates.
+
+Angles are in radians. The azimuth turns about +Y, measured from +Z toward +X, and the elevation is the angle above the XZ plane, so `setFromSpherical(r, 0, 0)` is `(0, 0, r)`. It is the building block for orbit cameras: add the target position to get the camera position.
+
+```ts
+setFromSpherical(radius: number, azimuth: number, elevation: number): Vec3
+```
+
+#### Parameters
+
+- `radius` — `number`. Distance from the origin.
+- `azimuth` — `number`. Angle about +Y.
+- `elevation` — `number`. Angle above the XZ plane.
+
+#### Returns
+
+`Vec3` — This vector with its updated values.
+
+#### Example
+
+```js
+import { Vec3 } from '@1pizzateam/spock';
+
+const eye = new Vec3().setFromSpherical(10, Math.PI / 4, 0.3).add(new Vec3(0, 1, 0));
+```
+
+### Vec3.getSpherical()
+
+Write the spherical coordinates of this vector into target.
+
+The inverse of `setFromSpherical()`. The result holds `(radius, azimuth, elevation)` in `x`, `y`, and `z`. The target may be this vector, and the origin gives a zero radius and elevation.
+
+```ts
+getSpherical(target: Vec3 = new Vec3()): Vec3
+```
+
+#### Parameters
+
+- `target` — `Vec3`. Optional.
+
+#### Returns
+
+`Vec3` — the target, holding `(radius, azimuth, elevation)`
+
+#### Example
+
+```js
+import { Vec3 } from '@1pizzateam/spock';
+
+const { x: radius, y: azimuth, z: elevation } = new Vec3(0, 0, 4).getSpherical(); // 4, 0, 0
 ```
 
 ## Bézier Curves

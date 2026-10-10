@@ -19,10 +19,10 @@ features:
     details: Mutable 2D and 3D vectors with arithmetic, interpolation, curves, and spatial helpers.
   - icon: 🔲
     title: Matrices
-    details: 3×3, affine 4×3, and 4×4 transforms with composition, inversion, and camera matrices.
+    details: 3×3, affine 4×3, and 4×4 transforms with composition, inversion, point and normal transforms, and camera matrices.
   - icon: 📐
     title: Geometry
-    details: Circles, rectangles, grids, occupancy checks, and canvas drawing.
+    details: Circles, rectangles, grids, 3D boxes, spheres, planes, frustums, and 2D/3D rays with occupancy checks and canvas drawing.
   - icon: 〰️
     title: Curves
     details: Quadratic and cubic Bézier evaluation, derivatives, splits, and sampled arc lengths.
@@ -31,7 +31,7 @@ features:
     details: Uniform values, distributions, picks, and replayable seeded generators.
   - icon: 🔄
     title: Quaternions
-    details: Axis-angle and Euler rotations, Hamilton products, slerp, vector rotation, and matrix conversion.
+    details: Axis-angle and Euler rotations, look-at, Hamilton products, slerp, vector rotation, and matrix conversion.
 ---
 
 <GameOfLife />

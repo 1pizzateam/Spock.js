@@ -52,6 +52,7 @@ export default defineConfig({
         items: [
           { text: 'Overview', link: '/guide/overview' },
           { text: 'Installation', link: '/guide/installation' },
+          { text: 'Recipes', link: '/guide/recipes' },
         ],
       },
       {
@@ -82,6 +83,12 @@ export default defineConfig({
           { text: 'Circ', link: '/api/circ' },
           { text: 'Rect', link: '/api/rect' },
           { text: 'Grid', link: '/api/grid' },
+          { text: 'Ray2', link: '/api/ray2' },
+          { text: 'Box', link: '/api/box' },
+          { text: 'Sphere', link: '/api/sphere' },
+          { text: 'Plane', link: '/api/plane' },
+          { text: 'Ray3', link: '/api/ray3' },
+          { text: 'Frustum', link: '/api/frustum' },
         ],
       },
       {

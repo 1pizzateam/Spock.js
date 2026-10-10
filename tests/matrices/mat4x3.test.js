@@ -80,4 +80,18 @@ describe('Mat4x3', () => {
     expect(Array.from(singular.toArray())).toEqual(before);
   });
 
+  it('should invert arbitrary rotations and translations so the product is identity', () => {
+    for (let deg = 0; deg <= 360; deg += 30) {
+      const rad = deg * Math.PI / 180;
+      const original = new Mat4x3().translate(new Vec3(1, 2, 3)).rotateY(rad).rotateX(rad * 0.5);
+      const product = new Mat4x3().copy(original).invertAffine().multiply(original).toArray();
+      expect(product[0]).toBeCloseTo(1, 4);
+      expect(product[5]).toBeCloseTo(1, 4);
+      expect(product[10]).toBeCloseTo(1, 4);
+      expect(product[12]).toBeCloseTo(0, 4);
+      expect(product[13]).toBeCloseTo(0, 4);
+      expect(product[14]).toBeCloseTo(0, 4);
+    }
+  });
+
 });
