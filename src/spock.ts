@@ -7,6 +7,7 @@ export { NumArray, RollingAverage } from './array';
 export { Bezier }       from './bezier';
 export { Circ }       from './geometry/circ';
 export { Rect }    from './geometry/rect';
+export { RightTriangle, raycastSegment, type TriangleCorner, type TriangleShape } from './geometry/triangle';
 export { Grid, GRID_EMPTY_CELL } from './geometry/grid';
 export { Box }        from './geometry/box';
 export { Sphere }     from './geometry/sphere';

@@ -1,5 +1,5 @@
 <script setup>
-import { Circ, Rect, Ray2, Vec2 } from '@1pizzateam/spock';
+import { Circ, Rect, RightTriangle, Ray2, Vec2 } from '@1pizzateam/spock';
 import DemoFrame from './DemoFrame.vue';
 import { dot, label, polyline } from '../canvas.js';
 
@@ -17,8 +17,8 @@ let shapes = [];
 
 function layout() {
   shapes = [
-    new Rect(new Vec2(60, 120), new Vec2(width * 0.55, height * 0.3)),
-    new Rect(new Vec2(110, 40), new Vec2(width * 0.72, height * 0.74)),
+    new Rect(new Vec2(60, 120), new Vec2(width * 0.52, height * 0.3)),
+    new RightTriangle(new Vec2(84, 84), new Vec2(width * 0.74, height * 0.68), 'se'),
     new Circ(42, new Vec2(width * 0.42, height * 0.7)),
   ];
 }
@@ -42,9 +42,11 @@ function draw(context, state, theme) {
   // keep the nearest hit across every shape
   let found = false;
   for (const shape of shapes) {
-    const result = shape instanceof Rect
-      ? ray.intersectRect(shape, maxDistance, hit)
-      : ray.intersectCirc(shape, maxDistance, hit);
+    const result = shape instanceof RightTriangle
+      ? ray.intersectTriangle(shape, maxDistance, hit)
+      : shape instanceof Rect
+        ? ray.intersectRect(shape, maxDistance, hit)
+        : ray.intersectCirc(shape, maxDistance, hit);
     if (result && (!found || result.fraction < best.fraction)) {
       best.fraction = result.fraction;
       best.point.copy(result.point);
@@ -53,18 +55,9 @@ function draw(context, state, theme) {
     }
   }
 
-  context.lineWidth = 2;
-  for (const shape of shapes) {
-    context.fillStyle = theme.dark ? 'rgba(91, 140, 255, 0.10)' : 'rgba(91, 140, 255, 0.14)';
-    context.strokeStyle = theme.accent;
-    context.beginPath();
-    if (shape instanceof Rect)
-      context.rect(shape.topLeftCorner.x, shape.topLeftCorner.y, shape.size.x, shape.size.y);
-    else
-      context.arc(shape.position.x, shape.position.y, shape.radius, 0, Math.PI * 2);
-    context.fill();
-    context.stroke();
-  }
+  const fill = theme.dark ? 'rgba(91, 140, 255, 0.10)' : 'rgba(91, 140, 255, 0.14)';
+  for (const shape of shapes)
+    shape.draw(context, fill, theme.accent, 2);
 
   const end = found ? best.point : ray.at(maxDistance, hitPoint);
   polyline(context, [[origin.x, origin.y], [end.x, end.y]], found ? theme.fresh : theme.guide, 2);
@@ -88,8 +81,8 @@ function draw(context, state, theme) {
 
 <template>
   <DemoFrame :draw="draw">
-    A <code>Ray2</code> aimed at the pointer tests two rectangles and a circle with
-    <code>ray.intersectRect()</code> and <code>ray.intersectCirc()</code>, reusing one hit object
+    A <code>Ray2</code> aimed at the pointer tests a rectangle, a right triangle, and a circle with
+    <code>ray.intersectRect()</code>, <code>ray.intersectTriangle()</code>, and <code>ray.intersectCirc()</code>, reusing one hit object
     and keeping the nearest. Distance along the ray is <code>hit.fraction * maxDistance</code>.
   </DemoFrame>
 </template>

@@ -70,14 +70,14 @@ describe('Vec2', () => {
   });
 
   it('should lerp between two vectors', () => {
-    const v = new Vec2().lerp(new Vec2(0, 0), new Vec2(10, 10), 0.5);
+    const v = new Vec2().lerpVectors(new Vec2(0, 0), new Vec2(10, 10), 0.5);
     expect(v.x).toBe(5);
     expect(v.y).toBe(5);
   });
 
-  it('should clamp to a rectangle', () => {
-    const rect = new Rect(10, 10, 5, 5);
-    const v = new Vec2(20, -4).clamp(rect);
+  it('should clamp to bounds', () => {
+    const rect = new Rect(new Vec2(10, 10), new Vec2(5, 5));
+    const v = new Vec2(20, -4).clamp(rect.topLeftCorner, rect.bottomRightCorner);
     expect(v.x).toBe(10);
     expect(v.y).toBe(0);
   });
@@ -330,9 +330,9 @@ describe('Vec2', () => {
     expect(h.y).toBe(-9);
   });
 
-  it('should clamp inside a Rect or between min and max Vec2', () => {
-    const rect = new Rect(10, 10, 0, 0); // [-5, 5] x [-5, 5]
-    const v1 = new Vec2(12, -8).clamp(rect);
+  it('should clamp between min and max Vec2', () => {
+    const rect = new Rect(new Vec2(10, 10), new Vec2(0, 0)); // [-5, 5] x [-5, 5]
+    const v1 = new Vec2(12, -8).clamp(rect.topLeftCorner, rect.bottomRightCorner);
     expect(v1.x).toBe(5);
     expect(v1.y).toBe(-5);
 
@@ -481,12 +481,6 @@ describe('Vec2', () => {
     expect(a.x).toBe(5);
     expect(a.y).toBe(15);
 
-    // Backwards-compatible 3-argument lerp
-    const c = new Vec2();
-    c.lerp(new Vec2(0, 0), new Vec2(100, 200), 0.25);
-    expect(c.x).toBe(25);
-    expect(c.y).toBe(50);
-
     // Explicit lerpVectors
     const dest = new Vec2();
     expect(dest.lerpVectors(new Vec2(0, 0), new Vec2(10, 20), 0.5)).toBe(dest);
@@ -527,15 +521,6 @@ describe('Vec2', () => {
     expect(right[2].x).toBe(10);
     expect(left[2].x).toBeCloseTo(right[0].x, 5);
     expect(left[2].y).toBeCloseTo(right[0].y, 5);
-  });
-
-  it('should support isInBounds with Rect', () => {
-    const rect = {
-      topLeftCorner: new Vec2(10, 10),
-      bottomRightCorner: new Vec2(20, 20)
-    };
-    expect(new Vec2(15, 15).isInBounds(rect)).toBe(true);
-    expect(new Vec2(5, 15).isInBounds(rect)).toBe(false);
   });
 
 });

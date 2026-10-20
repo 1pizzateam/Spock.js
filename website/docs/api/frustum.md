@@ -49,15 +49,15 @@ frustum.planes.length; // 6
 
 Extract the planes from a projection-view matrix.
 
-Uses the standard row combinations of a column-major matrix and normalizes each plane. Pass a `Mat4`, or its `Float32Array` / `number[]` when the matrix lives in a buffer. The matrix is projection × view; combine them with `Mat4.multiplyAffine()`.
+Uses the standard row combinations of a column-major `Mat4` and normalizes each plane. The matrix is projection × view; combine them with `Mat4.multiplyAffine()`.
 
 ```ts
-setFromProjectionViewMatrix(matrixOrArray: Mat4 | Float32Array | number[]): Frustum
+setFromProjectionViewMatrix(matrix: Mat4): Frustum
 ```
 
 ### Parameters
 
-- `matrixOrArray` — `Mat4 | Float32Array | number[]`. A projection-view matrix.
+- `matrix` — `Mat4`. A projection-view matrix.
 
 ### Returns
 

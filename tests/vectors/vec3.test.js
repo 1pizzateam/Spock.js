@@ -58,7 +58,7 @@ describe('Vec3', () => {
   });
 
   it('should lerp between two vectors', () => {
-    const v = new Vec3().lerp(new Vec3(0, 0, 0), new Vec3(10, 20, 30), 0.5);
+    const v = new Vec3().lerpVectors(new Vec3(0, 0, 0), new Vec3(10, 20, 30), 0.5);
     expect(v.x).toBe(5);
     expect(v.y).toBe(10);
     expect(v.z).toBe(15);

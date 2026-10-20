@@ -22,8 +22,8 @@ export class Frustum {
   }
 
   /** Extract the planes from a column-major projection * view matrix. */
-  public setFromProjectionViewMatrix(matrixOrArray: Mat4 | Float32Array | number[]): this {
-    const m = matrixOrArray instanceof Mat4 ? matrixOrArray.toArray() : matrixOrArray;
+  public setFromProjectionViewMatrix(matrix: Mat4): this {
+    const m = matrix.toArray();
     // Column-major rows: row 0 = m[0], m[4], m[8], m[12]; row 3 = m[3], m[7], m[11], m[15]
 
     // Left plane: row 3 + row 0

@@ -466,7 +466,7 @@ import { Mat4x3, Quat, Vec3 } from '@1pizzateam/spock';
 
 const model = new Mat4x3().compose(
   new Vec3(1, 2, 3),
-  new Quat().setFromEuler(0, Math.PI / 2, 0),
+  new Quat().setFromEuler(new Vec3(0, Math.PI / 2, 0)),
   new Vec3(2, 2, 2)
 );
 ```

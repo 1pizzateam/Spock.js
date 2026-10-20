@@ -33,10 +33,10 @@ function draw(context, state, theme) {
       height * 0.5 + Math.sin(state.time * 0.9) * height * 0.4
     );
 
-  clamped.copy(pointer).clamp(inner);
+  clamped.copy(pointer).clamp(inner.topLeftCorner, inner.bottomRightCorner);
   circle.setPosition(clamped);
 
-  const inside = pointer.isInBounds(bounds);
+  const inside = pointer.isInBounds(bounds.topLeftCorner, bounds.bottomRightCorner);
   const distance = pointer.getDistance(bounds.position);
 
   bounds.draw(context, '', theme.guide, 1);
@@ -66,8 +66,8 @@ function draw(context, state, theme) {
 <template>
   <DemoFrame :draw="draw">
     Move the pointer around the rectangle. The ghost is the unconstrained point; the filled
-    circle is that same <code>Vec2</code> after <code>clamp()</code> against the inner box,
-    tested with <code>pointer.isInBounds(bounds)</code>, so the disc never crosses the outer edge. The caption is
+    circle is that same <code>Vec2</code> after <code>clamp(min, max)</code> against the inner box,
+    tested with <code>pointer.isInBounds(min, max)</code>, so the disc never crosses the outer edge. The caption is
     <code>getDistance()</code> from the pointer to the rectangle centre.
   </DemoFrame>
 </template>

@@ -36,7 +36,7 @@ describe('Ray2', () => {
   });
 
   test('intersectRect reports the hit with a fraction of maxDistance', () => {
-    const rect = new Rect(2, 2, 10, 0);
+    const rect = new Rect(new Vec2(2, 2), new Vec2(10, 0));
     const ray = new Ray2(new Vec2(0, 0), new Vec2(1, 0));
     const hit = ray.intersectRect(rect, 20);
     expect(hit).not.toBeNull();
@@ -47,14 +47,14 @@ describe('Ray2', () => {
   });
 
   test('intersectRect misses when out of range or pointing away', () => {
-    const rect = new Rect(2, 2, 10, 0);
+    const rect = new Rect(new Vec2(2, 2), new Vec2(10, 0));
     expect(new Ray2(new Vec2(0, 0), new Vec2(1, 0)).intersectRect(rect, 5)).toBeNull();
     expect(new Ray2(new Vec2(0, 0), new Vec2(-1, 0)).intersectRect(rect, 50)).toBeNull();
     expect(new Ray2(new Vec2(0, 5), new Vec2(1, 0)).intersectsRect(rect, 50)).toBe(false);
   });
 
   test('intersectCirc reports the hit and normal', () => {
-    const circ = new Circ(2, 10, 0);
+    const circ = new Circ(2, new Vec2(10, 0));
     const ray = new Ray2(new Vec2(0, 0), new Vec2(1, 0));
     const hit = ray.intersectCirc(circ, 30);
     expect(hit).not.toBeNull();
@@ -66,7 +66,7 @@ describe('Ray2', () => {
   });
 
   test('works with diagonal rays and writes into a provided hit', () => {
-    const rect = new Rect(2, 2, 5, 5);
+    const rect = new Rect(new Vec2(2, 2), new Vec2(5, 5));
     const ray = new Ray2(new Vec2(0, 0), new Vec2(1, 1));
     const target = { fraction: 0, point: new Vec2(), normal: new Vec2() };
     const hit = ray.intersectRect(rect, 20, target);
@@ -76,7 +76,7 @@ describe('Ray2', () => {
   });
 
   test('a ray starting inside a shape hits immediately', () => {
-    const hit = new Ray2(new Vec2(10, 0), new Vec2(1, 0)).intersectRect(new Rect(2, 2, 10, 0), 5);
+    const hit = new Ray2(new Vec2(10, 0), new Vec2(1, 0)).intersectRect(new Rect(new Vec2(2, 2), new Vec2(10, 0)), 5);
     expect(hit.fraction).toBe(0);
   });
 });

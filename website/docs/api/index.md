@@ -24,14 +24,15 @@ The classes — vectors, matrices, quaternions, and shapes — are mutable. Thei
 ## Geometry
 
 - [Circ](./circ) — circle with a centre, a radius, and optional grid occupancy
-- [Rect](./rect) — axis-aligned rectangle with cached corners, also the bounds type for `Vec2.clamp()`
+- [Rect](./rect) — axis-aligned rectangle with cached corners and optional grid occupancy
+- [RightTriangle](./triangle) — axis-aligned right triangle (`'nw' | 'ne' | 'sw' | 'se'`) extending `Rect` with hypotenuse normal/tangent helpers
 - [Grid](./grid) — uniform cell lattice used as a broad-phase spatial index
 - [Box](./box) — axis-aligned 3D bounding box: fit, refit through a matrix, containment and overlap
 - [Sphere](./sphere) — 3D bounding sphere with matrix transforms and sphere/box tests
 - [Plane](./plane) — infinite plane with signed point distance
 - [Ray3](./ray3) — 3D ray tested against boxes, spheres, and triangles
 - [Frustum](./frustum) — six view-volume planes from a projection-view matrix, for culling
-- [Ray2](./ray2) — 2D ray with a unit direction, tested against `Rect` and `Circ`
+- [Ray2](./ray2) — 2D ray with a unit direction, tested against `Rect`, `RightTriangle`, and `Circ`
 - `GRID_EMPTY_CELL` — `-1`, the sentinel used for empty occupancy, also exposed as `Grid.emptyCell`
 
 ## Curves

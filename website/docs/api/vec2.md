@@ -6,14 +6,14 @@ A mutable two-dimensional vector: public `x` and `y` numbers plus the operations
 
 Use it for positions, directions, velocities, sizes, and any other 2D pair. Nearly every method writes into the vector it was called on and returns that same vector, so operations chain and a render loop can reuse a handful of instances instead of allocating a new one each frame. When you need an independent value, take a `clone()` first.
 
-On top of arithmetic it carries magnitude and distance queries, normalization, per-axis rounding, angle helpers that read and write the vector's heading, interpolation with `lerp()`, clamping into a `Rect`, and Bézier evaluation, so curve sampling stays in vector space.
+On top of arithmetic it carries magnitude and distance queries, normalization, per-axis rounding, angle helpers that read and write the vector's heading, interpolation with `lerp()` / `lerpVectors()`, clamping between `min` and `max` bounds, and Bézier evaluation, so curve sampling stays in vector space.
 
 ```js
 import { Utils, Vec2 } from '@1pizzateam/spock';
 
 const start = new Vec2(0, 20);
 const end = new Vec2(100, 80);
-const point = new Vec2().lerp(start, end, 0.35);
+const point = new Vec2().lerpVectors(start, end, 0.35);
 
 const radius = Utils.lerp(8, 30, 0.35);
 
@@ -1613,18 +1613,16 @@ reflect(normal: Vec2): Vec2
 
 ### Vec2.clamp()
 
-Clamp this point inside a rectangle or between min and max bounds.
+Clamp this point between min and max bounds in-place.
 
-Confines this point to a `Rect` or between `(min, max)` vector corners. A point already inside is left untouched.
+Confines this point between `(min, max)` vector corners. A point already inside is left untouched.
 
 ```ts
-clamp(rect: Rect): Vec2
 clamp(min: Vec2, max: Vec2): Vec2
 ```
 
 #### Parameters
 
-- `rect` — `Rect`. Rectangle bounds
 - `min` — `Vec2`. Lower-left bounds
 - `max` — `Vec2`. Upper-right bounds
 
@@ -1635,10 +1633,9 @@ clamp(min: Vec2, max: Vec2): Vec2
 #### Example
 
 ```js
-import { Vec2, Rect } from '@1pizzateam/spock';
+import { Vec2 } from '@1pizzateam/spock';
 
 const pos = new Vec2(150, -20);
-pos.clamp(new Rect(100, 100, 0, 0)); // clamped to rectangle
 pos.clamp(new Vec2(0, 0), new Vec2(100, 100)); // clamped between min and max
 ```
 
@@ -1685,16 +1682,14 @@ clampToExtent(extent: Vec2): Vec2
 
 ### Vec2.isInBounds()
 
-True if this point lies inside or on the axis-aligned bounds defined by min and max corners, or inside a `Rect`.
+True if this point lies inside or on the axis-aligned bounds defined by min and max corners.
 
 ```ts
-isInBounds(rect: Rect): boolean
 isInBounds(min: Vec2, max: Vec2): boolean
 ```
 
 #### Parameters
 
-- `rect` — `Rect`. Rectangle to test containment against
 - `min` — `Vec2`. First bounding corner
 - `max` — `Vec2`. Opposite bounding corner
 
@@ -1705,10 +1700,7 @@ isInBounds(min: Vec2, max: Vec2): boolean
 #### Example
 
 ```js
-import { Vec2, Rect } from '@1pizzateam/spock';
-
-const rect = new Rect(new Vec2(100, 100), new Vec2(50, 50));
-const insideRect = new Vec2(50, 50).isInBounds(rect); // true
+import { Vec2 } from '@1pizzateam/spock';
 
 const min = new Vec2(0, 0);
 const max = new Vec2(100, 100);
@@ -1717,20 +1709,16 @@ const inside = new Vec2(50, 50).isInBounds(min, max); // true
 
 ### Vec2.lerp()
 
-Linearly interpolate towards target or between two vectors.
-
-Interpolates in-place towards `target` by `amount`, or sets this vector to the interpolation from `min` to `max`.
+Linearly interpolate towards `target` in-place by `amount`.
 
 ```ts
 lerp(target: Vec2, amount: number): Vec2
-lerp(min: Vec2, max: Vec2, amount: number): Vec2
 ```
 
 #### Parameters
 
-- `targetOrMin` — `Vec2`. Target vector to lerp towards, or `min` start vector.
-- `amountOrMax` — `number | Vec2`. Interpolation factor `t` in `[0, 1]`, or `max` end vector.
-- `amount` — `number` (optional). Interpolation factor when 3 arguments are passed.
+- `target` — `Vec2`. Target vector to lerp towards.
+- `amount` — `number`. Interpolation factor `t` in `[0, 1]`.
 
 #### Returns
 
@@ -1744,10 +1732,6 @@ import { Vec2 } from '@1pizzateam/spock';
 const current = new Vec2(0, 0);
 const target = new Vec2(100, 100);
 current.lerp(target, 0.1); // moves 10% towards target
-```
-
-
-const result = new Vec2().lerp(new Vec2(1, 2), new Vec2(1, 2), 0.5);
 ```
 
 ## Angles & Axes

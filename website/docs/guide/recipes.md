@@ -75,7 +75,7 @@ A `Ray2` is tested against any number of `Rect` and `Circ` shapes. Pass a reusab
 ```js
 import { Circ, Ray2, Rect, Vec2 } from '@1pizzateam/spock';
 
-const walls = [new Rect(2, 10, 10, 0), new Circ(2, 20, 0)];
+const walls = [new Rect(new Vec2(2, 10), new Vec2(10, 0)), new Circ(2, new Vec2(20, 0))];
 const viewer = new Ray2(new Vec2(0, 0), new Vec2(1, 0));
 const maxDistance = 50;
 

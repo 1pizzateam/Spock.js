@@ -1,6 +1,5 @@
 import { Trigo, applySineCosine } from '../trigo';
 import { Bezier, sampleCurveLength, sampleCurveParameterAtLength } from '../bezier';
-import type { Rect } from '../geometry/rect';
 import { Utils } from '../utils';
 
 /** Mutable 2D vector. */
@@ -691,14 +690,9 @@ export class Vec2 {
     return this.y < this.x ? 'y' : 'x';
   }
 
-  /** Clamp this point inside a rectangle or between min and max bounds. */
-  public clamp(rect: Rect): Vec2;
-  public clamp(min: Vec2, max: Vec2): Vec2;
-  public clamp(minOrRect: Vec2 | Rect, max?: Vec2): Vec2 {
-    if (max !== undefined)
-      return this.clampVectors(this, minOrRect as Vec2, max);
-    const rect = minOrRect as Rect;
-    return this.clampVectors(this, rect.topLeftCorner, rect.bottomRightCorner);
+  /** Clamp this point between min and max bounds. */
+  public clamp(min: Vec2, max: Vec2): Vec2 {
+    return this.clampVectors(this, min, max);
   }
 
   /** Set this vector to value clamped between min and max bounds. */
@@ -729,34 +723,19 @@ export class Vec2 {
     return this;
   }
 
-  /** True if this point lies inside or on an axis-aligned bounding box or Rect. */
-  public isInBounds(rect: Rect): boolean;
-  public isInBounds(min: Vec2, max: Vec2): boolean;
-  public isInBounds(minOrRect: Vec2 | Rect, max?: Vec2): boolean {
-    if (max !== undefined) {
-      const min = minOrRect as Vec2;
-      const minX = Math.min(min.x, max.x);
-      const maxX = Math.max(min.x, max.x);
-      const minY = Math.min(min.y, max.y);
-      const maxY = Math.max(min.y, max.y);
-      return this.x >= minX && this.x <= maxX && this.y >= minY && this.y <= maxY;
-    }
-    const rect = minOrRect as Rect;
-    return this.x >= rect.topLeftCorner.x && this.x <= rect.bottomRightCorner.x &&
-           this.y >= rect.topLeftCorner.y && this.y <= rect.bottomRightCorner.y;
+  /** True if this point lies inside or on an axis-aligned bounding box [min, max]. */
+  public isInBounds(min: Vec2, max: Vec2): boolean {
+    const minX = Math.min(min.x, max.x);
+    const maxX = Math.max(min.x, max.x);
+    const minY = Math.min(min.y, max.y);
+    const maxY = Math.max(min.y, max.y);
+    return this.x >= minX && this.x <= maxX && this.y >= minY && this.y <= maxY;
   }
 
-  /** Linear interpolate toward target by amount, or from min to max by amount. */
-  public lerp(target: Vec2, amount: number): Vec2;
-  public lerp(min: Vec2, max: Vec2, amount: number): Vec2;
-  public lerp(minOrTarget: Vec2, maxOrAmount: Vec2 | number, amount?: number): Vec2 {
-    if (typeof maxOrAmount === 'number') {
-      this.x = Utils.lerp(this.x, minOrTarget.x, maxOrAmount);
-      this.y = Utils.lerp(this.y, minOrTarget.y, maxOrAmount);
-      return this;
-    }
-    this.x = Utils.lerp(minOrTarget.x, maxOrAmount.x, amount!);
-    this.y = Utils.lerp(minOrTarget.y, maxOrAmount.y, amount!);
+  /** Linear interpolate toward target by amount in-place. */
+  public lerp(target: Vec2, amount: number): Vec2 {
+    this.x = Utils.lerp(this.x, target.x, amount);
+    this.y = Utils.lerp(this.y, target.y, amount);
     return this;
   }
 

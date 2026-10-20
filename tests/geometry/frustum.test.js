@@ -16,17 +16,16 @@ describe('Plane', () => {
 });
 
 describe('Frustum', () => {
-  const frustum = () => new Frustum().setFromProjectionViewMatrix(new Mat4().perspective(Math.PI / 4, 1.0, 1.0, 100.0).toArray());
+  const frustum = () => new Frustum().setFromProjectionViewMatrix(new Mat4().perspective(Math.PI / 4, 1.0, 1.0, 100.0));
 
   test('has six planes', () => {
     expect(new Frustum().planes).toHaveLength(6);
   });
 
-  test('accepts Mat4, Float32Array and number[]', () => {
+  test('accepts Mat4', () => {
     const proj = new Mat4().perspective(Math.PI / 4, 1.0, 1.0, 100.0);
     const sphere = new Sphere(new Vec3(0, 0, -10), 1);
     expect(new Frustum().setFromProjectionViewMatrix(proj).intersectsSphere(sphere)).toBe(true);
-    expect(new Frustum().setFromProjectionViewMatrix(Array.from(proj.toArray())).intersectsSphere(sphere)).toBe(true);
   });
 
   test('intersectsSphere', () => {

@@ -22,18 +22,16 @@ const occupied = ball.gridCells.filter(cell => cell !== Grid.emptyCell);
 
 Circ of radius at position. Occupancy is opt-in via setGrid().
 
-Takes the radius first, then the centre (as a `Vec2` or coordinate scalars). Occupancy stays off until you call `setGrid()`.
+Takes the radius first, then the centre `position` vector. Occupancy stays off until you call `setGrid()`.
 
 ```ts
 new Circ(radius: number, position?: Vec2)
-new Circ(radius: number, positionX: number, positionY: number)
 ```
 
 ### Parameters
 
 - `radius` — `number`.
-- `position` / `positionX` — `Vec2` or `number`.
-- `positionY` — `number` *(optional when passing Vec2)*.
+- `position` — `Vec2` *(optional)*. Center position. Defaults to `(0, 0)`.
 
 ### Returns
 
@@ -44,11 +42,7 @@ new Circ(radius: number, positionX: number, positionY: number)
 ```js
 import { Circ, Vec2 } from '@1pizzateam/spock';
 
-// Vector-first
 const value = new Circ(10, new Vec2(1, 1));
-
-// Scalar overload
-const scalarValue = new Circ(10, 1, 1);
 ```
 
 ## Circ.clone()
@@ -338,14 +332,12 @@ True if this circle overlaps another circle.
 Tests whether two circles intersect or touch using squared Euclidean distance without square roots.
 
 ```ts
-overlapsCircle(center: Vec2, radius: number): boolean
 overlapsCircle(circ: Circ): boolean
 ```
 
 ### Parameters
 
-- `centerOrCirc` — `Vec2 | Circ`. Circle center position vector or `Circ` instance
-- `radius` — `number`. Optional if passing a `Circ` instance
+- `circ` — `Circ`. Circle instance to test against.
 
 ### Returns
 
@@ -360,7 +352,6 @@ const a = new Circ(25, new Vec2(0, 0));
 const b = new Circ(20, new Vec2(30, 0));
 
 const collides = a.overlapsCircle(b);
-const collidesCenter = a.overlapsCircle(new Vec2(30, 0), 20);
 ```
 
 ## Circ.overlapsRect()

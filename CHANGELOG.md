@@ -1,3 +1,13 @@
+Version 4.4.0 (October 20th 2026)
+-----------------------------
+ * Geometry (`RightTriangle`, `Rect`, `Circ`, `Grid`, `Ray2`):
+    * Add `RightTriangle` (axis-aligned right triangle extending `Rect` for corners `'nw' | 'ne' | 'sw' | 'se'`, with `getVertices`, `getOppositeCorner`, `signedDistanceToHypotenuse`, `projectOntoHypotenuse`, `getClosestPoint`, `isIn`, `overlapsCircle`, `overlapsBounds`, `raycast`, and `draw`)
+    * Add `raycastSegment(start, end, p1, p2, outNormal, target?)` for 2D segment-vs-edge raycasting with target reuse
+    * Export `RightTriangle`, `raycastSegment`, `TriangleCorner`, and `TriangleShape`
+    * Add `Ray2.intersectTriangle(tri, maxDistance, target?)` and `Ray2.intersectsTriangle(tri, maxDistance)`
+    * Add `Rect.getGrid()` returning the attached spatial `Grid` or `null`
+    * Remove legacy scalar overloads and runtime type-branching from `Rect` (`constructor(size, position)`, `setSize(size)`, `overlapsCircle(circ)`), `Circ` (`constructor(radius, position)`, `overlapsCircle(circ)`), `RightTriangle` (`overlapsCircle(circ)`), `Grid` (`constructor(size, cellSize)`, `getCell(point)`, `getCellsForCircle(circ)`, `fillGridCells(grid, min, max, gridCells)`), `Quat.setFromEuler(euler)`, `Frustum.setFromProjectionViewMatrix(matrix)`, `Vec2` (`lerp(target, amount)`, `clamp(min, max)`, `isInBounds(min, max)`), and `Vec3` (`lerp(target, amount)`)
+
 Version 4.3.0 (October 10th 2026)
 -----------------------------
  * Mat4x3:

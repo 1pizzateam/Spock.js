@@ -42,16 +42,11 @@ export class Quat {
     return this;
   }
 
-  /** Set from Euler angles in radians. Accepts Vec3 or (x, y, z). */
-  public setFromEuler(euler: Vec3): Quat;
-  public setFromEuler(x: number, y: number, z: number): Quat;
-  public setFromEuler(xOrEuler: Vec3 | number, y?: number, z?: number): Quat {
-    const ex = xOrEuler instanceof Vec3 ? xOrEuler.x : xOrEuler;
-    const ey = xOrEuler instanceof Vec3 ? xOrEuler.y : y!;
-    const ez = xOrEuler instanceof Vec3 ? xOrEuler.z : z!;
-    const hx = ex * 0.5;
-    const hy = ey * 0.5;
-    const hz = ez * 0.5;
+  /** Set from Euler angles in radians. */
+  public setFromEuler(euler: Vec3): Quat {
+    const hx = euler.x * 0.5;
+    const hy = euler.y * 0.5;
+    const hz = euler.z * 0.5;
     const cx = Math.cos(hx);
     const cy = Math.cos(hy);
     const cz = Math.cos(hz);

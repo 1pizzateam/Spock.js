@@ -4,16 +4,16 @@ An axis-aligned rectangle defined by a centre position and a size, with cached c
 
 <ClampDemo />
 
-The constructor takes width and height first, then the centre. `topLeftCorner` and `bottomRightCorner` are recomputed whenever you move or resize it, so containment tests and clamping read them directly instead of deriving them every frame.
+The constructor takes a `size` vector first, then the centre `position` vector. `topLeftCorner` and `bottomRightCorner` are recomputed whenever you move or resize it, so containment tests and clamping read them directly instead of deriving them every frame.
 
-As with `Circ`, occupancy is opt-in through `setGrid()`, after which `gridCells` lists every cell the rectangle covers. `Vec2.clamp()` takes a `Rect`, which makes it the natural type for bounds.
+As with `Circ`, occupancy is opt-in through `setGrid()`, after which `gridCells` lists every cell the rectangle covers.
 
 ```js
 import { Rect, Vec2 } from '@1pizzateam/spock';
 
 const bounds = new Rect(new Vec2(640, 360), new Vec2(320, 180));
 
-const pointer = new Vec2(700, -20).clamp(bounds);
+const pointer = bounds.getClosestPoint(new Vec2(700, -20));
 const distance = pointer.getDistance(bounds.position);
 const inside = bounds.isIn(pointer); // true
 ```
@@ -22,19 +22,16 @@ const inside = bounds.isIn(pointer); // true
 
 Rect of size centered at position.
 
-Takes size first, then the centre (as `Vec2` instances or coordinates). The corners are derived for you.
+Takes size first, then the centre (both `Vec2` instances). The corners are derived for you.
 
 ```ts
-new Rect(size: Vec2, position?: Vec2)
-new Rect(width: number, height: number, positionX: number, positionY: number)
+new Rect(size?: Vec2, position?: Vec2)
 ```
 
 ### Parameters
 
-- `size` / `width` — `Vec2` or `number`.
-- `position` / `height` — `Vec2` or `number` *(optional)*.
-- `positionX` — `number` *(optional)*.
-- `positionY` — `number` *(optional)*.
+- `size` — `Vec2` *(optional)*. Dimensions `(width, height)`. Defaults to `(0, 0)`.
+- `position` — `Vec2` *(optional)*. Center position. Defaults to `(0, 0)`.
 
 ### Returns
 
@@ -45,11 +42,7 @@ new Rect(width: number, height: number, positionX: number, positionY: number)
 ```js
 import { Rect, Vec2 } from '@1pizzateam/spock';
 
-// Vector-first
 const value = new Rect(new Vec2(100, 100), new Vec2(1, 1));
-
-// Scalar overload
-const scalarValue = new Rect(100, 100, 1, 1);
 ```
 
 ## Rect.clone()
@@ -131,6 +124,14 @@ import { Rect, Grid, Vec2 } from '@1pizzateam/spock';
 const result = new Rect(new Vec2(20, 10), new Vec2(0, 0)).setGrid(new Grid(new Vec2(100, 100), 10));
 ```
 
+## Rect.getGrid()
+
+Return the currently attached `Grid`, or `null` if none is attached.
+
+```ts
+getGrid(): Grid | null
+```
+
 ## Rect.setPosition()
 
 Move the center to a position vector and refresh corners and occupancy together, so nothing goes stale.
@@ -202,17 +203,15 @@ getClosestPoint(point: Vec2, target?: Vec2): Vec2
 
 Resize and refresh corners and occupancy.
 
-Resizes about the centre, refreshing the half-size, the corners, and occupancy. Can be called with either scalar dimensions or a `Vec2`.
+Resizes about the centre using a `Vec2` dimension vector, refreshing the half-size, the corners, and occupancy.
 
 ```ts
-setSize(width: number, height: number): Rect
 setSize(size: Vec2): Rect
 ```
 
 ### Parameters
 
-- `width` / `size` — `number` or `Vec2`.
-- `height` — `number` *(optional when passing Vec2)*.
+- `size` — `Vec2`. Dimensions `(width, height)`.
 
 ### Returns
 
@@ -314,17 +313,15 @@ const collides = a.overlapsRect(b);
 
 True if this rectangle overlaps a circle.
 
-Tests whether the rectangle intersects a circle defined by center position and radius, or a `Circ` instance.
+Tests whether the rectangle intersects a `Circ` instance.
 
 ```ts
-overlapsCircle(center: Vec2, radius: number): boolean
 overlapsCircle(circ: Circ): boolean
 ```
 
 ### Parameters
 
-- `centerOrCirc` — `Vec2 | Circ`. Circle center position vector or `Circ` instance
-- `radius` — `number`. Optional if passing a `Circ` instance
+- `circ` — `Circ`. Circle instance to test against.
 
 ### Returns
 
@@ -339,7 +336,6 @@ const rect = new Rect(new Vec2(100, 100), new Vec2(50, 50));
 const circle = new Circ(30, new Vec2(80, 80));
 
 const collides = rect.overlapsCircle(circle);
-const collidesCenter = rect.overlapsCircle(new Vec2(80, 80), 30);
 ```
 
 ## Rect.overlapsBounds()

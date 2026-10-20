@@ -78,7 +78,7 @@ describe('Box', () => {
 
   test('applyMatrix4 matches transforming every corner', () => {
     const box = new Box(new Vec3(-1, -2, -3), new Vec3(2, 1, 4));
-    const m = new Mat4x3().compose(new Vec3(5, -1, 2), new Quat().setFromEuler(0.4, 0.9, -0.3), new Vec3(2, 1, 3));
+    const m = new Mat4x3().compose(new Vec3(5, -1, 2), new Quat().setFromEuler(new Vec3(0.4, 0.9, -0.3)), new Vec3(2, 1, 3));
     const expected = new Box();
     for (const x of [box.min.x, box.max.x])
       for (const y of [box.min.y, box.max.y])

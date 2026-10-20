@@ -663,19 +663,11 @@ export class Vec3 {
     );
   }
 
-  /** Linear interpolate toward target by amount, or from min to max by amount. */
-  public lerp(target: Vec3, amount: number): Vec3;
-  public lerp(min: Vec3, max: Vec3, amount: number): Vec3;
-  public lerp(minOrTarget: Vec3, maxOrAmount: Vec3 | number, amount?: number): Vec3 {
-    if (typeof maxOrAmount === 'number') {
-      this.x = Utils.lerp(this.x, minOrTarget.x, maxOrAmount);
-      this.y = Utils.lerp(this.y, minOrTarget.y, maxOrAmount);
-      this.z = Utils.lerp(this.z, minOrTarget.z, maxOrAmount);
-      return this;
-    }
-    this.x = Utils.lerp(minOrTarget.x, maxOrAmount.x, amount!);
-    this.y = Utils.lerp(minOrTarget.y, maxOrAmount.y, amount!);
-    this.z = Utils.lerp(minOrTarget.z, maxOrAmount.z, amount!);
+  /** Linear interpolate toward target by amount in-place. */
+  public lerp(target: Vec3, amount: number): Vec3 {
+    this.x = Utils.lerp(this.x, target.x, amount);
+    this.y = Utils.lerp(this.y, target.y, amount);
+    this.z = Utils.lerp(this.z, target.z, amount);
     return this;
   }
 

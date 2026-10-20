@@ -18,6 +18,7 @@ const modules = [
   ['Quat', 'quat.ts', 'quat.md'],
   ['Circ', 'geometry/circ.ts', 'circ.md'],
   ['Rect', 'geometry/rect.ts', 'rect.md'],
+  ['RightTriangle', 'geometry/triangle.ts', 'triangle.md'],
   ['Grid', 'geometry/grid.ts', 'grid.md'],
   ['Trigo', 'trigo.ts', 'trigo.md'],
   ['Bezier', 'bezier.ts', 'bezier.md'],
@@ -130,8 +131,8 @@ const facing = current.multiplyVector(new Vec3(0, 0, 1));`,
     ],
     example: `import { Circ, Grid, Vec2 } from '@1pizzateam/spock';
 
-const grid = new Grid(800, 600, 32);
-const ball = new Circ(20, 100, 100).setGrid(grid);
+const grid = new Grid(new Vec2(800, 600), 32);
+const ball = new Circ(20, new Vec2(100, 100)).setGrid(grid);
 
 ball.setPosition(new Vec2(240, 180));
 const occupied = ball.gridCells.filter(cell => cell !== Grid.emptyCell);`,
@@ -139,27 +140,27 @@ const occupied = ball.gridCells.filter(cell => cell !== Grid.emptyCell);`,
   Rect: {
     summary: 'An axis-aligned rectangle defined by a centre position and a size, with cached corners.',
     body: [
-      'The constructor takes width and height first, then the centre. `topLeftCorner` and `bottomRightCorner` are recomputed whenever you move or resize it, so containment tests and clamping read them directly instead of deriving them every frame.',
-      'As with `Circ`, occupancy is opt-in through `setGrid()`, after which `gridCells` lists every cell the rectangle covers. `Vec2.clamp()` takes a `Rect`, which makes it the natural type for bounds.',
+      'The constructor takes a `size` vector first, then the centre `position` vector. `topLeftCorner` and `bottomRightCorner` are recomputed whenever you move or resize it, so containment tests and clamping read them directly instead of deriving them every frame.',
+      'As with `Circ`, occupancy is opt-in through `setGrid()`, after which `gridCells` lists every cell the rectangle covers.',
     ],
     example: `import { Rect, Vec2 } from '@1pizzateam/spock';
 
-const bounds = new Rect(640, 360, 320, 180);
+const bounds = new Rect(new Vec2(640, 360), new Vec2(320, 180));
 
-const pointer = new Vec2(700, -20).clamp(bounds);
+const pointer = bounds.getClosestPoint(new Vec2(700, -20));
 const inside = bounds.isIn(pointer); // true`,
   },
   Grid: {
     summary: 'A uniform lattice that divides a width × height area into square cells and reports which cells a shape covers.',
     body: [
-      'This is the spatial index behind `Circ` and `Rect` occupancy. Construct it with the area and a cell size; `len` is a `Vec2` holding the column and row counts. Attaching it to a shape fills that shape\'s `gridCells` with the indices its bounding box overlaps.',
+      'This is the spatial index behind `Circ`, `Rect`, and `RightTriangle` occupancy. Construct it with the area `size` vector and a cell size; `len` is a `Vec2` holding the column and row counts. Attaching it to a shape fills that shape\'s `gridCells` with the indices its bounding box overlaps.',
       '`testCells()` then answers whether two shapes share a cell, a cheap broad-phase check to run before any exact collision maths. Unused and off-grid slots use the `Grid.emptyCell` sentinel (`-1`), which `testCells()` ignores. `draw()` paints the lattice for debugging.',
     ],
-    example: `import { Circ, Grid } from '@1pizzateam/spock';
+    example: `import { Circ, Grid, Vec2 } from '@1pizzateam/spock';
 
-const grid = new Grid(800, 600, 32); // 25 × 19 cells
-const a = new Circ(20, 100, 100).setGrid(grid);
-const b = new Circ(20, 110, 96).setGrid(grid);
+const grid = new Grid(new Vec2(800, 600), 32); // 25 × 19 cells
+const a = new Circ(20, new Vec2(100, 100)).setGrid(grid);
+const b = new Circ(20, new Vec2(110, 96)).setGrid(grid);
 
 if (grid.testCells(a.gridCells, b.gridCells)) {
   // close enough to be worth an exact test

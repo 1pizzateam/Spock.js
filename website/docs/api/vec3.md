@@ -1687,20 +1687,16 @@ const inside = new Vec3(50, 50, 50).isInBounds(min, max); // true
 
 ### Vec3.lerp()
 
-Linearly interpolate towards target or between two vectors.
-
-Interpolates in-place towards `target` by `amount`, or sets this vector to the interpolation from `min` to `max`.
+Linearly interpolate towards `target` in-place by `amount`.
 
 ```ts
 lerp(target: Vec3, amount: number): Vec3
-lerp(min: Vec3, max: Vec3, amount: number): Vec3
 ```
 
 #### Parameters
 
-- `targetOrMin` — `Vec3`. Target vector to lerp towards, or `min` start vector.
-- `amountOrMax` — `number | Vec3`. Interpolation factor `t` in `[0, 1]`, or `max` end vector.
-- `amount` — `number` (optional). Interpolation factor when 3 arguments are passed.
+- `target` — `Vec3`. Target vector to lerp towards.
+- `amount` — `number`. Interpolation factor `t` in `[0, 1]`.
 
 #### Returns
 
@@ -1714,10 +1710,6 @@ import { Vec3 } from '@1pizzateam/spock';
 const current = new Vec3(0, 0, 0);
 const target = new Vec3(100, 100, 100);
 current.lerp(target, 0.1); // moves 10% towards target
-```
-
-
-const result = new Vec3().lerp(new Vec3(1, 2, 3), new Vec3(1, 2, 3), 0.5);
 ```
 
 ### Vec3.maxComponent()

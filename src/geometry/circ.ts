@@ -22,14 +22,9 @@ export class Circ {
   private static readonly scratchD = new Vec2();
   private static readonly scratchM = new Vec2();
 
-  /** Circ of radius at position. Supports (radius, position: Vec2) or (radius, positionX, positionY). */
-  constructor(radius: number, position?: Vec2);
-  constructor(radius: number, positionX: number, positionY: number);
-  constructor(radius: number, positionOrX?: Vec2 | number, positionY?: number) {
-    if (positionOrX instanceof Vec2)
-      this.position = new Vec2(positionOrX.x, positionOrX.y);
-    else
-      this.position = new Vec2(typeof positionOrX === 'number' ? positionOrX : 0, typeof positionY === 'number' ? positionY : 0);
+  /** Circ of radius at position. */
+  constructor(radius: number, position: Vec2 = new Vec2()) {
+    this.position = position.clone();
     this.halfSize = new Vec2(radius, radius);
     this._radius = radius;
     this._diameter = radius * 2;
@@ -64,7 +59,7 @@ export class Circ {
 
   /** Copy with the same grid. */
   public clone(): Circ {
-    return new Circ(this.radius, this.position.x, this.position.y).setGrid(this.grid);
+    return new Circ(this.radius, this.position).setGrid(this.grid);
   }
 
   /** Copy size, position, and grid from another circle. */
@@ -133,18 +128,14 @@ export class Circ {
   }
 
   /** True if this circle overlaps another circle. */
-  public overlapsCircle(center: Vec2, radius: number): boolean;
-  public overlapsCircle(circ: Circ): boolean;
-  public overlapsCircle(centerOrCirc: Vec2 | Circ, radius?: number): boolean {
-    const center = 'position' in centerOrCirc ? centerOrCirc.position : centerOrCirc;
-    const r = 'radius' in centerOrCirc ? centerOrCirc.radius : (radius ?? 0);
-    const totalR = this.radius + r;
-    return this.position.getDistance(center, true) <= totalR * totalR;
+  public overlapsCircle(circ: Circ): boolean {
+    const totalR = this.radius + circ.radius;
+    return this.position.getDistance(circ.position, true) <= totalR * totalR;
   }
 
   /** True if this circle overlaps a rectangle. */
   public overlapsRect(rect: Rect): boolean {
-    return rect.overlapsCircle(this.position, this.radius);
+    return rect.overlapsCircle(this);
   }
 
   /** True if this circle overlaps an axis-aligned bounding box defined by min and max corners. */

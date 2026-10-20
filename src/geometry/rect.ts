@@ -1,6 +1,7 @@
 import { Vec2 } from '../vectors/vec2';
 import type { Circ } from './circ';
 import type { RayHit2D } from './rayhit';
+import type { TriangleShape } from './triangle';
 import { type Grid, clearGridCells, GRID_EMPTY_CELL } from './grid';
 import { applyCanvasStyle } from './canvas';
 
@@ -14,38 +15,16 @@ export class Rect {
   public halfSize : Vec2;
   public gridCells: number[] = [GRID_EMPTY_CELL];
   private grid: Grid | null;
-  readonly shape: 'aabb' = 'aabb';
+  public shape: 'aabb' | TriangleShape = 'aabb';
 
   private static readonly scratchMin = new Vec2();
   private static readonly scratchMax = new Vec2();
   private static readonly scratchClosest = new Vec2();
 
-  /** Rect centered at position. Supports (size: Vec2, position?: Vec2) or (width, height, positionX?, positionY?). */
-  constructor(size: Vec2, position?: Vec2);
-  constructor(width: number, height: number, positionX?: number, positionY?: number);
-  constructor(width: number, height: number, position?: Vec2);
-  constructor(
-    sizeOrWidth: Vec2 | number,
-    heightOrPosition?: number | Vec2,
-    positionXOrPosition?: number | Vec2,
-    positionY?: number
-  ) {
-    if (sizeOrWidth instanceof Vec2) {
-      const pos = heightOrPosition instanceof Vec2 ? heightOrPosition : new Vec2();
-      this.position = new Vec2(pos.x, pos.y);
-      this.size = new Vec2(sizeOrWidth.x, sizeOrWidth.y);
-    } else {
-      const w = sizeOrWidth;
-      const h = typeof heightOrPosition === 'number' ? heightOrPosition : w;
-      if (positionXOrPosition instanceof Vec2)
-        this.position = new Vec2(positionXOrPosition.x, positionXOrPosition.y);
-      else {
-        const px = typeof positionXOrPosition === 'number' ? positionXOrPosition : 0;
-        const py = typeof positionY === 'number' ? positionY : 0;
-        this.position = new Vec2(px, py);
-      }
-      this.size = new Vec2(w, h);
-    }
+  /** Rect centered at position. */
+  constructor(size: Vec2 = new Vec2(), position: Vec2 = new Vec2()) {
+    this.position = position.clone();
+    this.size = size.clone();
     this.halfSize = new Vec2();
     this.topLeftCorner = new Vec2();
     this.bottomRightCorner = new Vec2();
@@ -56,7 +35,7 @@ export class Rect {
 
   /** Copy with the same grid. */
   public clone(): Rect {
-    return new Rect(this.size.x, this.size.y, this.position.x, this.position.y).setGrid(this.grid);
+    return new Rect(this.size, this.position).setGrid(this.grid);
   }
 
   /** Copy size, position, and grid from another rectangle. */
@@ -76,6 +55,11 @@ export class Rect {
     else
       clearGridCells(this.gridCells);
     return this;
+  }
+
+  /** Attached grid, or null. */
+  public getGrid(): Grid | null {
+    return this.grid;
   }
 
   /** Move the center to a position vector and refresh corners and occupancy. */
@@ -100,14 +84,9 @@ export class Rect {
     return target.clampVectors(point, this.topLeftCorner, this.bottomRightCorner);
   }
 
-  /** Resize and refresh corners and occupancy. Accepts Vec2 or (width, height). */
-  public setSize(size: Vec2): Rect;
-  public setSize(width: number, height?: number): Rect;
-  public setSize(sizeOrWidth: Vec2 | number, height?: number): Rect {
-    if (sizeOrWidth instanceof Vec2)
-      this.size.copy(sizeOrWidth);
-    else
-      this.size.setScalar(sizeOrWidth, height ?? sizeOrWidth);
+  /** Resize and refresh corners and occupancy. */
+  public setSize(size: Vec2): Rect {
+    this.size.copy(size);
     this.setHalfSize();
     this.setCorners();
     this.setGridPos();
@@ -142,13 +121,9 @@ export class Rect {
   }
 
   /** True if this rectangle overlaps a circle. */
-  public overlapsCircle(center: Vec2, radius: number): boolean;
-  public overlapsCircle(circ: Circ): boolean;
-  public overlapsCircle(centerOrCirc: Vec2 | Circ, radius?: number): boolean {
-    const center = 'position' in centerOrCirc ? centerOrCirc.position : centerOrCirc;
-    const r = 'radius' in centerOrCirc ? centerOrCirc.radius : (radius ?? 0);
-    Rect.scratchClosest.clampVectors(center, this.topLeftCorner, this.bottomRightCorner);
-    return center.getDistance(Rect.scratchClosest, true) <= r * r;
+  public overlapsCircle(circ: Circ): boolean {
+    Rect.scratchClosest.clampVectors(circ.position, this.topLeftCorner, this.bottomRightCorner);
+    return circ.position.getDistance(Rect.scratchClosest, true) <= circ.radius * circ.radius;
   }
 
   /** Write minimum and maximum bounding corners into outMin and outMax. */
@@ -273,13 +248,13 @@ export class Rect {
   }
 
   /** Update top-left and bottom-right from center and half-size. */
-  private setCorners(): void {
+  protected setCorners(): void {
     this.topLeftCorner.subVectors(this.position, this.halfSize);
     this.bottomRightCorner.addVectors(this.position, this.halfSize);
   }
 
   /** Cache half of the current size. */
-  private setHalfSize(): void {
+  protected setHalfSize(): void {
     this.halfSize.scaleVector(this.size, 0.5);
   }
 

@@ -82,6 +82,7 @@ export default defineConfig({
         items: [
           { text: 'Circ', link: '/api/circ' },
           { text: 'Rect', link: '/api/rect' },
+          { text: 'RightTriangle', link: '/api/triangle' },
           { text: 'Grid', link: '/api/grid' },
           { text: 'Ray2', link: '/api/ray2' },
           { text: 'Box', link: '/api/box' },

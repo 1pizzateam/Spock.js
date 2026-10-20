@@ -24,20 +24,17 @@ if (grid.testCells(circle.gridCells, other.gridCells))
 
 ## Constructor
 
-Divide size (width × height) into cells of cellSize.
+Divide size (`Vec2`) into cells of `cellSize`.
 
 Cell counts are rounded up, so the lattice always covers the whole area even when the size is not an exact multiple of the cell size. `len` holds the column and row counts as a `Vec2`.
 
 ```ts
 new Grid(size: Vec2, cellSize: number)
-new Grid(width: number, height: number, cellSize: number)
 ```
 
 ### Parameters
 
-- `size` — `Vec2`. Dimensions of the lattice.
-- `width` — `number`.
-- `height` — `number`.
+- `size` — `Vec2`. Dimensions `(width, height)` of the lattice.
 - `cellSize` — `number`.
 
 ### Returns
@@ -49,11 +46,7 @@ new Grid(width: number, height: number, cellSize: number)
 ```js
 import { Grid, Vec2 } from '@1pizzateam/spock';
 
-// Vector-first
 const grid = new Grid(new Vec2(100, 100), 10);
-
-// Scalar overload
-const scalarGrid = new Grid(100, 100, 10);
 ```
 
 ## Grid.totalCells
@@ -140,18 +133,15 @@ isFirstCommonCell(aCells: number[], bCells: number[], cellId: number): boolean
 
 ## Grid.getCell()
 
-Get cell index at `point` or (x, y) coordinates, or -1 if out of bounds.
+Get cell index at `point`, or `-1` (`Grid.emptyCell`) if out of bounds.
 
 ```ts
 getCell(point: Vec2): number
-getCell(x: number, y: number): number
 ```
 
 ### Parameters
 
 - `point` — `Vec2`.
-- `x` — `number`.
-- `y` — `number`.
 
 ### Returns
 
@@ -207,28 +197,12 @@ draw(context: CanvasRenderingContext2D, fillColor: string, strokeColor: string, 
 ### Example
 
 ```js
-import { Grid } from '@1pizzateam/spock';
+import { Grid, Vec2 } from '@1pizzateam/spock';
 
 const context = document.querySelector('canvas').getContext('2d');
 
-const result = new Grid(100, 100, 10).draw(context, '#5b8cff', '#5b8cff', 1);
+const result = new Grid(new Vec2(100, 100), 10).draw(context, '#5b8cff', '#5b8cff', 1);
 ```
-
-## Grid.getCellAt()
-
-Get the cell index for a 2D position vector.
-
-```ts
-getCellAt(point: Vec2): number
-```
-
-### Parameters
-
-- `point` — `Vec2`. Coordinates to query.
-
-### Returns
-
-`number` — Cell index, or `Grid.emptyCell` (-1) if outside grid bounds.
 
 ## Grid.getCellsForBounds()
 
@@ -250,16 +224,15 @@ getCellsForBounds(min: Vec2, max: Vec2, out?: number[]): number[]
 
 ## Grid.getCellsForCircle()
 
-Get all cell indices overlapping a circle.
+Get all cell indices overlapping a `Circ`.
 
 ```ts
-getCellsForCircle(center: Vec2, radius: number, out?: number[]): number[]
+getCellsForCircle(circ: Circ, out?: number[]): number[]
 ```
 
 ### Parameters
 
-- `center` — `Vec2`. Circle center.
-- `radius` — `number`. Circle radius.
+- `circ` — `Circ`. Circle instance.
 - `out` — `number[]` (optional). Output array to write cell indices into.
 
 ### Returns

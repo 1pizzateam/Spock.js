@@ -14,7 +14,7 @@ const closeVec = (v, x, y, z, eps = 1e-5) => {
 describe('Mat4x3 3D transform helpers', () => {
 
   const position = new Vec3(1, 2, 3);
-  const rotation = new Quat().setFromEuler(0.3, -0.7, 1.1);
+  const rotation = new Quat().setFromEuler(new Vec3(0.3, -0.7, 1.1));
   const scale = new Vec3(2, 3, 0.5);
 
   it('compose matches translate * rotate * scale', () => {
@@ -129,7 +129,7 @@ describe('Quat matrix and euler helpers', () => {
   it('getEuler inverts setFromEuler', () => {
     const angles = [[0.3, -0.7, 1.1], [-1.2, 0.4, 0.2], [0, 0, 0], [0.5, 1.2, -2.5]];
     for (const [x, y, z] of angles) {
-      const q = new Quat().setFromEuler(x, y, z);
+      const q = new Quat().setFromEuler(new Vec3(x, y, z));
       const e = q.getEuler();
       const q2 = new Quat().setFromEuler(e);
       close(Math.abs(q.dot(q2)), 1);
@@ -137,7 +137,7 @@ describe('Quat matrix and euler helpers', () => {
   });
 
   it('getEuler handles gimbal lock', () => {
-    const q = new Quat().setFromEuler(0.4, Math.PI / 2, 0);
+    const q = new Quat().setFromEuler(new Vec3(0.4, Math.PI / 2, 0));
     const e = q.getEuler();
     close(e.y, Math.PI / 2, 1e-4);
     const q2 = new Quat().setFromEuler(e);
@@ -155,7 +155,7 @@ describe('Quat matrix and euler helpers', () => {
   });
 
   it('setFromRotationMatrix ignores scale', () => {
-    const q = new Quat().setFromEuler(0.3, 0.2, -0.4);
+    const q = new Quat().setFromEuler(new Vec3(0.3, 0.2, -0.4));
     const m = new Mat4x3().compose(new Vec3(1, 2, 3), q, new Vec3(2, 3, 4));
     close(Math.abs(new Quat().setFromRotationMatrix(m).dot(q)), 1);
   });
@@ -178,7 +178,7 @@ describe('Quat matrix and euler helpers', () => {
   });
 
   it('lookAt leaves the quaternion unchanged when eye equals target', () => {
-    const q = new Quat().setFromEuler(0.1, 0.2, 0.3);
+    const q = new Quat().setFromEuler(new Vec3(0.1, 0.2, 0.3));
     const before = q.clone();
     q.lookAt(new Vec3(1, 1, 1), new Vec3(1, 1, 1), new Vec3(0, 1, 0));
     close(q.dot(before), 1);

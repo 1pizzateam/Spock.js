@@ -16,6 +16,7 @@ import UtilsDemo from './components/UtilsDemo.vue';
 import WaveDemo from './components/WaveDemo.vue';
 import RollingAverageDemo from './components/RollingAverageDemo.vue';
 import CircDemo from './components/CircDemo.vue';
+import TriangleDemo from './components/TriangleDemo.vue';
 import Vec3Demo from './components/Vec3Demo.vue';
 import Ray2Demo from './components/Ray2Demo.vue';
 import BoxDemo from './components/BoxDemo.vue';
@@ -53,6 +54,7 @@ export default {
     app.component('WaveDemo', WaveDemo);
     app.component('RollingAverageDemo', RollingAverageDemo);
     app.component('CircDemo', CircDemo);
+    app.component('TriangleDemo', TriangleDemo);
     app.component('Vec3Demo', Vec3Demo);
     app.component('Ray2Demo', Ray2Demo);
     app.component('BoxDemo', BoxDemo);

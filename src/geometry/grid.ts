@@ -1,27 +1,30 @@
 import { Vec2 } from '../vectors/vec2';
+import type { Circ } from './circ';
 
 export const GRID_EMPTY_CELL = -1;
 
-/** Fill gridCells with every cell overlapping the AABB, or the empty sentinel. */
+/** Fill gridCells with every cell overlapping the AABB [min, max], or the empty sentinel. */
 export function fillGridCells(
   grid: Grid,
-  left: number,
-  top: number,
-  right: number,
-  bottom: number,
+  min: Vec2,
+  max: Vec2,
   gridCells: number[]
 ): void {
   const size = grid.cellSize;
   const cols = grid.len.x;
   const rows = grid.len.y;
-  const minCol = Math.max(0, Math.floor(Math.min(left, right) / size));
-  const maxCol = Math.min(cols - 1, Math.floor(Math.max(left, right) / size));
-  const minRow = Math.max(0, Math.floor(Math.min(top, bottom) / size));
-  const maxRow = Math.min(rows - 1, Math.floor(Math.max(top, bottom) / size));
+  const minX = Math.min(min.x, max.x);
+  const maxX = Math.max(min.x, max.x);
+  const minY = Math.min(min.y, max.y);
+  const maxY = Math.max(min.y, max.y);
+  const minCol = Math.max(0, Math.floor(minX / size));
+  const maxCol = Math.min(cols - 1, Math.floor(maxX / size));
+  const minRow = Math.max(0, Math.floor(minY / size));
+  const maxRow = Math.min(rows - 1, Math.floor(maxY / size));
 
   if (maxCol < minCol || maxRow < minRow ||
-      Math.max(left, right) < 0 || Math.min(left, right) >= cols * size ||
-      Math.max(top, bottom) < 0 || Math.min(top, bottom) >= rows * size) {
+      maxX < 0 || minX >= cols * size ||
+      maxY < 0 || minY >= rows * size) {
     clearGridCells(gridCells);
     return;
   }
@@ -47,23 +50,13 @@ export class Grid {
   cellSize: number;
   len: Vec2;
 
-  /** Divide width × height or size vector into cells of cellSize. */
-  constructor(size: Vec2, cellSize: number);
-  constructor(width: number, height: number, cellSize: number);
-  constructor(widthOrSize: Vec2 | number, heightOrCellSize: number, cellSize?: number) {
-    if (widthOrSize instanceof Vec2) {
-      this.cellSize = heightOrCellSize;
-      this.len = new Vec2(
-        Math.ceil(widthOrSize.x / this.cellSize),
-        Math.ceil(widthOrSize.y / this.cellSize)
-      );
-    } else {
-      this.cellSize = cellSize!;
-      this.len = new Vec2(
-        Math.ceil(widthOrSize / this.cellSize),
-        Math.ceil(heightOrCellSize / this.cellSize)
-      );
-    }
+  /** Divide size vector into cells of cellSize. */
+  constructor(size: Vec2, cellSize: number) {
+    this.cellSize = cellSize;
+    this.len = new Vec2(
+      Math.ceil(size.x / this.cellSize),
+      Math.ceil(size.y / this.cellSize)
+    );
   }
 
   /** Total number of cells in the lattice (cols × rows). */
@@ -136,35 +129,30 @@ export class Grid {
     return this.getFirstCommonCell(aCells, bCells) === cellId;
   }
 
-  /** Get cell index at (x, y) coordinates or point vector, or -1 if out of bounds. */
-  public getCell(point: Vec2): number;
-  public getCell(x: number, y: number): number;
-  public getCell(xOrPoint: Vec2 | number, y?: number): number {
-    const px = xOrPoint instanceof Vec2 ? xOrPoint.x : xOrPoint;
-    const py = xOrPoint instanceof Vec2 ? xOrPoint.y : y!;
-    if (px < 0 || py < 0)
+  /** Get cell index at point vector, or -1 if out of bounds. */
+  public getCell(point: Vec2): number {
+    if (point.x < 0 || point.y < 0)
       return GRID_EMPTY_CELL;
-    const col = Math.floor(px / this.cellSize);
-    const row = Math.floor(py / this.cellSize);
+    const col = Math.floor(point.x / this.cellSize);
+    const row = Math.floor(point.y / this.cellSize);
     if (col >= this.len.x || row >= this.len.y)
       return GRID_EMPTY_CELL;
     return row * this.len.x + col;
   }
 
-  /** Get cell index at point position, or -1 if out of bounds. */
-  public getCellAt(point: Vec2): number {
-    return this.getCell(point);
-  }
+  private static readonly scratchMin = new Vec2();
+  private static readonly scratchMax = new Vec2();
 
   /** Fill target array with every cell overlapping the bounds [min, max]. */
   public getCellsForBounds(min: Vec2, max: Vec2, out: number[] = []): number[] {
-    fillGridCells(this, min.x, min.y, max.x, max.y, out);
+    fillGridCells(this, min, max, out);
     return out;
   }
 
   /** Fill target array with every cell overlapping the circle. */
-  public getCellsForCircle(center: Vec2, radius: number, out: number[] = []): number[] {
-    fillGridCells(this, center.x - radius, center.y - radius, center.x + radius, center.y + radius, out);
+  public getCellsForCircle(circ: Circ, out: number[] = []): number[] {
+    circ.getBounds(Grid.scratchMin, Grid.scratchMax);
+    fillGridCells(this, Grid.scratchMin, Grid.scratchMax, out);
     return out;
   }
 

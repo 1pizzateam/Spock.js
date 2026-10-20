@@ -1,6 +1,7 @@
 import { Vec2 } from '../vectors/vec2';
 import type { Rect } from './rect';
 import type { Circ } from './circ';
+import type { RightTriangle } from './triangle';
 import type { RayHit2D } from './rayhit';
 
 /**
@@ -51,6 +52,16 @@ export class Ray2 {
   /** True if the ray hits the circle within maxDistance. */
   public intersectsCirc(circ: Circ, maxDistance: number): boolean {
     return this.intersectCirc(circ, maxDistance) !== null;
+  }
+
+  /** First hit on the right triangle within maxDistance, else null. */
+  public intersectTriangle(tri: RightTriangle, maxDistance: number, target?: RayHit2D): RayHit2D | null {
+    return tri.raycast(this.origin, this.at(maxDistance, Ray2._end), target);
+  }
+
+  /** True if the ray hits the right triangle within maxDistance. */
+  public intersectsTriangle(tri: RightTriangle, maxDistance: number): boolean {
+    return this.intersectTriangle(tri, maxDistance) !== null;
   }
 
   /** Independent copy. */

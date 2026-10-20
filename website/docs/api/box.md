@@ -12,7 +12,7 @@ A new box is empty (`max` below `min`) until it grows to include something, so `
 import { Box, Mat4x3, Quat, Vec3 } from '@1pizzateam/spock';
 
 const local = new Box().setFromPoints(vertices); // flat [x, y, z, ...] or Vec3[]
-const model = new Mat4x3().compose(position, new Quat().setFromEuler(0, 0.5, 0), new Vec3(1, 1, 1));
+const model = new Mat4x3().compose(position, new Quat().setFromEuler(new Vec3(0, 0.5, 0)), new Vec3(1, 1, 1));
 
 const world = local.clone().applyMatrix4(model);
 world.containsPoint(new Vec3(0, 0, 0));
