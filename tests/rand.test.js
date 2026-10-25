@@ -34,6 +34,7 @@ describe('Rand', () => {
   it('should replay the same sequence for a given seed', () => {
     const a = Rand.create(1);
     const b = Rand.create(1);
+    expect(a.next()).toBe(b.next());
     expect(a.float(0, 1)).toBe(b.float(0, 1));
     expect(a.integer(0, 10)).toBe(b.integer(0, 10));
     expect(a.pick(1, 2)).toBe(b.pick(1, 2));

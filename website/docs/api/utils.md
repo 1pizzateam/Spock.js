@@ -4,7 +4,7 @@ Scalar helpers that sit between `Math` and your own code: rounding, mixing, clam
 
 <UtilsDemo />
 
-`clamp()`, `lerp()`, `mix()`, `normalize()`, and `map()` are the interpolation set. `normalize()` takes a value from a range into 0–1, `map()` moves it from one range straight into another, and `lerp()` and `mix()` blend two values, differing only in argument order.
+`clamp()`, `lerp()`, `mix()`, `normalize()`, `map()`, `smoothstep()`, and `damp()` are the interpolation set. `normalize()` takes a value from a range into 0–1, `map()` moves it from one range straight into another, `lerp()` and `mix()` blend two values, `smoothstep()` evaluates the cubic Hermite curve between two edges, and `damp()` eases a value toward a target independent of frame rate.
 
 The rounding group — `round()`, `floor()`, `ceil()`, and `trunc()` — takes a decimal count, so you can snap to two decimals without the usual multiply-and-divide dance. `roundToNearest()` snaps to an arbitrary step instead. `isIn()` and `isOut()` are readable range tests.
 
@@ -445,4 +445,63 @@ import { Utils } from '@1pizzateam/spock';
 
 const result = Utils.isOut(1, 1, 1);
 ```
+
+## Utils.smoothstep()
+
+Hermite smoothstep interpolation in `[0, 1]` for `x` between `[edge0, edge1]`.
+
+Maps `x` from `[edge0, edge1]` into `[0, 1]`, clamps the ratio, and evaluates the cubic Hermite curve `t * t * (3 - 2 * t)` so the slope is zero at both ends. Returns `0` when `edge0 === edge1`.
+
+```ts
+smoothstep(edge0: number, edge1: number, x: number): number
+```
+
+### Parameters
+
+- `edge0` — `number`. Lower edge where the output is `0`.
+- `edge1` — `number`. Upper edge where the output is `1`.
+- `x` — `number`. Value to evaluate.
+
+### Returns
+
+`number` — Smoothly interpolated value in `[0, 1]`.
+
+### Example
+
+```js
+import { Utils } from '@1pizzateam/spock';
+
+const fade = Utils.smoothstep(0, 10, 5); // 0.5
+const edge = Utils.smoothstep(0, 10, 2.5); // 0.15625
+```
+
+## Utils.damp()
+
+Frame-rate-independent exponential smoothing toward `target`.
+
+Evaluates `lerp(current, target, 1 - Math.exp(-rate * dt))`, moving toward `target` at a speed controlled by `rate` regardless of frame duration `dt`.
+
+```ts
+damp(current: number, target: number, rate: number, dt: number): number
+```
+
+### Parameters
+
+- `current` — `number`. Current value.
+- `target` — `number`. Target value to approach.
+- `rate` — `number`. Exponential decay rate (higher reaches `target` faster).
+- `dt` — `number`. Elapsed time step (typically in seconds).
+
+### Returns
+
+`number` — The damped value.
+
+### Example
+
+```js
+import { Utils } from '@1pizzateam/spock';
+
+const smoothed = Utils.damp(0, 100, 10, 1 / 60);
+```
+
 

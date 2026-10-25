@@ -42,12 +42,12 @@ The classes — vectors, matrices, quaternions, and shapes — are mutable. Thei
 
 ## Trigo
 
-- [Trigo](./trigo) — angle constants and conversions, lookup-table and precise sine and cosine, wave equations
+- [Trigo](./trigo) — angle constants and conversions, shortest-arc radian delta/lerp/step, lookup-table and precise sine and cosine, wave equations
 
 ## Utilities
 
-- [Rand](./rand) — uniform values, distributions, and picks, from `Math.random()` or a replayable seed
+- [Rand](./rand) — uniform `[0, 1)` and ranged values, distributions, and picks, from `Math.random()` or a replayable seed
 - [NumArray](./num-array) — min, max, sum, product, and average reductions over number arrays
 - [RollingAverage](./rolling-average) — fixed-capacity circular buffer for $O(1)$ real-time rolling averages with zero allocations
-- [Utils](./utils) — clamping, interpolation, range mapping, and decimal rounding
+- [Utils](./utils) — clamping, linear/smoothstep/damped interpolation, range mapping, and decimal rounding
 - [Time](./time) — conversions between ms, seconds, and frame rates, monotonic clock, delta clamping, and sub-stepping

@@ -173,6 +173,32 @@ getCellCoords(cellId: number, target?: Vec2): Vec2
 
 `Vec2`
 
+## Grid.getCellCenter()
+
+Write the world-space center coordinates of `cellId` into `target`.
+
+```ts
+getCellCenter(cellId: number, target?: Vec2): Vec2
+```
+
+### Parameters
+
+- `cellId` — `number`. Cell index in the lattice.
+- `target` — `Vec2`. Optional pre-allocated vector to receive the `(x, y)` center.
+
+### Returns
+
+`Vec2` — World-space center of the cell (`((col + 0.5) * cellSize, (row + 0.5) * cellSize)`).
+
+### Example
+
+```js
+import { Grid, Vec2 } from '@1pizzateam/spock';
+
+const grid = new Grid(new Vec2(100, 100), 10);
+const center = grid.getCellCenter(12); // Vec2(25, 15)
+```
+
 ## Grid.draw()
 
 Draw the lattice on a canvas.
@@ -238,6 +264,65 @@ getCellsForCircle(circ: Circ, out?: number[]): number[]
 ### Returns
 
 `number[]` — Array of unique occupied cell indices.
+
+## Grid.traverseRay()
+
+Walk every grid cell crossed by the 2D segment from `start` to `end` in traversal order (2D Amanatides & Woo DDA).
+
+Calls `visit(cellId, col, row)` for each in-bounds cell along the ray and stops early if `visit` returns `true`. Zero allocations.
+
+```ts
+traverseRay(start: Vec2, end: Vec2, visit: (cellId: number, col: number, row: number) => boolean | void): boolean
+```
+
+### Parameters
+
+- `start` — `Vec2`. Segment start position.
+- `end` — `Vec2`. Segment end position.
+- `visit` — `(cellId: number, col: number, row: number) => boolean | void`. Callback invoked for each cell; return `true` to terminate traversal early.
+
+### Returns
+
+`boolean` — `true` if `visit` returned `true` to stop early, otherwise `false`.
+
+### Example
+
+```js
+import { Grid, Vec2 } from '@1pizzateam/spock';
+
+const grid = new Grid(new Vec2(100, 100), 10);
+const blocked = grid.traverseRay(new Vec2(5, 5), new Vec2(45, 25), (cellId) => {
+  return cellId === 12; // stop as soon as cell 12 is reached
+});
+```
+
+## Grid.getCellsForSegment()
+
+Collect all in-bounds cell indices crossed by the 2D segment from `start` to `end` in traversal order.
+
+```ts
+getCellsForSegment(start: Vec2, end: Vec2, out?: number[]): number[]
+```
+
+### Parameters
+
+- `start` — `Vec2`. Segment start position.
+- `end` — `Vec2`. Segment end position.
+- `out` — `number[]` (optional). Output array to write cell indices into.
+
+### Returns
+
+`number[]` — Array of visited cell indices in ray order.
+
+### Example
+
+```js
+import { Grid, Vec2 } from '@1pizzateam/spock';
+
+const grid = new Grid(new Vec2(100, 100), 10);
+const cells = grid.getCellsForSegment(new Vec2(5, 5), new Vec2(35, 5)); // [0, 1, 2, 3]
+```
+
 
 
 

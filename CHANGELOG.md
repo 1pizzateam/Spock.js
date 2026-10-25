@@ -1,3 +1,21 @@
+Version 4.5.0 (October 25th 2026)
+-----------------------------
+ * Utils:
+    * Add `Utils.smoothstep(edge0, edge1, x)` evaluating the cubic Hermite curve `t * t * (3 - 2 * t)` for `t = clamp((x - edge0) / (edge1 - edge0), 0, 1)`
+    * Add `Utils.damp(current, target, rate, dt)` for frame-rate-independent exponential smoothing (`lerp(current, target, 1 - Math.exp(-rate * dt))`)
+ * Trigo:
+    * Add `Trigo.deltaRadian(from, to)` returning the shortest signed angular difference in `(-π, π]`
+    * Add `Trigo.lerpRadian(from, to, t)` interpolating between two radian angles along the shortest arc
+    * Add `Trigo.stepRadian(current, target, maxStep)` stepping `current` toward `target` by at most `maxStep` radians along the shortest arc
+ * Rand:
+    * Add `Rand.next()` and `.next()` on generators returned by `Rand.create(seed)` returning a uniform float in `[0, 1)` with zero arguments
+ * Quat:
+    * Add `Quat.equals(q)` for exact component-wise quaternion comparison (`w`, `x`, `y`, `z`)
+ * Grid:
+    * Add `Grid.getCellCenter(cellId, target?)` writing the world-space center coordinates of a cell into `target` (`Vec2`)
+    * Add `Grid.traverseRay(start, end, visit)` walking every cell crossed by a 2D line segment in order via Amanatides & Woo DDA, stopping early when `visit(cellId)` returns `true`
+    * Add `Grid.getCellsForSegment(start, end, out?)` collecting all in-bounds cell indices crossed by a 2D segment in traversal order
+
 Version 4.4.0 (October 20th 2026)
 -----------------------------
  * Geometry (`RightTriangle`, `Rect`, `Circ`, `Grid`, `Ray2`):

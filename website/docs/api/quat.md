@@ -702,6 +702,34 @@ import { Quat } from '@1pizzateam/spock';
 const result = new Quat().isIdentity();
 ```
 
+## Quat.equals()
+
+True if `w` and `vector` match `q` component-for-component.
+
+Exact component comparison (`w`, `x`, `y`, `z`), useful for skipping redundant transform updates when a node's orientation has not changed.
+
+```ts
+equals(q: Quat): boolean
+```
+
+### Parameters
+
+- `q` — `Quat`. Quaternion to compare against.
+
+### Returns
+
+`boolean`
+
+### Example
+
+```js
+import { Quat } from '@1pizzateam/spock';
+
+const a = new Quat();
+const b = new Quat();
+const same = a.equals(b); // true
+```
+
 ## Quat.setFromRotationMatrix()
 
 Set from the rotation part of an affine matrix.

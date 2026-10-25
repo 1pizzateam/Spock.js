@@ -399,6 +399,7 @@ const methodNotes = {
     toMat4: 'Writes the rotation into a 4×4 matrix so it can be combined with translation and projection. Pass a matrix to fill instead of allocating one.',
     toMat4x3: 'Writes the rotation into an affine 4×3 matrix.',
     isIdentity: 'True when this is the no-rotation quaternion.',
+    equals: 'Exact component comparison (`w`, `x`, `y`, `z`), useful for skipping redundant transform updates when an orientation has not changed.',
   },
   Circ: {
     constructor: 'Takes the radius first, then the centre. Occupancy stays off until you call `setGrid()`.',
@@ -425,12 +426,18 @@ const methodNotes = {
   Grid: {
     constructor: 'Cell counts are rounded up, so the lattice always covers the whole area even when the size is not an exact multiple of the cell size. `len` holds the column and row counts as a `Vec2`.',
     testCells: 'Broad-phase overlap test: true when the two occupancy lists share a cell. It ignores the `Grid.emptyCell` sentinel, so unused slots never cause a false hit. A true result means the shapes are close enough to be worth an exact test, not that they actually intersect.',
+    getCellCenter: 'Writes the world-space center coordinates of `cellId` into `target`.',
+    traverseRay: 'Walks every in-bounds cell crossed by the segment from `start` to `end` in ray order using 2D Amanatides & Woo DDA, stopping early if `visit` returns `true`.',
+    getCellsForSegment: 'Collects all in-bounds cell indices crossed by the segment from `start` to `end` in traversal order.',
     draw: 'Paints the lattice, optionally filling the background first. Pass an empty string for either colour to skip that pass.',
   },
   Trigo: {
     degreeToRadian: 'Multiplies by π/180. Every angle in this library is in radians, so this is the conversion to do at the edge of degree-based input.',
     radianToDegree: 'Converts back to degrees, mostly for display.',
     normalizeRadian: 'Wraps any angle into (-π, π]. Do this before comparing or interpolating angles, otherwise a value just past π looks far from one just below it when the two are neighbours.',
+    deltaRadian: 'Returns the shortest signed angular difference from `from` to `to` wrapped into `(-π, π]`.',
+    lerpRadian: 'Interpolates between two radian angles along the shortest arc and wraps the result into `(-π, π]`.',
+    stepRadian: 'Steps `current` toward `target` by at most `maxStep` radians along the shortest arc without overshooting.',
     sine: 'Reads from a 16384-entry lookup table instead of calling `Math.sin`. Fast enough to run per particle per frame, and accurate enough for motion; use `sinePrecise()` when the small error would accumulate.',
     cosine: 'Lookup-table cosine, with the same trade-off as `sine()`.',
     arctan: 'Delegates to `Math.atan`, returning an angle in (-π/2, π/2).',
@@ -454,12 +461,13 @@ const methodNotes = {
     cubicParameterAtLength: 'Finds the `t` at a given distance along the cubic.',
   },
   Rand: {
+    next: 'Returns a uniform float in `[0, 1)` with no arguments.',
     float: 'Uniform in [min, max): `min` can come up, `max` cannot.',
     integer: 'Uniform in [min, max], with both ends included, unlike `float()`.',
     distribution: 'Averages `iterations` uniform samples. More iterations bunch results toward the middle of the range, approaching a bell shape, which is a quick way to make random placement look less evenly scattered.',
     pick: 'Returns one of the two values with even odds.',
     seed: 'Switches the module-level functions to a deterministic mulberry32 sequence, so the same seed replays the same numbers. Call it with no argument to hand them back to `Math.random()`.',
-    create: 'Returns an independent generator carrying its own `float`, `integer`, `distribution`, and `pick`. Prefer it over `seed()` when you want reproducibility in one place without changing behaviour everywhere else.',
+    create: 'Returns an independent generator carrying its own `next`, `float`, `integer`, `distribution`, and `pick`. Prefer it over `seed()` when you want reproducibility in one place without changing behaviour everywhere else.',
   },
   NumArray: {
     min: 'Smallest value, or `NaN` for an empty array.',
@@ -483,6 +491,8 @@ const methodNotes = {
     map: 'Moves a value from one range straight into another: `normalize()` followed by `lerp()`. This is the one-liner for turning data into pixels, degrees, or colour channels.',
     isIn: 'Inclusive range test, easier to read at a glance than two comparisons.',
     isOut: 'The negation of `isIn()`, for guard clauses that bail out early.',
+    smoothstep: 'Evaluates the cubic Hermite curve `t * t * (3 - 2 * t)` for `x` clamped and normalized between `edge0` and `edge1`.',
+    damp: 'Frame-rate-independent exponential smoothing toward `target` using `1 - Math.exp(-rate * dt)`.',
   },
   Time: {
     millisecToSec: 'Divides by 1000. Browser timestamps arrive in milliseconds while animation maths usually runs in seconds.',
@@ -514,6 +524,7 @@ const aliases = {
 
 const callableAliases = {
   Rand: {
+    next: { params: [], returns: 'number' },
     float: { params: [['min', 'number'], ['max', 'number']], returns: 'number' },
     integer: { params: [['min', 'number'], ['max', 'number']], returns: 'number' },
     distribution: { params: [['min', 'number'], ['max', 'number'], ['iterations', 'number']], returns: 'number' },
@@ -531,7 +542,7 @@ const callableAliases = {
 const returnOverrides = {
   'Circ.setRadius': 'this',
   'Circ.setDiameter': 'this',
-  'Rand.create': '{ float(min, max): number; integer(min, max): number; distribution(min, max, iterations): number; pick(value1, value2): number }',
+  'Rand.create': '{ next(): number; float(min, max): number; integer(min, max): number; distribution(min, max, iterations): number; pick(value1, value2): number }',
 };
 
 const legacy = new Map();

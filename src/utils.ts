@@ -20,7 +20,8 @@ function lerp(min: number, max: number, amount: number): number {
 
 /** Map x from [min, max] into [0, 1]. */
 function normalize(x: number, min: number, max: number): number {
-  if (min === max) return 0;
+  if (min === max)
+    return 0;
   return (x - min) / (max - min);
 }
 
@@ -91,6 +92,21 @@ export const Utils = {
   /** Map x from [sourceMin, sourceMax] into [destMin, destMax]. */
   map(x: number, sourceMin: number, sourceMax: number, destMin: number, destMax: number): number {
     return lerp(destMin, destMax, normalize(x, sourceMin, sourceMax));
+  },
+
+  /** Hermite smoothstep interpolation of x between edge0 and edge1 in [0, 1]. */
+  smoothstep(edge0: number, edge1: number, x: number): number {
+    if (edge0 === edge1)
+      return x < edge0 ? 0 : 1;
+    const t = Math.min(Math.max((x - edge0) / (edge1 - edge0), 0), 1);
+    return t * t * (3 - 2 * t);
+  },
+
+  /** Frame-rate independent exponential damping from current toward target. */
+  damp(current: number, target: number, rate: number, dt: number): number {
+    if (dt <= 0 || rate <= 0)
+      return current;
+    return lerp(current, target, 1 - Math.exp(-rate * dt));
   },
 
   /** True if x is inside [min, max]. */

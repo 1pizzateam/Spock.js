@@ -16,6 +16,15 @@ describe('Trigo', () => {
     expect(Trigo.normalizeRadian(0.5)).toBe(0.5);
   });
 
+  it('should compute deltaRadian, lerpRadian, and stepRadian along the shortest arc', () => {
+    expect(Trigo.deltaRadian(0.1, -0.1)).toBeCloseTo(-0.2, 6);
+    expect(Trigo.deltaRadian(Math.PI - 0.1, -Math.PI + 0.1)).toBeCloseTo(0.2, 6);
+    expect(Trigo.lerpRadian(Math.PI - 0.1, -Math.PI + 0.1, 0.5)).toBeCloseTo(Math.PI, 6);
+    expect(Trigo.stepRadian(0, 1, 0.25)).toBeCloseTo(0.25, 6);
+    expect(Trigo.stepRadian(0, -1, 0.25)).toBeCloseTo(-0.25, 6);
+    expect(Trigo.stepRadian(0.1, 0.2, 0.5)).toBeCloseTo(0.2, 6);
+  });
+
   it('should approximate sine and cosine closely enough for realtime use', () => {
     expect(Trigo.sine(0)).toBeCloseTo(0, 3);
     expect(Trigo.cosine(0)).toBeCloseTo(1, 3);

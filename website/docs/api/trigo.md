@@ -6,7 +6,7 @@ Angle constants, conversions, and wave equations, with both fast and precise sin
 
 `sine()` and `cosine()` read from a 16k-entry lookup table: fast enough to call per particle per frame, and accurate enough for motion. When you need full precision, such as building a matrix or a quaternion, use `sinePrecise()` and `cosinePrecise()`, which call `Math.sin` and `Math.cos` directly.
 
-The constants `pi`, `twopi`, and `halfpi` save recomputing them, `degreeToRadian()` and `radianToDegree()` convert, and `normalizeRadian()` wraps an angle into (-π, π]. The `*Equation` helpers evaluate `amplitude * f(period + shiftX) + shiftY` in one call, which is the shape most oscillations take.
+The constants `pi`, `twopi`, and `halfpi` save recomputing them, `degreeToRadian()` and `radianToDegree()` convert, and `normalizeRadian()`, `deltaRadian()`, `lerpRadian()`, and `stepRadian()` wrap, compare, and interpolate angles across the ±π seam. The `*Equation` helpers evaluate `amplitude * f(period + shiftX) + shiftY` in one call, which is the shape most oscillations take.
 
 ```js
 import { Trigo } from '@1pizzateam/spock';
@@ -95,6 +95,89 @@ import { Trigo } from '@1pizzateam/spock';
 
 
 const result = Trigo.normalizeRadian(Math.PI / 4);
+```
+
+## Trigo.deltaRadian()
+
+Shortest signed angular difference from `from` to `to` in `(-π, π]`.
+
+Wraps `to - from` into `(-π, π]`, giving the direction and magnitude of the shortest turn from `from` to `to`.
+
+```ts
+deltaRadian(from: number, to: number): number
+```
+
+### Parameters
+
+- `from` — `number`. Starting angle in radians.
+- `to` — `number`. Target angle in radians.
+
+### Returns
+
+`number` — Shortest signed difference in radians in `(-π, π]`.
+
+### Example
+
+```js
+import { Trigo } from '@1pizzateam/spock';
+
+const diff = Trigo.deltaRadian(3.0, -3.0); // ≈ 0.283 (turns across π instead of going the long way round)
+```
+
+## Trigo.lerpRadian()
+
+Shortest-arc angular interpolation from `from` to `to` by `t`.
+
+Interpolates along the shortest angular delta `deltaRadian(from, to)` and normalizes the resulting angle into `(-π, π]`.
+
+```ts
+lerpRadian(from: number, to: number, t: number): number
+```
+
+### Parameters
+
+- `from` — `number`. Starting angle in radians.
+- `to` — `number`. Target angle in radians.
+- `t` — `number`. Interpolation factor, typically in `[0, 1]`.
+
+### Returns
+
+`number` — Interpolated angle in radians wrapped into `(-π, π]`.
+
+### Example
+
+```js
+import { Trigo } from '@1pizzateam/spock';
+
+const midway = Trigo.lerpRadian(3.0, -3.0, 0.5); // ≈ π
+```
+
+## Trigo.stepRadian()
+
+Step `current` toward `target` by at most `maxStep` radians along the shortest arc.
+
+Moves `current` toward `target` without overshooting when the remaining angular distance is within `maxStep`, and wraps the result into `(-π, π]`.
+
+```ts
+stepRadian(current: number, target: number, maxStep: number): number
+```
+
+### Parameters
+
+- `current` — `number`. Current angle in radians.
+- `target` — `number`. Target angle in radians.
+- `maxStep` — `number`. Maximum angular step in radians (non-negative).
+
+### Returns
+
+`number` — Updated angle in radians wrapped into `(-π, π]`.
+
+### Example
+
+```js
+import { Trigo } from '@1pizzateam/spock';
+
+const heading = Trigo.stepRadian(0, Math.PI / 2, 0.1); // 0.1
 ```
 
 ## Trigo.sine()

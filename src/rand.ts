@@ -6,6 +6,9 @@ function fromNext(next: () => number) {
   }
 
   return {
+    /** Uniform float in [0, 1). */
+    next: () => next(),
+
     float,
 
     /** Uniform integer in [min, max]. */
@@ -46,6 +49,8 @@ const methods = fromNext(() => next());
 /** Random numbers; unseeded calls use Math.random(). */
 export const Rand = {
 
+  /** Uniform float in [0, 1). */
+  next: methods.next,
   /** Uniform float in [min, max). */
   float: methods.float,
   /** Uniform integer in [min, max]. */

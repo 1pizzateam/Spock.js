@@ -164,6 +164,86 @@ export class Grid {
     return target.setScalar(cellId % cols, Math.floor(cellId / cols));
   }
 
+  /** Get the world-space center of a cell index, or (-1, -1) if out of bounds. */
+  public getCellCenter(cellId: number, target: Vec2 = new Vec2()): Vec2 {
+    if (cellId < 0 || cellId >= this.totalCells)
+      return target.setScalar(GRID_EMPTY_CELL, GRID_EMPTY_CELL);
+    const cols = this.len.x;
+    const col = cellId % cols;
+    const row = Math.floor(cellId / cols);
+    return target.setScalar((col + 0.5) * this.cellSize, (row + 0.5) * this.cellSize);
+  }
+
+  /**
+   * 2D Amanatides & Woo DDA traversal along the segment [start, end].
+   * Invokes `visit(cellId, col, row, tEnter, tExit)` for each in-bounds cell in ray order.
+   * Stops early and returns false if `visit` returns true; returns true if the full segment is traversed.
+   */
+  public traverseRay(
+    start: Vec2,
+    end: Vec2,
+    visit: (cellId: number, col: number, row: number, tEnter: number, tExit: number) => boolean | void
+  ): boolean {
+    const size = this.cellSize;
+    const cols = this.len.x;
+    const rows = this.len.y;
+    const dx = end.x - start.x;
+    const dy = end.y - start.y;
+
+    let col = Math.floor(start.x / size);
+    let row = Math.floor(start.y / size);
+    const endCol = Math.floor(end.x / size);
+    const endRow = Math.floor(end.y / size);
+
+    const stepX = dx > 0 ? 1 : dx < 0 ? -1 : 0;
+    const stepY = dy > 0 ? 1 : dy < 0 ? -1 : 0;
+
+    const tDeltaX = stepX !== 0 ? Math.abs(size / dx) : Infinity;
+    const tDeltaY = stepY !== 0 ? Math.abs(size / dy) : Infinity;
+
+    let tMaxX = stepX > 0
+      ? ((col + 1) * size - start.x) / dx
+      : stepX < 0
+        ? (col * size - start.x) / dx
+        : Infinity;
+    let tMaxY = stepY > 0
+      ? ((row + 1) * size - start.y) / dy
+      : stepY < 0
+        ? (row * size - start.y) / dy
+        : Infinity;
+
+    let t = 0;
+    const maxSteps = Math.abs(endCol - col) + Math.abs(endRow - row) + 1;
+    for (let s = 0; s < maxSteps; s++) {
+      const nextT = Math.min(1, tMaxX, tMaxY);
+      if (col >= 0 && row >= 0 && col < cols && row < rows) {
+        if (visit(row * cols + col, col, row, t, nextT))
+          return false;
+      }
+      if (col === endCol && row === endRow)
+        break;
+      t = nextT;
+      if (tMaxX < tMaxY) {
+        tMaxX += tDeltaX;
+        col += stepX;
+      } else {
+        tMaxY += tDeltaY;
+        row += stepY;
+      }
+    }
+    return true;
+  }
+
+  /** Fill target array with every in-bounds cell traversed by the segment [start, end]. */
+  public getCellsForSegment(start: Vec2, end: Vec2, out: number[] = []): number[] {
+    let index = 0;
+    this.traverseRay(start, end, (cellId) => {
+      out[index++] = cellId;
+    });
+    out.length = index;
+    return out;
+  }
+
   /** Draw the lattice on a canvas. */
   public draw(context: CanvasRenderingContext2D, fillColor: string, strokeColor: string, strokeWidth: number): void {
     const size = this.cellSize;

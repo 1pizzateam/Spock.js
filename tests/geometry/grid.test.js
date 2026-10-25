@@ -97,6 +97,25 @@ describe('Grid', () => {
 
     const circleCells = grid.getCellsForCircle(new Circ(5, new Vec2(10, 10)));
     expect(circleCells).toEqual([0, 1, 10, 11]);
+
+    const centerTarget = new Vec2();
+    expect(grid.getCellCenter(12, centerTarget)).toBe(centerTarget);
+    expect(centerTarget.x).toBe(25);
+    expect(centerTarget.y).toBe(15);
+    expect(grid.getCellCenter(999).x).toBe(Grid.emptyCell);
+
+    const segCells = grid.getCellsForSegment(new Vec2(5, 5), new Vec2(25, 5));
+    expect(segCells).toEqual([0, 1, 2]);
+
+    const visited = [];
+    const completed = grid.traverseRay(new Vec2(25, 25), new Vec2(5, 5), (cellId) => {
+      visited.push(cellId);
+      return cellId === 11;
+    });
+    expect(completed).toBe(false);
+    expect(visited).toContain(22);
+    expect(visited).toContain(11);
+    expect(visited).not.toContain(0);
   });
 
 });

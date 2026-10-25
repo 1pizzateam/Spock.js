@@ -131,6 +131,11 @@ export class Quat {
     return this;
   }
 
+  /** Component-wise equality check. */
+  public equals(q: Quat): boolean {
+    return this.w === q.w && this.vector.equals(q.vector);
+  }
+
   /** Write [w, x, y, z] into target (or a new array). */
   public toArray(target: number[] = []): number[] {
     target[0] = this.w;

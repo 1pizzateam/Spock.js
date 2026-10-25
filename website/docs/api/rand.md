@@ -4,18 +4,45 @@ Random numbers, either from `Math.random()` or from a seeded generator you can r
 
 <RandDemo />
 
-The module-level `float()`, `integer()`, `distribution()`, and `pick()` use `Math.random()` until you call `seed()`, after which they follow a deterministic mulberry32 sequence. Call `seed()` with no argument to hand them back to `Math.random()`.
+The module-level `next()`, `float()`, `integer()`, `distribution()`, and `pick()` use `Math.random()` until you call `seed()`, after which they follow a deterministic mulberry32 sequence. Call `seed()` with no argument to hand them back to `Math.random()`.
 
-`create()` returns an independent generator with the same four methods, which is the better option when you want one reproducible stream without touching global state. `distribution()` averages several samples, biasing results toward the middle of the range instead of spreading them evenly.
+`create()` returns an independent generator with the same five methods, which is the better option when you want one reproducible stream without touching global state. `distribution()` averages several samples, biasing results toward the middle of the range instead of spreading them evenly.
 
 ```js
 import { Rand } from '@1pizzateam/spock';
 
 const random = Rand.create(1337); // same seed, same level, every run
 
+const u = random.next();
 const flat = random.float(0, 1);
 const enemies = random.integer(3, 8);
 const centered = random.distribution(0, 1, 5); // clustered toward middle
+```
+
+## Rand.next()
+
+Uniform float in `[0, 1)`.
+
+Returns a single uniform random number in `[0, 1)` with no range math overhead, matching the signature of `Math.random()`.
+
+```ts
+next(): number
+```
+
+### Parameters
+
+None.
+
+### Returns
+
+`number` — Uniform float in `[0, 1)`.
+
+### Example
+
+```js
+import { Rand } from '@1pizzateam/spock';
+
+const u = Rand.next();
 ```
 
 ## Rand.float()
@@ -180,10 +207,10 @@ const result = Rand.seed(1);
 
 Independent generator from seed.
 
-Returns an independent generator carrying its own `float`, `integer`, `distribution`, and `pick`. Prefer it over `seed()` when you want reproducibility in one place without changing behaviour everywhere else.
+Returns an independent generator carrying its own `next`, `float`, `integer`, `distribution`, and `pick`. Prefer it over `seed()` when you want reproducibility in one place without changing behaviour everywhere else.
 
 ```ts
-create(seed: number): { float(min, max): number; integer(min, max): number; distribution(min, max, iterations): number; pick(value1, value2): number }
+create(seed: number): { next(): number; float(min, max): number; integer(min, max): number; distribution(min, max, iterations): number; pick(value1, value2): number }
 ```
 
 ### Parameters
@@ -192,7 +219,7 @@ create(seed: number): { float(min, max): number; integer(min, max): number; dist
 
 ### Returns
 
-`{ float(min, max): number; integer(min, max): number; distribution(min, max, iterations): number; pick(value1, value2): number }`
+`{ next(): number; float(min, max): number; integer(min, max): number; distribution(min, max, iterations): number; pick(value1, value2): number }`
 
 ### Example
 

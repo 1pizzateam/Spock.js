@@ -57,6 +57,24 @@ export const Trigo = {
     return angle;
   },
 
+  /** Shortest signed angular difference from `from` to `to` in (-π, π]. */
+  deltaRadian(from: number, to: number): number {
+    return Trigo.normalizeRadian(to - from);
+  },
+
+  /** Interpolate from `from` to `to` along the shortest angular arc. */
+  lerpRadian(from: number, to: number, t: number): number {
+    return from + Trigo.normalizeRadian(to - from) * t;
+  },
+
+  /** Step `current` toward `target` along the shortest arc by at most `maxStep` radians. */
+  stepRadian(current: number, target: number, maxStep: number): number {
+    const diff = Trigo.normalizeRadian(target - current);
+    if (Math.abs(diff) <= maxStep)
+      return target;
+    return current + (diff > 0 ? maxStep : -maxStep);
+  },
+
   /** Fast sine of angle in radians. */
   sine(angle: number): number {
     return fastSine(angle);

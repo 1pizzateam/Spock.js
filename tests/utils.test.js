@@ -63,6 +63,20 @@ describe('Utils', () => {
     expect(Utils.map(5, 0, 10, 0, 100)).toBe(50);
   });
 
+  it('should compute smoothstep interpolation', () => {
+    expect(Utils.smoothstep(0, 10, -2)).toBe(0);
+    expect(Utils.smoothstep(0, 10, 5)).toBe(0.5);
+    expect(Utils.smoothstep(0, 10, 12)).toBe(1);
+    expect(Utils.smoothstep(5, 5, 3)).toBe(0);
+    expect(Utils.smoothstep(5, 5, 5)).toBe(1);
+  });
+
+  it('should compute exponential damping', () => {
+    expect(Utils.damp(0, 10, 5, 0)).toBe(0);
+    expect(Utils.damp(0, 10, 0, 0.1)).toBe(0);
+    expect(Utils.damp(0, 10, 10, 0.1)).toBeCloseTo(10 * (1 - Math.exp(-1)), 6);
+  });
+
   it('should detect values inside and outside a range', () => {
     expect(Utils.isIn(5, 0, 10)).toBe(true);
     expect(Utils.isIn(0, 0, 10)).toBe(true);
