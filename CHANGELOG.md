@@ -1,3 +1,11 @@
+Version 4.6.0 (November 7th 2026)
+-----------------------------
+ * Mat4x3:
+    * Add `Mat4x3.transformPoints(array, indices?, weights?)` transforming packed xyz points in place, optionally restricted to `indices` and blended per vertex by `weights`
+    * Add `Mat4x3.transformDirections(array, indices?, weights?)` doing the same for directions (normals, deltas) without the translation column
+ * Vec3:
+    * Add `Vec3.getEllipsoidDistance(center, radii)` returning the normalized distance from an axis-aligned ellipsoid's center (`1` on the surface)
+
 Version 4.5.0 (October 25th 2026)
 -----------------------------
  * Utils:

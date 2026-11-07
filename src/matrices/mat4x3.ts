@@ -228,6 +228,53 @@ export class Mat4x3 {
     return this;
   }
 
+  /**
+   * Transform packed xyz points in place by this affine matrix.
+   * With `indices`, only those vertices are touched. With `weights`, each point is blended
+   * `p + (M·p - p) * w` (parallel to `indices` when given, otherwise per vertex); `w <= 0` skips, `w >= 1` is a full transform.
+   * Allocation-free; the hot loop works on scalars so it costs no more than hand-written code.
+   */
+  public transformPoints(array: Float32Array | number[], indices?: ArrayLike<number>, weights?: ArrayLike<number>): Mat4x3 {
+    this.applyToArray(array, indices, weights, true);
+    return this;
+  }
+
+  /** Same as {@link transformPoints} but rotates/scales directions (normals, deltas): the translation column is ignored. */
+  public transformDirections(array: Float32Array | number[], indices?: ArrayLike<number>, weights?: ArrayLike<number>): Mat4x3 {
+    this.applyToArray(array, indices, weights, false);
+    return this;
+  }
+
+  private applyToArray(
+    a: Float32Array | number[],
+    indices: ArrayLike<number> | undefined,
+    weights: ArrayLike<number> | undefined,
+    translate: boolean
+  ): void {
+    const m = this.m;
+    const m0 = m[0], m1 = m[1], m2 = m[2];
+    const m4 = m[4], m5 = m[5], m6 = m[6];
+    const m8 = m[8], m9 = m[9], m10 = m[10];
+    const tx = translate ? m[12] : 0, ty = translate ? m[13] : 0, tz = translate ? m[14] : 0;
+    const count = indices ? indices.length : (a.length / 3) | 0;
+    for (let k = 0; k < count; k++) {
+      const w = weights ? weights[k] : 1;
+      if (!(w > 0)) continue;
+      const i = (indices ? indices[k] : k) * 3;
+      const x = a[i], y = a[i + 1], z = a[i + 2];
+      const rx = m0 * x + m4 * y + m8 * z + tx;
+      const ry = m1 * x + m5 * y + m9 * z + ty;
+      const rz = m2 * x + m6 * y + m10 * z + tz;
+      if (w >= 1) {
+        a[i] = rx; a[i + 1] = ry; a[i + 2] = rz;
+      } else {
+        a[i] = x + (rx - x) * w;
+        a[i + 1] = y + (ry - y) * w;
+        a[i + 2] = z + (rz - z) * w;
+      }
+    }
+  }
+
   /** Write the translation column into target. */
   public getTranslation(target: Vec3 = new Vec3()): Vec3 {
     const m = this.m;

@@ -94,4 +94,37 @@ describe('Mat4x3', () => {
     }
   });
 
+
+  describe('bulk transforms', () => {
+    const m = new Mat4x3().rotateY(Math.PI / 2).translate(new Vec3(1, 2, 3));
+    const pts = [[1, 0, 0], [0, 1, 0], [2, -1, 5]];
+
+    it('transformPoints matches per-point math, indexed and weighted', () => {
+      const a = new Float32Array(pts.flat());
+      const b = new Float32Array(pts.flat());
+      // reference: full transform of all points
+      m.transformPoints(a);
+      const e = m.toArray();
+      pts.forEach(([x, y, z], i) => {
+        expect(a[i * 3]).toBeCloseTo(e[0] * x + e[4] * y + e[8] * z + e[12], 5);
+        expect(a[i * 3 + 1]).toBeCloseTo(e[1] * x + e[5] * y + e[9] * z + e[13], 5);
+        expect(a[i * 3 + 2]).toBeCloseTo(e[2] * x + e[6] * y + e[10] * z + e[14], 5);
+      });
+      // indexed + weighted: only vertex 2 at half strength, others untouched
+      m.transformPoints(b, [2], [0.5]);
+      expect(Array.from(b.slice(0, 6))).toEqual([1, 0, 0, 0, 1, 0]);
+      expect(b[6]).toBeCloseTo(2 + (a[6] - 2) * 0.5, 5);
+      expect(b[8]).toBeCloseTo(5 + (a[8] - 5) * 0.5, 5);
+    });
+
+    it('transformDirections ignores translation and skips zero weights', () => {
+      const a = new Float32Array([1, 0, 0, 1, 0, 0]);
+      new Mat4x3().translate(new Vec3(9, 9, 9)).transformDirections(a);
+      expect(Array.from(a)).toEqual([1, 0, 0, 1, 0, 0]);
+      const b = new Float32Array([1, 0, 0, 1, 0, 0]);
+      new Mat4x3().rotateZ(Math.PI / 2).transformDirections(b, undefined, [0, 1]);
+      expect(Array.from(b.slice(0, 3))).toEqual([1, 0, 0]);
+      expect(Math.abs(b[3])).toBeLessThan(1e-5);
+    });
+  });
 });

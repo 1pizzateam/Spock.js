@@ -113,6 +113,66 @@ import { Mat4x3 } from '@1pizzateam/spock';
 const result = new Mat4x3().toArray(new Float32Array(16));
 ```
 
+## Mat4x3.transformPoints()
+
+Transform packed xyz points in place.
+
+Treats the array as `[x0, y0, z0, x1, ...]` and applies the full affine transform, translation included, to each point. With `indices`, only those vertices are touched; with `weights`, each point is blended `p + (M·p - p) * w`, so a skinned vertex can follow a pivot partially. Weights are parallel to `indices` when it is given, otherwise per vertex; a weight `<= 0` skips the point and `>= 1` is a full transform. Nothing is allocated, which makes it suitable for deforming whole meshes every frame.
+
+```ts
+transformPoints(array: Float32Array | number[], indices?: ArrayLike<number>, weights?: ArrayLike<number>): Mat4x3
+```
+
+### Parameters
+
+- `array` — `Float32Array | number[]`. Packed xyz positions, modified in place.
+- `indices` — `ArrayLike<number>`. Optional. Vertex numbers to transform; all vertices when omitted.
+- `weights` — `ArrayLike<number>`. Optional. Blend weight `0..1` per listed vertex (per vertex when `indices` is omitted).
+
+### Returns
+
+`Mat4x3` — the Mat4x3 itself, for chaining
+
+### Example
+
+```js
+import { Mat4x3, Quat, Vec3 } from '@1pizzateam/spock';
+
+const pivot = new Vec3(0, -3, 0);
+const jaw = new Mat4x3()
+  .compose(pivot, new Quat().setFromEuler(new Vec3(0.3, 0, 0)), new Vec3(1, 1, 1))
+  .translate(new Vec3().oppositeVector(pivot));
+
+// rotate vertices 10, 11 and 12 about the pivot, fading in with distance from the hinge
+jaw.transformPoints(positions, [10, 11, 12], [1, 0.6, 0.2]);
+```
+
+## Mat4x3.transformDirections()
+
+Transform packed xyz directions in place, ignoring translation.
+
+Same contract as `transformPoints()`, but only the rotation and scale part is applied. Use it for normals and morph deltas that must turn with a pivot but not move with it. Normals are not renormalized afterwards.
+
+```ts
+transformDirections(array: Float32Array | number[], indices?: ArrayLike<number>, weights?: ArrayLike<number>): Mat4x3
+```
+
+### Parameters
+
+- `array` — `Float32Array | number[]`. Packed xyz directions, modified in place.
+- `indices` — `ArrayLike<number>`. Optional. Vertex numbers to transform; all vertices when omitted.
+- `weights` — `ArrayLike<number>`. Optional. Blend weight `0..1` per listed vertex (per vertex when `indices` is omitted).
+
+### Returns
+
+`Mat4x3` — the Mat4x3 itself, for chaining
+
+### Example
+
+```js
+jaw.transformDirections(normals, [10, 11, 12], [1, 0.6, 0.2]);
+```
+
 ## Mat4x3.toString()
 
 Human-readable row string.

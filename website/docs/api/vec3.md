@@ -25,7 +25,7 @@ const angle = forward.getAngle(up); // radians, or false for a zero-length vecto
 | **Creation & Component State** | [`new Vec3()`](#constructor) · [`setScalar()`](#vec3-setscalar) · [`setArray()`](#vec3-setarray) · [`copy()`](#vec3-copy) · [`clone()`](#vec3-clone) · [`toArray()`](#vec3-toarray) · [`toString()`](#vec3-tostring) · [`isOrigin()`](#vec3-isorigin) · [`origin()`](#vec3-origin) · [`equals()`](#vec3-equals) · [`isEqualTo()`](#vec3-isequalto) · [`isPositive()`](#vec3-ispositive) |
 | **Arithmetic & Modification** | [`add()`](#vec3-add) · [`addScaledVector()`](#vec3-addscaledvector) · [`addScalar()`](#vec3-addscalar) · [`addComponents()`](#vec3-addcomponents) · [`subtract()`](#vec3-subtract) · [`subtractScaledVector()`](#vec3-subtractscaledvector) · [`subtractScalar()`](#vec3-subtractscalar) · [`multiply()`](#vec3-multiply) · [`multiplyScaledVector()`](#vec3-multiplyscaledvector) · [`scale()`](#vec3-scale) · [`divide()`](#vec3-divide) · [`divideScaledVector()`](#vec3-dividescaledvector) · [`divideScalar()`](#vec3-dividescalar) · [`halve()`](#vec3-halve) · [`opposite()`](#vec3-opposite) · [`absolute()`](#vec3-absolute) · [`sign()`](#vec3-sign) · [`floor()`](#vec3-floor) · [`ceil()`](#vec3-ceil) · [`max()`](#vec3-max) · [`min()`](#vec3-min) · [`maxScalar()`](#vec3-maxscalar) · [`minScalar()`](#vec3-minscalar) |
 | **Target Operations** | [`addVectors()`](#vec3-addvectors) · [`subVectors()`](#vec3-subvectors) · [`multiplyVectors()`](#vec3-multiplyvectors) · [`scaleVector()`](#vec3-scalevector) · [`divideVectors()`](#vec3-dividevectors) · [`minVectors()`](#vec3-minvectors) · [`maxVectors()`](#vec3-maxvectors) · [`clampVectors()`](#vec3-clampvectors) · [`oppositeVector()`](#vec3-oppositevector) · [`absoluteVector()`](#vec3-absolutevector) · [`normalizeVector()`](#vec3-normalizevector) · [`crossVectors()`](#vec3-crossvectors) |
-| **Geometric & Spatial Operations** | [`getMagnitude()`](#vec3-getmagnitude) · [`getDistance()`](#vec3-getdistance) · [`normalize()`](#vec3-normalize) · [`dotProduct()`](#vec3-dotproduct) · [`cross()`](#vec3-cross) · [`getAngle()`](#vec3-getangle) · [`clamp()`](#vec3-clamp) · [`clampScalar()`](#vec3-clampscalar) · [`isInBounds()`](#vec3-isinbounds) · [`lerp()`](#vec3-lerp) · [`maxComponent()`](#vec3-maxcomponent) · [`minComponent()`](#vec3-mincomponent) · [`setFromSpherical()`](#vec3-setfromspherical) · [`getSpherical()`](#vec3-getspherical) |
+| **Geometric & Spatial Operations** | [`getMagnitude()`](#vec3-getmagnitude) · [`getDistance()`](#vec3-getdistance) · [`getEllipsoidDistance()`](#vec3-getellipsoiddistance) · [`normalize()`](#vec3-normalize) · [`dotProduct()`](#vec3-dotproduct) · [`cross()`](#vec3-cross) · [`getAngle()`](#vec3-getangle) · [`clamp()`](#vec3-clamp) · [`clampScalar()`](#vec3-clampscalar) · [`isInBounds()`](#vec3-isinbounds) · [`lerp()`](#vec3-lerp) · [`maxComponent()`](#vec3-maxcomponent) · [`minComponent()`](#vec3-mincomponent) · [`setFromSpherical()`](#vec3-setfromspherical) · [`getSpherical()`](#vec3-getspherical) |
 | **Bézier Curves** | [`quadraticBezier()`](#vec3-quadraticbezier) · [`cubicBezier()`](#vec3-cubicbezier) · [`quadraticBezierDerivative()`](#vec3-quadraticbezierderivative) · [`cubicBezierDerivative()`](#vec3-cubicbezierderivative) · [`quadraticBezierSplit()`](#vec3-quadraticbeziersplit) · [`cubicBezierSplit()`](#vec3-cubicbeziersplit) · [`quadraticBezierLength()`](#vec3-quadraticbezierlength) · [`cubicBezierLength()`](#vec3-cubicbezierlength) · [`quadraticBezierParameterAtLength()`](#vec3-quadraticbezierparameteratlength) · [`cubicBezierParameterAtLength()`](#vec3-cubicbezierparameteratlength) |
 
 ---
@@ -1436,6 +1436,23 @@ import { Vec3 } from '@1pizzateam/spock';
 
 const result = new Vec3().getMagnitude(false);
 ```
+
+### Vec3.getEllipsoidDistance()
+
+Distance from the center of an axis-aligned ellipsoid, normalized so the surface is `1` (`sqrt(((x-cx)/rx)² + ((y-cy)/ry)² + ((z-cz)/rz)²)`). Values below `1` are inside.
+
+```ts
+getEllipsoidDistance(center: Vec3, radii: Vec3): number
+```
+
+#### Parameters
+
+- `center` — `Vec3`.
+- `radii` — `Vec3`. Semi-axes.
+
+#### Returns
+
+`number`.
 
 ### Vec3.getDistance()
 

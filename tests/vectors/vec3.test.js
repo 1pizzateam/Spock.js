@@ -404,4 +404,11 @@ describe('Vec3', () => {
     expect(leftCubic[3].x).toBeCloseTo(rightCubic[0].x, 5);
   });
 
+
+  it('getEllipsoidDistance is 1 on the surface and < 1 inside', () => {
+    const c = new Vec3(1, 2, 3), r = new Vec3(2, 4, 1);
+    expect(new Vec3(3, 2, 3).getEllipsoidDistance(c, r)).toBeCloseTo(1, 6);
+    expect(new Vec3(1, 2, 3).getEllipsoidDistance(c, r)).toBe(0);
+    expect(new Vec3(1, 4, 3).getEllipsoidDistance(c, r)).toBeCloseTo(0.5, 6);
+  });
 });
