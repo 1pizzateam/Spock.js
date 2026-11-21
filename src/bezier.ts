@@ -8,39 +8,6 @@ export function bezierSampleCount(samples?: number): number {
   return samples < 1 ? 1 : samples | 0;
 }
 
-/** Approximate arc length of a 1D curve by polyline samples. */
-function polylineLength(at: (t: number) => number, samples?: number): number {
-  const n = bezierSampleCount(samples);
-  let prev = at(0);
-  let length = 0;
-  for (let i = 1; i <= n; i++) {
-    const curr = at(i / n);
-    length += curr > prev ? curr - prev : prev - curr;
-    prev = curr;
-  }
-  return length;
-}
-
-/** Parameter t where sampled 1D arc length reaches distance. */
-function parameterAtLength(at: (t: number) => number, distance: number, samples?: number): number {
-  if (distance <= 0)
-    return 0;
-  const n = bezierSampleCount(samples);
-  let traveled = 0;
-  let prev = at(0);
-  for (let i = 1; i <= n; i++) {
-    const curr = at(i / n);
-    const segment = curr > prev ? curr - prev : prev - curr;
-    if (traveled + segment >= distance) {
-      const u = segment === 0 ? 0 : (distance - traveled) / segment;
-      return (i - 1 + u) / n;
-    }
-    traveled += segment;
-    prev = curr;
-  }
-  return 1;
-}
-
 /** Approximate 2D/3D curve length from coordinate samplers. */
 export function sampleCurveLength<V extends Vec2 | Vec3>(
   sample: (t: number, target: V) => V,
@@ -156,22 +123,68 @@ export const Bezier = {
 
   /** Sampled arc length of a 1D quadratic. */
   quadraticLength(p0: number, p1: number, p2: number, samples?: number): number {
-    return polylineLength(t => Bezier.quadratic(p0, p1, p2, t), samples);
+    const n = bezierSampleCount(samples);
+    let prev = Bezier.quadratic(p0, p1, p2, 0);
+    let length = 0;
+    for (let i = 1; i <= n; i++) {
+      const curr = Bezier.quadratic(p0, p1, p2, i / n);
+      length += curr > prev ? curr - prev : prev - curr;
+      prev = curr;
+    }
+    return length;
   },
 
   /** Sampled arc length of a 1D cubic. */
   cubicLength(p0: number, p1: number, p2: number, p3: number, samples?: number): number {
-    return polylineLength(t => Bezier.cubic(p0, p1, p2, p3, t), samples);
+    const n = bezierSampleCount(samples);
+    let prev = Bezier.cubic(p0, p1, p2, p3, 0);
+    let length = 0;
+    for (let i = 1; i <= n; i++) {
+      const curr = Bezier.cubic(p0, p1, p2, p3, i / n);
+      length += curr > prev ? curr - prev : prev - curr;
+      prev = curr;
+    }
+    return length;
   },
 
   /** Parameter t at the given 1D quadratic arc length. */
   quadraticParameterAtLength(p0: number, p1: number, p2: number, distance: number, samples?: number): number {
-    return parameterAtLength(t => Bezier.quadratic(p0, p1, p2, t), distance, samples);
+    if (distance <= 0)
+      return 0;
+    const n = bezierSampleCount(samples);
+    let traveled = 0;
+    let prev = Bezier.quadratic(p0, p1, p2, 0);
+    for (let i = 1; i <= n; i++) {
+      const curr = Bezier.quadratic(p0, p1, p2, i / n);
+      const segment = curr > prev ? curr - prev : prev - curr;
+      if (traveled + segment >= distance) {
+        const u = segment === 0 ? 0 : (distance - traveled) / segment;
+        return (i - 1 + u) / n;
+      }
+      traveled += segment;
+      prev = curr;
+    }
+    return 1;
   },
 
   /** Parameter t at the given 1D cubic arc length. */
   cubicParameterAtLength(p0: number, p1: number, p2: number, p3: number, distance: number, samples?: number): number {
-    return parameterAtLength(t => Bezier.cubic(p0, p1, p2, p3, t), distance, samples);
+    if (distance <= 0)
+      return 0;
+    const n = bezierSampleCount(samples);
+    let traveled = 0;
+    let prev = Bezier.cubic(p0, p1, p2, p3, 0);
+    for (let i = 1; i <= n; i++) {
+      const curr = Bezier.cubic(p0, p1, p2, p3, i / n);
+      const segment = curr > prev ? curr - prev : prev - curr;
+      if (traveled + segment >= distance) {
+        const u = segment === 0 ? 0 : (distance - traveled) / segment;
+        return (i - 1 + u) / n;
+      }
+      traveled += segment;
+      prev = curr;
+    }
+    return 1;
   },
 
 };
