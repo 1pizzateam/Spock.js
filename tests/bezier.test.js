@@ -1,3 +1,5 @@
+import { sampleCurveLength } from '../build/es6/bezier.js';
+import { Vec2 } from '../build/es6/vectors/vec2.js';
 import { Bezier } from '../build/es6/bezier.js';
 
 describe('Bezier', () => {
@@ -52,6 +54,16 @@ describe('Bezier', () => {
 
   it('should map half the length of a straight quadratic to t = 0.5', () => {
     expect(Bezier.quadraticParameterAtLength(0, 5, 10, 5)).toBeCloseTo(0.5, 5);
+  });
+
+  it('AC-1 sampleCurveLength accepts a Vec2 vector sampler with scratch vectors', () => {
+    const length = sampleCurveLength(
+      (t, target) => target.setScalar(3 * t, 4 * t),
+      new Vec2(),
+      new Vec2(),
+      4
+    );
+    expect(length).toBeCloseTo(5, 12);
   });
 
 });

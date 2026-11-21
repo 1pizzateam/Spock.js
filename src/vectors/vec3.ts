@@ -563,9 +563,9 @@ export class Vec3 {
   /** Sampled arc length of a quadratic. */
   public quadraticBezierLength(p0: Vec3, p1: Vec3, p2: Vec3, samples?: number): number {
     return sampleCurveLength(
-      t => Bezier.quadratic(p0.x, p1.x, p2.x, t),
-      t => Bezier.quadratic(p0.y, p1.y, p2.y, t),
-      t => Bezier.quadratic(p0.z, p1.z, p2.z, t),
+      (t, target) => target.setScalar(Bezier.quadratic(p0.x, p1.x, p2.x, t), Bezier.quadratic(p0.y, p1.y, p2.y, t), Bezier.quadratic(p0.z, p1.z, p2.z, t)),
+      bezierPrevious,
+      bezierCurrent,
       samples
     );
   }
@@ -573,9 +573,9 @@ export class Vec3 {
   /** Sampled arc length of a cubic. */
   public cubicBezierLength(p0: Vec3, p1: Vec3, p2: Vec3, p3: Vec3, samples?: number): number {
     return sampleCurveLength(
-      t => Bezier.cubic(p0.x, p1.x, p2.x, p3.x, t),
-      t => Bezier.cubic(p0.y, p1.y, p2.y, p3.y, t),
-      t => Bezier.cubic(p0.z, p1.z, p2.z, p3.z, t),
+      (t, target) => target.setScalar(Bezier.cubic(p0.x, p1.x, p2.x, p3.x, t), Bezier.cubic(p0.y, p1.y, p2.y, p3.y, t), Bezier.cubic(p0.z, p1.z, p2.z, p3.z, t)),
+      bezierPrevious,
+      bezierCurrent,
       samples
     );
   }
@@ -583,9 +583,9 @@ export class Vec3 {
   /** Parameter t at the given quadratic arc length. */
   public quadraticBezierParameterAtLength(p0: Vec3, p1: Vec3, p2: Vec3, distance: number, samples?: number): number {
     return sampleCurveParameterAtLength(
-      t => Bezier.quadratic(p0.x, p1.x, p2.x, t),
-      t => Bezier.quadratic(p0.y, p1.y, p2.y, t),
-      t => Bezier.quadratic(p0.z, p1.z, p2.z, t),
+      (t, target) => target.setScalar(Bezier.quadratic(p0.x, p1.x, p2.x, t), Bezier.quadratic(p0.y, p1.y, p2.y, t), Bezier.quadratic(p0.z, p1.z, p2.z, t)),
+      bezierPrevious,
+      bezierCurrent,
       distance,
       samples
     );
@@ -594,9 +594,9 @@ export class Vec3 {
   /** Parameter t at the given cubic arc length. */
   public cubicBezierParameterAtLength(p0: Vec3, p1: Vec3, p2: Vec3, p3: Vec3, distance: number, samples?: number): number {
     return sampleCurveParameterAtLength(
-      t => Bezier.cubic(p0.x, p1.x, p2.x, p3.x, t),
-      t => Bezier.cubic(p0.y, p1.y, p2.y, p3.y, t),
-      t => Bezier.cubic(p0.z, p1.z, p2.z, p3.z, t),
+      (t, target) => target.setScalar(Bezier.cubic(p0.x, p1.x, p2.x, p3.x, t), Bezier.cubic(p0.y, p1.y, p2.y, p3.y, t), Bezier.cubic(p0.z, p1.z, p2.z, p3.z, t)),
+      bezierPrevious,
+      bezierCurrent,
       distance,
       samples
     );
@@ -723,3 +723,6 @@ export class Vec3 {
   }
 
 }
+
+const bezierPrevious = new Vec3();
+const bezierCurrent = new Vec3();

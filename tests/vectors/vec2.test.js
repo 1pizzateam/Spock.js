@@ -1,3 +1,4 @@
+import { Bezier } from '../../build/es6/bezier.js';
 import { Vec2 } from '../../build/es6/vectors/vec2.js';
 import { Rect } from '../../build/es6/geometry/rect.js';
 
@@ -521,6 +522,50 @@ describe('Vec2', () => {
     expect(right[2].x).toBe(10);
     expect(left[2].x).toBeCloseTo(right[0].x, 5);
     expect(left[2].y).toBeCloseTo(right[0].y, 5);
+  });
+
+  it('AC-2 straight line length is 5 for samples 1, 4 and 16', () => {
+    const a = new Vec2(0, 0), b = new Vec2(1.5, 2), c = new Vec2(3, 4);
+    for (const n of [1, 4, 16]) {
+      expect(a.quadraticBezierLength(a, b, c, n)).toBeCloseTo(5, 12);
+      expect(a.cubicBezierLength(a, new Vec2(1, 4 / 3), new Vec2(2, 8 / 3), c, n)).toBeCloseTo(5, 12);
+    }
+  });
+
+  it('AC-3 cubic length equals independently summed Bezier.cubic polyline', () => {
+    const p0 = new Vec2(0, 0), p1 = new Vec2(1, 2), p2 = new Vec2(3, 2), p3 = new Vec2(4, 0);
+    let expected = 0;
+    let px = 0, py = 0;
+    for (let i = 1; i <= 16; i++) {
+      const t = i / 16;
+      const x = Bezier.cubic(0, 1, 3, 4, t), y = Bezier.cubic(0, 2, 2, 0, t);
+      expected += Math.sqrt((x - px) * (x - px) + (y - py) * (y - py));
+      px = x;
+      py = y;
+    }
+    expect(p0.cubicBezierLength(p0, p1, p2, p3, 16)).toBeCloseTo(expected, 12);
+  });
+
+  it('AC-5 samples below 1 clamp to 1 and omitted defaults to 16', () => {
+    const p0 = new Vec2(0, 0), p1 = new Vec2(1, 2), p2 = new Vec2(3, 2), p3 = new Vec2(4, 0);
+    expect(p0.cubicBezierLength(p0, p1, p2, p3, 0)).toBeCloseTo(p0.cubicBezierLength(p0, p1, p2, p3, 1), 12);
+    expect(p0.cubicBezierLength(p0, p1, p2, p3, -3)).toBeCloseTo(p0.cubicBezierLength(p0, p1, p2, p3, 1), 12);
+    expect(p0.cubicBezierLength(p0, p1, p2, p3)).toBeCloseTo(p0.cubicBezierLength(p0, p1, p2, p3, 16), 12);
+  });
+
+  it('AC-6 degenerate curve has zero length and parameter 1 for positive distance', () => {
+    const p = new Vec2(2, 3);
+    expect(p.cubicBezierLength(p, p, p, p)).toBe(0);
+    expect(p.quadraticBezierLength(p, p, p)).toBe(0);
+    expect(p.cubicBezierParameterAtLength(p, p, p, p, 1)).toBe(1);
+    expect(p.quadraticBezierParameterAtLength(p, p, p, 1)).toBe(1);
+  });
+
+  it('AC-7 repeated calls with different control points are independent', () => {
+    const a = new Vec2(0, 0), b = new Vec2(3, 4), c = new Vec2(10, 0), d = new Vec2(0, 10);
+    const first = a.quadraticBezierLength(a, b, b, 8);
+    a.quadraticBezierLength(c, d, c, 8);
+    expect(a.quadraticBezierLength(a, b, b, 8)).toBe(first);
   });
 
 });
