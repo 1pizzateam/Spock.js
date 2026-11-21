@@ -1,3 +1,8 @@
+Version 4.6.1 (November 21st 2026)
+-----------------------------
+ * Covering Sine and Cosine Wave Equations
+ * Covering Arctan Wave Equation and Edge Cases
+
 Version 4.6.0 (November 7th 2026)
 -----------------------------
  * Mat4x3:

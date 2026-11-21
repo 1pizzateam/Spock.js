@@ -4,7 +4,7 @@ import type { Circ } from './circ';
 export const GRID_EMPTY_CELL = -1;
 
 /** Fill gridCells with every cell overlapping the AABB [min, max], or the empty sentinel. */
-export function fillGridCells(
+function fillGridCells(
   grid: Grid,
   min: Vec2,
   max: Vec2,

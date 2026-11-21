@@ -5,6 +5,12 @@ import { type Grid, clearGridCells, GRID_EMPTY_CELL } from './grid';
 import { applyCanvasStyle } from './canvas';
 import {Vec2} from '../vectors/vec2';
 
+const scratchRayHit: RayHit2D = {
+  fraction: 0,
+  point: new Vec2(),
+  normal: new Vec2()
+};
+
 /** Circ with optional grid occupancy. */
 export class Circ {
 
@@ -14,6 +20,8 @@ export class Circ {
   private grid: Grid | null;
   private _radius: number;
   private _diameter: number;
+  private _boundsMin: Vec2;
+  private _boundsMax: Vec2;
   readonly shape: 'circle' = 'circle';
 
   private static readonly scratchMin = new Vec2();
@@ -26,9 +34,17 @@ export class Circ {
   constructor(radius: number, position: Vec2 = new Vec2()) {
     this.position = position.clone();
     this.halfSize = new Vec2(radius, radius);
+    this._boundsMin = new Vec2();
+    this._boundsMax = new Vec2();
     this._radius = radius;
     this._diameter = radius * 2;
     this.grid = null;
+    this.updateBounds();
+  }
+
+  private updateBounds(): void {
+    this._boundsMin.subVectors(this.position, this.halfSize);
+    this._boundsMax.addVectors(this.position, this.halfSize);
   }
 
   /** Set radius and refresh occupancy. */
@@ -36,6 +52,7 @@ export class Circ {
     this._radius   = radius;
     this._diameter = this._radius * 2;
     this.halfSize.setScalar(this._radius, this._radius);
+    this.updateBounds();
     this.setGridPos();
   }
 
@@ -49,6 +66,7 @@ export class Circ {
     this._diameter = diameter;
     this._radius = this._diameter * 0.5;
     this.halfSize.setScalar(this._radius, this._radius);
+    this.updateBounds();
     this.setGridPos();
   }
 
@@ -68,6 +86,7 @@ export class Circ {
     this.halfSize.copy(circ.halfSize);
     this._radius = circ.radius;
     this._diameter = circ.diameter;
+    this.updateBounds();
     return this.setGrid(circ.grid);
   }
 
@@ -84,6 +103,7 @@ export class Circ {
   /** Move the center to a position vector and refresh occupancy. */
   public setPosition(position: Vec2): Circ {
     this.position.copy(position);
+    this.updateBounds();
     this.setGridPos();
     return this;
   }
@@ -91,6 +111,7 @@ export class Circ {
   /** Translate center by offset vector in-place and refresh occupancy. */
   public translate(offset: Vec2): Circ {
     this.position.add(offset);
+    this.updateBounds();
     this.setGridPos();
     return this;
   }
@@ -119,6 +140,7 @@ export class Circ {
   /** Multiply radius by scalar. */
   public scale(scalar: number): Circ {
     this.radius *= scalar;
+    this.updateBounds();
     return this;
   }
 
@@ -148,18 +170,18 @@ export class Circ {
 
   /** Write minimum and maximum bounding corners into outMin and outMax. */
   public getBounds(outMin: Vec2, outMax: Vec2): void {
-    outMin.subVectors(this.position, this.halfSize);
-    outMax.addVectors(this.position, this.halfSize);
+    outMin.copy(this._boundsMin);
+    outMax.copy(this._boundsMax);
   }
 
   /** Minimum corner of the axis-aligned bounding box. */
   public get boundsMin(): Vec2 {
-    return new Vec2().subVectors(this.position, this.halfSize);
+    return this._boundsMin;
   }
 
   /** Maximum corner of the axis-aligned bounding box. */
   public get boundsMax(): Vec2 {
-    return new Vec2().addVectors(this.position, this.halfSize);
+    return this._boundsMax;
   }
 
   /** Raycast a line segment against this circle. */
@@ -172,7 +194,7 @@ export class Circ {
 
     // Start inside or on circle boundary
     if (c <= 0) {
-      const out = target ?? { fraction: 0, point: new Vec2(), normal: new Vec2() };
+      const out = target ?? scratchRayHit;
       out.fraction = 0;
       out.point.copy(start);
       if (m.getMagnitude(true) > 0)
@@ -199,7 +221,7 @@ export class Circ {
     if (t < 0 || t > 1)
       return null;
 
-    const out = target ?? { fraction: 0, point: new Vec2(), normal: new Vec2() };
+    const out = target ?? scratchRayHit;
     out.fraction = t;
     out.point.lerpVectors(start, end, t);
 
@@ -225,9 +247,9 @@ export class Circ {
 
   /** Record occupied AABB cells on the attached grid. */
   private setGridPos(): void {
-    if (!this.grid) return;
-    this.getBounds(Circ.scratchMin, Circ.scratchMax);
-    this.grid.getCellsForBounds(Circ.scratchMin, Circ.scratchMax, this.gridCells);
+    if (!this.grid)
+      return;
+    this.grid.getCellsForBounds(this._boundsMin, this._boundsMax, this.gridCells);
   }
 
 };
