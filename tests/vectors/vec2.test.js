@@ -616,4 +616,95 @@ describe('Vec2', () => {
     console.log('ok   AC-6 docs no longer mention Vec2 setArray or trimming');
   });
 
+  describe('closure-free curve length methods', () => {
+    const q = [new Vec2(0, 0), new Vec2(3, 5), new Vec2(10, 0)];
+    const c = [new Vec2(0, 0), new Vec2(2, 6), new Vec2(7, -4), new Vec2(10, 0)];
+    const evalQ = t => [Bezier.quadratic(q[0].x, q[1].x, q[2].x, t), Bezier.quadratic(q[0].y, q[1].y, q[2].y, t)];
+    const evalC = t => [Bezier.cubic(c[0].x, c[1].x, c[2].x, c[3].x, t), Bezier.cubic(c[0].y, c[1].y, c[2].y, c[3].y, t)];
+    const count = s => (s === undefined ? 16 : s < 1 ? 1 : s | 0);
+    const refLength = (ev, s) => {
+      const n = count(s);
+      let prev = ev(0);
+      let sum = 0;
+      for (let i = 1; i <= n; i++) {
+        const cur = ev(i / n);
+        sum += Math.hypot(cur[0] - prev[0], cur[1] - prev[1]);
+        prev = cur;
+      }
+      return sum;
+    };
+    const refParam = (ev, d, s) => {
+      if (d <= 0)
+        return 0;
+      const n = count(s);
+      let prev = ev(0);
+      let traveled = 0;
+      for (let i = 1; i <= n; i++) {
+        const cur = ev(i / n);
+        const seg = Math.hypot(cur[0] - prev[0], cur[1] - prev[1]);
+        if (traveled + seg >= d)
+          return (i - 1 + (seg === 0 ? 0 : (d - traveled) / seg)) / n;
+        traveled += seg;
+        prev = cur;
+      }
+      return 1;
+    };
+    const v = new Vec2();
+
+    it('AC-1 curve lengths match reference polyline', () => {
+      for (const s of [1, 4, 16, undefined]) {
+        expect(v.quadraticBezierLength(q[0], q[1], q[2], s)).toBeCloseTo(refLength(evalQ, s), 12);
+        expect(v.cubicBezierLength(c[0], c[1], c[2], c[3], s)).toBeCloseTo(refLength(evalC, s), 12);
+      }
+      console.log('# file: tests/vectors/vec2.test.js');
+      console.log('ok   AC-1 curve lengths match reference polyline');
+    });
+
+    it('AC-2 parameter at length matches reference', () => {
+      const a = new Vec2(0, 0);
+      const b = new Vec2(5, 0);
+      const e = new Vec2(10, 0);
+      expect(v.quadraticBezierParameterAtLength(a, b, e, 5)).toBeCloseTo(0.5, 12);
+      expect(v.cubicBezierParameterAtLength(a, new Vec2(10 / 3, 0), new Vec2(20 / 3, 0), e, 5)).toBeCloseTo(0.5, 12);
+      for (const d of [1, 4, 9]) {
+        expect(v.quadraticBezierParameterAtLength(q[0], q[1], q[2], d, 8)).toBeCloseTo(refParam(evalQ, d, 8), 12);
+        expect(v.cubicBezierParameterAtLength(c[0], c[1], c[2], c[3], d, 8)).toBeCloseTo(refParam(evalC, d, 8), 12);
+      }
+      console.log('# file: tests/vectors/vec2.test.js');
+      console.log('ok   AC-2 parameter at length matches reference');
+    });
+
+    it('AC-3 parameter at length clamps to 0 and 1', () => {
+      for (const d of [0, -2]) {
+        expect(v.quadraticBezierParameterAtLength(q[0], q[1], q[2], d)).toBe(0);
+        expect(v.cubicBezierParameterAtLength(c[0], c[1], c[2], c[3], d)).toBe(0);
+      }
+      expect(v.quadraticBezierParameterAtLength(q[0], q[1], q[2], 1e6)).toBe(1);
+      expect(v.cubicBezierParameterAtLength(c[0], c[1], c[2], c[3], 1e6)).toBe(1);
+      console.log('# file: tests/vectors/vec2.test.js');
+      console.log('ok   AC-3 parameter at length clamps to 0 and 1');
+    });
+
+    it('AC-4 sample counts are clamped', () => {
+      for (const [s, n] of [[0, 1], [-3, 1], [2.9, 2], [undefined, 16]]) {
+        expect(v.quadraticBezierLength(q[0], q[1], q[2], s)).toBeCloseTo(refLength(evalQ, n), 12);
+        expect(v.cubicBezierLength(c[0], c[1], c[2], c[3], s)).toBeCloseTo(refLength(evalC, n), 12);
+      }
+      console.log('# file: tests/vectors/vec2.test.js');
+      console.log('ok   AC-4 sample counts are clamped');
+    });
+
+    it('AC-5 curve length methods contain no closures', () => {
+      for (const m of ['quadraticBezierLength', 'cubicBezierLength', 'quadraticBezierParameterAtLength', 'cubicBezierParameterAtLength']) {
+        const src = Vec2.prototype[m].toString();
+        expect(src).not.toContain('=>');
+        expect(src).not.toMatch(/function\s*\(/);
+        expect(src).not.toContain('sampleCurveLength');
+        expect(src).not.toContain('sampleCurveParameterAtLength');
+      }
+      console.log('# file: tests/vectors/vec2.test.js');
+      console.log('ok   AC-5 curve length methods contain no closures');
+    });
+  });
+
 });
