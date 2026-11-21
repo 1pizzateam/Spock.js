@@ -13,22 +13,24 @@ export class Quat {
   public w: number;
   public vector: Vec3;
 
-  /** Identity by default: (1, 0, 0, 0). */
-  constructor(w: number = 1, x: number = 0, y: number = 0, z: number = 0) {
-    this.vector = new Vec3(x, y, z);
+  /** Identity by default: w 1 and a zero Vec3 vector part. The vector is copied. */
+  constructor(w: number = 1, vector?: Vec3) {
+    this.vector = new Vec3();
     this.w = w;
+    if (vector)
+      this.vector.copy(vector);
   }
 
-  /** Set w, x, y, z. */
-  public set(w: number, x: number, y: number, z: number): Quat {
+  /** Set w and copy the vector part from a Vec3. */
+  public set(w: number, vector: Vec3): Quat {
     this.w = w;
-    this.vector.setScalar(x, y, z);
+    this.vector.copy(vector);
     return this;
   }
 
   /** Set to identity. */
   public identity(): Quat {
-    return this.set(1, 0, 0, 0);
+    return this.setParts(1, 0, 0, 0);
   }
 
   /** Rotation of angle radians about a (possibly unnormalized) axis. */
@@ -121,7 +123,7 @@ export class Quat {
 
   /** Independent copy. */
   public clone(): Quat {
-    return new Quat(this.w, this.vector.x, this.vector.y, this.vector.z);
+    return new Quat(this.w, this.vector);
   }
 
   /** Copy another quaternion into this one. */
@@ -329,18 +331,24 @@ export class Quat {
     const trace = m00 + m11 + m22;
     if (trace > 0) {
       const s = 0.5 / Math.sqrt(trace + 1);
-      return this.set(0.25 / s, (m21 - m12) * s, (m02 - m20) * s, (m10 - m01) * s);
+      return this.setParts(0.25 / s, (m21 - m12) * s, (m02 - m20) * s, (m10 - m01) * s);
     }
     if (m00 > m11 && m00 > m22) {
       const s = 2 * Math.sqrt(1 + m00 - m11 - m22);
-      return this.set((m21 - m12) / s, 0.25 * s, (m01 + m10) / s, (m02 + m20) / s);
+      return this.setParts((m21 - m12) / s, 0.25 * s, (m01 + m10) / s, (m02 + m20) / s);
     }
     if (m11 > m22) {
       const s = 2 * Math.sqrt(1 + m11 - m00 - m22);
-      return this.set((m02 - m20) / s, (m01 + m10) / s, 0.25 * s, (m12 + m21) / s);
+      return this.setParts((m02 - m20) / s, (m01 + m10) / s, 0.25 * s, (m12 + m21) / s);
     }
     const s = 2 * Math.sqrt(1 + m22 - m00 - m11);
-    return this.set((m10 - m01) / s, (m02 + m20) / s, (m12 + m21) / s, 0.25 * s);
+    return this.setParts((m10 - m01) / s, (m02 + m20) / s, (m12 + m21) / s, 0.25 * s);
+  }
+
+  private setParts(w: number, x: number, y: number, z: number): Quat {
+    this.w = w;
+    this.vector.setScalar(x, y, z);
+    return this;
   }
 
   /** Hamilton product of two quaternions into this one. */
