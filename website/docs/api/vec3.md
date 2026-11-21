@@ -93,6 +93,10 @@ const result = new Vec3().setScalar(1, 1, 1);
 
 Set x, y, z from array at offset.
 
+::: warning Deprecated
+Prefer [`copy()`](#vec3-copy) for vector-to-vector copies. Reading from packed buffers remains supported.
+:::
+
 Reads consecutive entries starting at `offset`, which makes it easy to pull one vertex out of a packed buffer. Entries past the end of the array leave that axis unchanged.
 
 ```ts
@@ -175,7 +179,7 @@ const result = new Vec3().clone();
 
 Write [x, y, z] into target (or a new array).
 
-Passing a target writes into it and returns it, so you can fill part of a larger buffer without allocating. The target can be a `number[]` or a typed array, and `offset` selects where in it the three values go; a plain array is only trimmed to length 3 when `offset` is 0.
+Passing a target writes into it and returns it, so you can fill part of a larger buffer without allocating. The target can be a `number[]` or a typed array, and `offset` selects where in it the three values go; only indices `offset` to `offset + 2` are written and any other elements are left untouched.
 
 ```ts
 toArray(target: number[] | Float32Array | Float64Array = [], offset: number = 0): typeof target

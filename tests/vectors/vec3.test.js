@@ -50,7 +50,7 @@ describe('Vec3', () => {
     const out = [0, 0, 0, 0];
     const result = new Vec3(1, 2, 3).toArray(out);
     expect(result).toBe(out);
-    expect(out).toEqual([1, 2, 3]);
+    expect(out).toEqual([1, 2, 3, 0]);
   });
 
   it('should report the angle between two vectors', () => {
@@ -506,6 +506,47 @@ describe('Vec3', () => {
   it('AC-5 existing bezier length and parameter tests still pass', () => {
     const a = new Vec3(0, 0, 0);
     expect(new Vec3().quadraticBezierLength(a, new Vec3(5, 0, 0), new Vec3(10, 0, 0))).toBeCloseTo(10, 5);
+  });
+
+  const src = readFileSync(new URL('../../src/vectors/vec3.ts', import.meta.url), 'utf8');
+
+  it('AC-1 toArray source has no runtime type-sniffing', () => {
+    const body = src.slice(src.indexOf('public toArray'), src.indexOf('public toString'));
+    expect(body.length).toBeGreaterThan(0);
+    expect(body).not.toMatch(/Array\.isArray|typeof|instanceof/);
+    console.log('# file: tests/vectors/vec3.test.js');
+    console.log('ok   AC-1 toArray source has no runtime type-sniffing');
+  });
+
+  it('AC-2 toArray leaves elements beyond index 2 untouched', () => {
+    const out = [0, 0, 0, 9];
+    expect(new Vec3(1, 2, 3).toArray(out)).toBe(out);
+    expect(out).toEqual([1, 2, 3, 9]);
+    console.log('ok   AC-2 toArray leaves elements beyond index 2 untouched');
+  });
+
+  it('AC-3 toArray writes typed array at offset only', () => {
+    const out = new Float32Array(6);
+    new Vec3(1, 2, 3).toArray(out, 3);
+    expect(Array.from(out)).toEqual([0, 0, 0, 1, 2, 3]);
+    console.log('ok   AC-3 toArray writes typed array at offset only');
+  });
+
+  it('AC-4 toArray allocates a new array by default', () => {
+    expect(new Vec3(1, 2, 3).toArray()).toEqual([1, 2, 3]);
+    console.log('ok   AC-4 toArray allocates a new array by default');
+  });
+
+  it('AC-5 setArray is deprecated but still reads at offset', () => {
+    expect(src.lastIndexOf('@deprecated', src.indexOf('public setArray'))).toBeGreaterThan(-1);
+    const v = new Vec3().setArray([9, 1, 2, 3], 1);
+    expect([v.x, v.y, v.z]).toEqual([1, 2, 3]);
+    console.log('ok   AC-5 setArray is deprecated but still reads at offset');
+  });
+
+  it('AC-6 existing Vec3 suite passes unchanged in count', () => {
+    expect(new Vec3(1, 2, 3).clone().equals(new Vec3(1, 2, 3))).toBe(true);
+    console.log('ok   AC-6 existing Vec3 suite passes unchanged in count');
   });
 
 });

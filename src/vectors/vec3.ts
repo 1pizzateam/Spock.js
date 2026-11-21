@@ -24,7 +24,10 @@ export class Vec3 {
     return this;
   }
 
-  /** Set x, y, z from an array or typed array at offset. */
+  /**
+   * Set x, y, z from an array or typed array at offset.
+   * @deprecated Use Vec3.copy(vector) for vector-to-vector copies.
+   */
   public setArray(array: ArrayLike<number>, offset: number = 0): Vec3 {
     this.x = array[offset] ?? this.x;
     this.y = array[offset + 1] ?? this.y;
@@ -60,13 +63,11 @@ export class Vec3 {
     return this.x === 0 && this.y === 0 && this.z === 0;
   }
 
-  /** Write [x, y, z] into target at offset (or a new array). */
+  /** Write [x, y, z] into target at offset (or a new array); elements beyond offset + 2 are left untouched. */
   public toArray<T extends number[] | Float32Array | Float64Array>(target: T = [] as unknown as T, offset: number = 0): T {
     target[offset] = this.x;
     target[offset + 1] = this.y;
     target[offset + 2] = this.z;
-    if (offset === 0 && Array.isArray(target))
-      target.length = 3;
     return target;
   }
 
