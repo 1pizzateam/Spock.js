@@ -92,13 +92,15 @@ export class Vec3 {
 
   /**
    * Distance from the center of an axis-aligned ellipsoid with semi-axes `radii`, normalized so the surface is 1
-   * (`sqrt(((x-cx)/rx)^2 + ...)`). Values `< 1` are inside.
+   * (`sqrt(((x-cx)/rx)^2 + ...)`). Values `< 1` are inside. If `square` is true, returns the squared normalized
+   * distance (surface is 1, inside is below 1) and skips `Math.sqrt`.
    */
-  public getEllipsoidDistance(center: Vec3, radii: Vec3): number {
+  public getEllipsoidDistance(center: Vec3, radii: Vec3, square: boolean = false): number {
     const dx = (this.x - center.x) / radii.x;
     const dy = (this.y - center.y) / radii.y;
     const dz = (this.z - center.z) / radii.z;
-    return Math.sqrt(dx * dx + dy * dy + dz * dz);
+    const squared = dx * dx + dy * dy + dz * dz;
+    return square ? squared : Math.sqrt(squared);
   }
 
   /** Distance to vector; squared if square is true. */

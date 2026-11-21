@@ -1446,13 +1446,16 @@ const result = new Vec3().getMagnitude(false);
 Distance from the center of an axis-aligned ellipsoid, normalized so the surface is `1` (`sqrt(((x-cx)/rx)² + ((y-cy)/ry)² + ((z-cz)/rz)²)`). Values below `1` are inside.
 
 ```ts
-getEllipsoidDistance(center: Vec3, radii: Vec3): number
+getEllipsoidDistance(center: Vec3, radii: Vec3, square: boolean = false): number
 ```
+
+Pass `true` for the squared normalized distance, which is the usual way to test `d² <= r²` or compute Gaussian falloff without a square root.
 
 #### Parameters
 
 - `center` — `Vec3`.
 - `radii` — `Vec3`. Semi-axes.
+- `square` — `boolean`. Optional.
 
 #### Returns
 

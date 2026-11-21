@@ -413,6 +413,48 @@ describe('Vec3', () => {
     expect(new Vec3(1, 4, 3).getEllipsoidDistance(c, r)).toBeCloseTo(0.5, 6);
   });
 
+  it('AC-1 getEllipsoidDistance declares optional square parameter', () => {
+    const source = readFileSync(new URL('../../src/vectors/vec3.ts', import.meta.url), 'utf8');
+    expect(source).toContain('getEllipsoidDistance(center: Vec3, radii: Vec3, square: boolean = false): number');
+    console.log('# file: tests/vectors/vec3.test.js');
+    console.log('ok   AC-1 getEllipsoidDistance declares optional square parameter');
+  });
+
+  it('AC-2 getEllipsoidDistance square=true returns squared anisotropic distance', () => {
+    const c = new Vec3(1, 2, 3), r = new Vec3(2, 4, 1);
+    expect(new Vec3(3, 6, 4).getEllipsoidDistance(c, r, true)).toBeCloseTo(3, 12);
+    expect(new Vec3(3, 6, 4).getEllipsoidDistance(new Vec3(1, 2, 3), new Vec3(1, 1, 1), true)).toBeCloseTo(21, 12);
+    console.log('# file: tests/vectors/vec3.test.js');
+    console.log('ok   AC-2 getEllipsoidDistance square=true returns squared anisotropic distance');
+  });
+
+  it('AC-3 getEllipsoidDistance default and square=false preserve legacy values', () => {
+    const c = new Vec3(1, 2, 3), r = new Vec3(2, 4, 1);
+    const p = new Vec3(1, 4, 3);
+    expect(new Vec3(3, 2, 3).getEllipsoidDistance(c, r)).toBeCloseTo(1, 6);
+    expect(new Vec3(1, 2, 3).getEllipsoidDistance(c, r, false)).toBe(0);
+    expect(p.getEllipsoidDistance(c, r)).toBeCloseTo(0.5, 6);
+    expect(p.getEllipsoidDistance(c, r, false)).toBeCloseTo(Math.sqrt(p.getEllipsoidDistance(c, r, true)), 12);
+    console.log('# file: tests/vectors/vec3.test.js');
+    console.log('ok   AC-3 getEllipsoidDistance default and square=false preserve legacy values');
+  });
+
+  it('AC-4 getEllipsoidDistance with unit radii matches getDistance', () => {
+    const c = new Vec3(1, 2, 3), r = new Vec3(1, 1, 1), p = new Vec3(4, 6, 3);
+    expect(p.getEllipsoidDistance(c, r, true)).toBeCloseTo(p.getDistance(c, true), 12);
+    expect(p.getEllipsoidDistance(c, r)).toBeCloseTo(p.getDistance(c), 12);
+    console.log('# file: tests/vectors/vec3.test.js');
+    console.log('ok   AC-4 getEllipsoidDistance with unit radii matches getDistance');
+  });
+
+  it('AC-5 vec3 docs document the square parameter', () => {
+    const docs = readFileSync(new URL('../../website/docs/api/vec3.md', import.meta.url), 'utf8');
+    expect(docs).toContain('getEllipsoidDistance(center: Vec3, radii: Vec3, square: boolean = false): number');
+    expect(docs).toContain('- `square` — `boolean`. Optional.');
+    console.log('# file: tests/vectors/vec3.test.js');
+    console.log('ok   AC-5 vec3 docs document the square parameter');
+  });
+
   it('AC-2 straight line (0,0,0)-(2,3,6) has length 7', () => {
     const a = new Vec3(0, 0, 0), m = new Vec3(1, 1.5, 3), b = new Vec3(2, 3, 6);
     for (const n of [1, 4, 16])
