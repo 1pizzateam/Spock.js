@@ -17,6 +17,7 @@ export class Ray3 {
   private static _inv = new Vec3();
   private static _t1 = new Vec3();
   private static _t2 = new Vec3();
+  private static _scratchTarget = new Vec3();
 
   /** Ray along -Z from the origin by default. The direction is normalized. */
   constructor(origin: Vec3 = new Vec3(), direction: Vec3 = new Vec3(0, 0, -1)) {
@@ -38,7 +39,7 @@ export class Ray3 {
 
   /** True if the ray hits the box. */
   public intersectsBox(box: Box): boolean {
-    return this.intersectBox(box) !== null;
+    return this.intersectBox(box, Ray3._scratchTarget) !== null;
   }
 
   private static safeInverse(d: number): number {
@@ -65,7 +66,7 @@ export class Ray3 {
 
   /** True if the ray hits the sphere. */
   public intersectsSphere(sphere: Sphere): boolean {
-    return this.intersectSphere(sphere) !== null;
+    return this.intersectSphere(sphere, Ray3._scratchTarget) !== null;
   }
 
   /** First hit point on the sphere, else null. */
