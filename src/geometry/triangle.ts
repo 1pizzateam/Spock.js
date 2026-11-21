@@ -18,6 +18,17 @@ const scratchB = new Vec2();
 const scratchRayDir = new Vec2();
 const scratchRayRel = new Vec2();
 const scratchHit: RayHit2D = { fraction: 0, point: new Vec2(), normal: new Vec2() };
+const scratchRayHit: RayHit2D = { fraction: 0, point: new Vec2(), normal: new Vec2() };
+
+function writeVertices(tri: RightTriangle, s: Vec2, a: Vec2, b: Vec2): void {
+  const sx = tri.sx < 0 ? tri.topLeftCorner.x : tri.bottomRightCorner.x;
+  const sy = tri.sy < 0 ? tri.topLeftCorner.y : tri.bottomRightCorner.y;
+  const ox = tri.sx < 0 ? tri.bottomRightCorner.x : tri.topLeftCorner.x;
+  const oy = tri.sy < 0 ? tri.bottomRightCorner.y : tri.topLeftCorner.y;
+  s.setScalar(sx, sy);
+  a.setScalar(sx, oy);
+  b.setScalar(ox, sy);
+}
 
 /** Raycast a 2D line segment [start, end] against edge segment [p1, p2] with outward normal outNormal. */
 export function raycastSegment(
@@ -38,7 +49,7 @@ export function raycastSegment(
   const u = scratchRayRel.crossProduct(scratchRayDir) / denom;
   if (t < 0 || t > 1 || u < 0 || u > 1)
     return null;
-  const out = target ?? { fraction: 0, point: new Vec2(), normal: new Vec2() };
+  const out = target ?? scratchRayHit;
   out.fraction = t;
   out.point.lerpVectors(start, end, t);
   out.normal.copy(outNormal);
@@ -96,13 +107,7 @@ export class RightTriangle extends Rect {
     a: Vec2 = new Vec2(),
     b: Vec2 = new Vec2()
   ): { s: Vec2; a: Vec2; b: Vec2 } {
-    const sx = this.sx < 0 ? this.topLeftCorner.x : this.bottomRightCorner.x;
-    const sy = this.sy < 0 ? this.topLeftCorner.y : this.bottomRightCorner.y;
-    const ox = this.sx < 0 ? this.bottomRightCorner.x : this.topLeftCorner.x;
-    const oy = this.sy < 0 ? this.bottomRightCorner.y : this.topLeftCorner.y;
-    s.setScalar(sx, sy);
-    a.setScalar(sx, oy);
-    b.setScalar(ox, sy);
+    writeVertices(this, s, a, b);
     return { s, a, b };
   }
 
@@ -157,7 +162,7 @@ export class RightTriangle extends Rect {
       const sdHyp = this.signedDistanceToHypotenuse(start);
       const sdLegX = (start.x - this.position.x) * this.sx - this.halfSize.x;
       const sdLegY = (start.y - this.position.y) * this.sy - this.halfSize.y;
-      const out = target ?? { fraction: 0, point: new Vec2(), normal: new Vec2() };
+      const out = target ?? scratchRayHit;
       out.fraction = 0;
       out.point.copy(start);
       if (sdHyp >= sdLegX && sdHyp >= sdLegY)
@@ -169,7 +174,7 @@ export class RightTriangle extends Rect {
       return out;
     }
 
-    this.getVertices(scratchS, scratchA, scratchB);
+    writeVertices(this, scratchS, scratchA, scratchB);
     let bestT = 2;
 
     if (raycastSegment(start, end, scratchA, scratchB, this.hypNormal, scratchHit)) {
@@ -189,7 +194,7 @@ export class RightTriangle extends Rect {
     if (bestT > 1)
       return null;
 
-    const out = target ?? { fraction: 0, point: new Vec2(), normal: new Vec2() };
+    const out = target ?? scratchRayHit;
     out.fraction = bestT;
     out.point.lerpVectors(start, end, bestT);
     out.normal.copy(scratchBestNormal);
@@ -202,7 +207,7 @@ export class RightTriangle extends Rect {
     strokeColor: string,
     strokeWidth: number
   ): void {
-    this.getVertices(scratchS, scratchA, scratchB);
+    writeVertices(this, scratchS, scratchA, scratchB);
     context.beginPath();
     context.moveTo(scratchS.x, scratchS.y);
     context.lineTo(scratchA.x, scratchA.y);
