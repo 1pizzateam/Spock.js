@@ -1,4 +1,5 @@
 import { Circ, Grid, Ray2, RightTriangle, Vec2, raycastSegment } from '../../build/es6/spock.js';
+import { jest } from '@jest/globals';
 
 describe('RightTriangle', () => {
   test('vertices, normals, opposite corner, hypotenuse helpers, and point containment for all 4 corners', () => {
@@ -126,5 +127,96 @@ describe('RightTriangle', () => {
       lineWidth: 0
     };
     nw.draw(ctx, '#ff0000', '#00ff00', 2);
+  });
+
+  describe('allocation-free paths', () => {
+    const makeCtx = (calls) => ({
+      beginPath: () => {},
+      moveTo: (x, y) => calls.push([x, y]),
+      lineTo: (x, y) => calls.push([x, y]),
+      closePath: () => {},
+      fill: () => {},
+      stroke: () => {},
+      fillStyle: '',
+      strokeStyle: '',
+      lineWidth: 0
+    });
+
+    test('AC-1 draw does not call getVertices and draws the vertex triangle', () => {
+      for (const corner of ['nw', 'ne', 'sw', 'se']) {
+        const tri = new RightTriangle(new Vec2(64, 64), new Vec2(32, 32), corner);
+        const v = tri.getVertices();
+        const spy = jest.spyOn(RightTriangle.prototype, 'getVertices');
+        const calls = [];
+        tri.draw(makeCtx(calls), '#f00', '#0f0', 2);
+        expect(spy).not.toHaveBeenCalled();
+        spy.mockRestore();
+        expect(calls).toEqual([v.s.toArray(), v.a.toArray(), v.b.toArray()]);
+      }
+    });
+
+    test('AC-2 raycast without target returns a stable shared hit', () => {
+      const nw = new RightTriangle(new Vec2(64, 64), new Vec2(32, 32), 'nw');
+      const first = nw.raycast(new Vec2(60, 60), new Vec2(10, 10));
+      const second = nw.raycast(new Vec2(-10, 20), new Vec2(20, 20));
+      expect(second).toBe(first);
+      expect(second.normal.x).toBe(-1);
+      expect(second.point.x).toBeCloseTo(0, 3);
+      expect(second.point.y).toBeCloseTo(20, 3);
+    });
+
+    test('AC-3 inside-start raycast fills the shared hit with fraction 0', () => {
+      const nw = new RightTriangle(new Vec2(64, 64), new Vec2(32, 32), 'nw');
+      const edge = nw.raycast(new Vec2(-10, 20), new Vec2(20, 20));
+      const inside = nw.raycast(new Vec2(20, 20), new Vec2(60, 60));
+      expect(inside).toBe(edge);
+      expect(inside.fraction).toBe(0);
+      expect(inside.point.toArray()).toEqual([20, 20]);
+    });
+
+    test('AC-4 raycastSegment reuses the fallback hit and honors a supplied target', () => {
+      const args = [new Vec2(0, 0), new Vec2(10, 10), new Vec2(0, 10), new Vec2(10, 0), new Vec2(0, 1)];
+      const first = raycastSegment(...args);
+      const second = raycastSegment(...args);
+      expect(second).toBe(first);
+      const snapshot = first.fraction;
+      const target = { fraction: 0, point: new Vec2(), normal: new Vec2() };
+      expect(raycastSegment(...args, target)).toBe(target);
+      expect(target.fraction).toBeCloseTo(0.5, 5);
+      expect(first.fraction).toBe(snapshot);
+      expect(raycastSegment(...args)).not.toBe(target);
+    });
+
+    test('AC-5 supplied target is returned and not overwritten by fallback calls', () => {
+      const nw = new RightTriangle(new Vec2(64, 64), new Vec2(32, 32), 'nw');
+      const target = { fraction: 0, point: new Vec2(), normal: new Vec2() };
+      expect(nw.raycast(new Vec2(60, 60), new Vec2(10, 10), target)).toBe(target);
+      const px = target.point.x;
+      const fallback = nw.raycast(new Vec2(-10, 20), new Vec2(20, 20));
+      expect(fallback).not.toBe(target);
+      expect(target.point.x).toBe(px);
+      expect(target.normal.x).toBeCloseTo(Math.SQRT1_2, 4);
+    });
+
+    test('AC-6 getVertices keeps returning caller vectors and misses return null', () => {
+      const expected = { nw: [[0, 0], [0, 64], [64, 0]], ne: [[64, 0], [64, 64], [0, 0]], sw: [[0, 64], [0, 0], [64, 64]], se: [[64, 64], [64, 0], [0, 64]] };
+      for (const corner of Object.keys(expected)) {
+        const tri = new RightTriangle(new Vec2(64, 64), new Vec2(32, 32), corner);
+        const s = new Vec2();
+        const a = new Vec2();
+        const b = new Vec2();
+        const v = tri.getVertices(s, a, b);
+        expect(v.s).toBe(s);
+        expect(v.a).toBe(a);
+        expect(v.b).toBe(b);
+        expect([s.toArray(), a.toArray(), b.toArray()]).toEqual(expected[corner]);
+      }
+      const nw = new RightTriangle(new Vec2(64, 64), new Vec2(32, 32), 'nw');
+      expect(nw.raycast(new Vec2(50, 60), new Vec2(60, 50))).toBeNull();
+    });
+
+    test('AC-7 existing RightTriangle suite still passes', () => {
+      expect(new RightTriangle(new Vec2(8, 8), new Vec2(), 'se').shape).toBe('triangle-se');
+    });
   });
 });

@@ -171,7 +171,7 @@ overlapsBounds(min: Vec2, max: Vec2): boolean
 
 ## RightTriangle.raycast()
 
-Cast a 2D line segment `[start, end]` against the three edges of the right triangle, returning `{ fraction, point, normal }` or `null`.
+Cast a 2D line segment `[start, end]` against the three edges of the right triangle, returning `{ fraction, point, normal }` or `null`. When `target` is omitted, the returned `RayHit2D` is a reused module-level scratch object overwritten by the next omitted-`target` call; pass your own `target` or copy the values to retain a hit.
 
 ```ts
 raycast(start: Vec2, end: Vec2, target?: RayHit2D): RayHit2D | null
@@ -189,7 +189,7 @@ const hit = tri.raycast(new Vec2(60, 60), new Vec2(10, 10));
 
 ## RightTriangle.draw()
 
-Draw the triangle on a 2D canvas context.
+Draw the triangle on a 2D canvas context. Vertices are written to module-level scratch vectors, so no `{ s, a, b }` container is allocated per frame.
 
 ```ts
 draw(context: CanvasRenderingContext2D, fillColor: string, strokeColor: string, strokeWidth: number): void
@@ -197,7 +197,7 @@ draw(context: CanvasRenderingContext2D, fillColor: string, strokeColor: string, 
 
 ## raycastSegment()
 
-Standalone 2D segment-vs-edge intersection helper used by `RightTriangle.raycast()`.
+Standalone 2D segment-vs-edge intersection helper used by `RightTriangle.raycast()`. When `target` is omitted, the returned `RayHit2D` is a reused module-level scratch object overwritten by the next omitted-`target` call; pass your own `target` or copy the values to retain a hit.
 
 ```ts
 raycastSegment(start: Vec2, end: Vec2, p1: Vec2, p2: Vec2, outNormal: Vec2, target?: RayHit2D): RayHit2D | null
