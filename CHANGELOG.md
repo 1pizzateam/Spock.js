@@ -1,3 +1,22 @@
+Version 5.0.0 (unreleased)
+-----------------------------
+ * Circ:
+    * Eliminate allocations in `boundsMin` and `boundsMax` by pre-allocating cached `Vec2` references updated on geometry mutations
+    * Reuse module-level scratch `RayHit2D` instance in `Circ.raycast` when `target` parameter is omitted to eliminate object literal and vector allocations
+ * Ray2:
+    * `intersectsRect`, `intersectsCirc` and `intersectsTriangle` pass an explicit preallocated scratch `RayHit2D` instead of relying on shape fallbacks
+ * Ray3:
+    * Boolean intersection queries no longer allocate a vector
+ * Rect:
+    * Reuse a module-level scratch `RayHit2D` in `Rect.raycast` when `target` is omitted to eliminate object literal and `Vec2` allocations
+ * RightTriangle:
+    * Use a private vertex writer in `draw` and `raycast` so they no longer allocate an `{ s, a, b }` container
+    * Reuse a module-level scratch `RayHit2D` in `RightTriangle.raycast` and `raycastSegment` when `target` is omitted
+ * Box:
+    * `Box.setFromPoints` reuses a hoisted scratch `Vec3` instead of allocating per call
+ * Bezier:
+    * `sampleCurveLength` and `sampleCurveParameterAtLength` take a vector sampler plus two scratch vectors instead of per-axis scalar samplers (`Vec2` and `Vec3` bezier length methods updated accordingly)
+
 Version 4.8.0 (November 21st 2026)
 -----------------------------
  * Box:
@@ -22,16 +41,6 @@ Version 4.7.0 (November 21st 2026)
 
 Version 4.6.1 (November 21st 2026)
 -----------------------------
- * Circ:
-    * Eliminate allocations in `boundsMin` and `boundsMax` by pre-allocating cached `Vec2` references updated on geometry mutations
-    * Reuse module-level scratch `RayHit2D` instance in `Circ.raycast` when `target` parameter is omitted to eliminate object literal and vector allocations
- * Ray2:
-    * `intersectsRect`, `intersectsCirc` and `intersectsTriangle` pass an explicit preallocated scratch `RayHit2D` instead of relying on shape fallbacks
- * Rect:
-    * Reuse a module-level scratch `RayHit2D` in `Rect.raycast` when `target` is omitted to eliminate object literal and `Vec2` allocations
- * RightTriangle:
-    * Use a private vertex writer in `draw` and `raycast` so they no longer allocate an `{ s, a, b }` container
-    * Reuse a module-level scratch `RayHit2D` in `RightTriangle.raycast` and `raycastSegment` when `target` is omitted
  * Covering Sine and Cosine Wave Equations
  * Covering Arctan Wave Equation and Edge Cases
 
