@@ -434,7 +434,7 @@ getBounds(outMin: Vec2, outMax: Vec2): void
 
 ## Circ.boundsMin & Circ.boundsMax
 
-Getters returning newly allocated minimum and maximum corners of the bounding box.
+Getters returning pre-allocated, cached `Vec2` references for the minimum and maximum corners of the bounding box, updated synchronously on geometry mutation with zero per-access allocations.
 
 ```ts
 get boundsMin(): Vec2
@@ -445,7 +445,7 @@ get boundsMax(): Vec2
 
 Cast a line segment against this circle.
 
-Returns the earliest intersection point, contact normal, and normalized fraction `t` along the segment `[0, 1]`. If `start` begins inside the circle, returns `fraction = 0` with the outward contact normal.
+Returns the earliest intersection point, contact normal, and normalized fraction `t` along the segment `[0, 1]`. If `start` begins inside the circle, returns `fraction = 0` with the outward contact normal. When the optional `target` argument is omitted, the method populates and returns an internal module-level scratch `RayHit2D` instance with zero allocations.
 
 ```ts
 raycast(start: Vec2, end: Vec2, target?: RayHit2D): RayHit2D | null
