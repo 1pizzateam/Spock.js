@@ -107,4 +107,15 @@ describe('Bezier', () => {
     expect(Bezier.cubicParameterAtLength(0, 10, -10, 0, 3, 0.5)).toBe(Bezier.cubicParameterAtLength(0, 10, -10, 0, 3, 1));
   });
 
+  it('AC-6 length functions create no closures and keep existing behavior', () => {
+    const fns = [Bezier.quadraticLength, Bezier.cubicLength, Bezier.quadraticParameterAtLength, Bezier.cubicParameterAtLength];
+    for (const fn of fns) {
+      const src = fn.toString();
+      expect(src).not.toMatch(/=>/);
+      expect(src).not.toMatch(/function\s*\(/);
+    }
+    expect(Bezier.quadraticLength(0, 5, 10)).toBeCloseTo(10, 5);
+    expect(Bezier.cubicLength(0, 10, 20, 30)).toBeCloseTo(30, 5);
+  });
+
 });
