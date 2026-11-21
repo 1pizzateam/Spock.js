@@ -411,4 +411,21 @@ describe('Vec3', () => {
     expect(new Vec3(1, 2, 3).getEllipsoidDistance(c, r)).toBe(0);
     expect(new Vec3(1, 4, 3).getEllipsoidDistance(c, r)).toBeCloseTo(0.5, 6);
   });
+
+  it('AC-2 straight line (0,0,0)-(2,3,6) has length 7', () => {
+    const a = new Vec3(0, 0, 0), m = new Vec3(1, 1.5, 3), b = new Vec3(2, 3, 6);
+    for (const n of [1, 4, 16])
+      expect(a.quadraticBezierLength(a, m, b, n)).toBeCloseTo(7, 12);
+  });
+
+  it('AC-4 parameter at length is 0.5, 0 and 1 at the boundaries', () => {
+    const a = new Vec3(0, 0, 0), b = new Vec3(10, 0, 0);
+    const m = new Vec3(5, 0, 0);
+    expect(a.quadraticBezierParameterAtLength(a, m, b, 5)).toBeCloseTo(0.5, 5);
+    expect(a.cubicBezierParameterAtLength(a, new Vec3(10 / 3, 0, 0), new Vec3(20 / 3, 0, 0), b, 5)).toBeCloseTo(0.5, 5);
+    expect(a.quadraticBezierParameterAtLength(a, m, b, 0)).toBe(0);
+    expect(a.quadraticBezierParameterAtLength(a, m, b, -1)).toBe(0);
+    expect(a.quadraticBezierParameterAtLength(a, m, b, 11)).toBe(1);
+  });
+
 });

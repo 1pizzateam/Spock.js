@@ -1,3 +1,6 @@
+import type { Vec2 } from './vectors/vec2';
+import type { Vec3 } from './vectors/vec3';
+
 /** Clamp sample count to a positive integer (default 16). */
 export function bezierSampleCount(samples?: number): number {
   if (samples === undefined)
@@ -39,32 +42,30 @@ function parameterAtLength(at: (t: number) => number, distance: number, samples?
 }
 
 /** Approximate 2D/3D curve length from coordinate samplers. */
-export function sampleCurveLength(
-  atX: (t: number) => number,
-  atY: (t: number) => number,
-  atZ?: (t: number) => number,
+export function sampleCurveLength<V extends Vec2 | Vec3>(
+  sample: (t: number, target: V) => V,
+  previous: V,
+  current: V,
   samples?: number
 ): number {
   const n = bezierSampleCount(samples);
-  let px = atX(0), py = atY(0), pz = atZ ? atZ(0) : 0;
+  sample(0, previous);
   let length = 0;
   for (let i = 1; i <= n; i++) {
-    const t = i / n;
-    const x = atX(t), y = atY(t), z = atZ ? atZ(t) : 0;
-    const dx = x - px, dy = y - py, dz = z - pz;
-    length += Math.sqrt(dx * dx + dy * dy + dz * dz);
-    px = x;
-    py = y;
-    pz = z;
+    sample(i / n, current);
+    length += current.getDistance(previous as never);
+    const swap = previous;
+    previous = current;
+    current = swap;
   }
   return length;
 }
 
 /** Parameter t where sampled 2D/3D arc length reaches distance. */
-export function sampleCurveParameterAtLength(
-  atX: (t: number) => number,
-  atY: (t: number) => number,
-  atZ: ((t: number) => number) | undefined,
+export function sampleCurveParameterAtLength<V extends Vec2 | Vec3>(
+  sample: (t: number, target: V) => V,
+  previous: V,
+  current: V,
   distance: number,
   samples?: number
 ): number {
@@ -72,20 +73,18 @@ export function sampleCurveParameterAtLength(
     return 0;
   const n = bezierSampleCount(samples);
   let traveled = 0;
-  let px = atX(0), py = atY(0), pz = atZ ? atZ(0) : 0;
+  sample(0, previous);
   for (let i = 1; i <= n; i++) {
-    const t = i / n;
-    const x = atX(t), y = atY(t), z = atZ ? atZ(t) : 0;
-    const dx = x - px, dy = y - py, dz = z - pz;
-    const segment = Math.sqrt(dx * dx + dy * dy + dz * dz);
+    sample(i / n, current);
+    const segment = current.getDistance(previous as never);
     if (traveled + segment >= distance) {
       const u = segment === 0 ? 0 : (distance - traveled) / segment;
       return (i - 1 + u) / n;
     }
     traveled += segment;
-    px = x;
-    py = y;
-    pz = z;
+    const swap = previous;
+    previous = current;
+    current = swap;
   }
   return 1;
 }
