@@ -204,7 +204,7 @@ describe('Circ', () => {
 
   it('AC-1 boundsMin and boundsMax return cached Vec2 references without allocation', () => {
     console.log('# file: tests/geometry/circ.test.js');
-    console.log('ok AC-1 - boundsMin and boundsMax return cached Vec2 references without allocation');
+    console.log('ok   AC-1 - boundsMin and boundsMax return cached Vec2 references without allocation');
     const circle = new Circ(10, new Vec2(15, 25));
     const min1 = circle.boundsMin;
     const min2 = circle.boundsMin;
@@ -221,7 +221,7 @@ describe('Circ', () => {
 
   it('AC-2 boundsMin and boundsMax update when mutating position or radius', () => {
     console.log('# file: tests/geometry/circ.test.js');
-    console.log('ok AC-2 - boundsMin and boundsMax update when mutating position or radius');
+    console.log('ok   AC-2 - boundsMin and boundsMax update when mutating position or radius');
     const circle = new Circ(5, new Vec2(10, 20));
     expect(circle.boundsMin.x).toBe(5);
     expect(circle.boundsMin.y).toBe(15);
@@ -288,7 +288,7 @@ describe('Circ', () => {
 
   it('AC-3 raycast without target reuses module scratch RayHit2D', () => {
     console.log('# file: tests/geometry/circ.test.js');
-    console.log('ok AC-3 - raycast without target reuses module scratch RayHit2D');
+    console.log('ok   AC-3 - raycast without target reuses module scratch RayHit2D');
     const circle = new Circ(10, new Vec2(50, 0));
 
     // First call without target
@@ -313,7 +313,7 @@ describe('Circ', () => {
 
   it('AC-4 raycast with target mutates and returns target without using scratch', () => {
     console.log('# file: tests/geometry/circ.test.js');
-    console.log('ok AC-4 - raycast with target mutates and returns target without using scratch');
+    console.log('ok   AC-4 - raycast with target mutates and returns target without using scratch');
     const circle = new Circ(10, new Vec2(50, 0));
 
     // Obtain the scratch hit reference first
@@ -338,7 +338,7 @@ describe('Circ', () => {
 
   it('AC-5 existing Circ tests continue to pass without regressions', () => {
     console.log('# file: tests/geometry/circ.test.js');
-    console.log('ok AC-5 - existing Circ tests continue to pass without regressions');
+    console.log('ok   AC-5 - existing Circ tests continue to pass without regressions');
     const circle = new Circ(10, new Vec2(15, 25));
     const min = new Vec2();
     const max = new Vec2();

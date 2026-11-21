@@ -1,5 +1,8 @@
 Version 4.6.1 (November 21st 2026)
 -----------------------------
+ * Circ:
+    * Eliminate allocations in `boundsMin` and `boundsMax` by pre-allocating cached `Vec2` references updated on geometry mutations
+    * Reuse module-level scratch `RayHit2D` instance in `Circ.raycast` when `target` parameter is omitted to eliminate object literal and vector allocations
  * Covering Sine and Cosine Wave Equations
  * Covering Arctan Wave Equation and Edge Cases
 
