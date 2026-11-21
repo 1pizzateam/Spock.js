@@ -18,10 +18,10 @@ if (hit) console.log(hit.point, hit.fraction * 20);
 | `set(origin, direction)` / `copy(ray)` / `clone()` | Assign or duplicate. |
 | `at(t, target?)` | Point at distance `t`. |
 | `intersectRect(rect, maxDistance, target?)` | First hit within `maxDistance`, or `null`. |
-| `intersectsRect(rect, maxDistance)` | Boolean version. Performs no heap allocation because the untargeted `Rect.raycast` reuses a shared scratch hit. |
+| `intersectsRect(rect, maxDistance)` | Boolean version. Passes a Ray2-owned scratch hit and performs no heap allocation. |
 | `intersectCirc(circ, maxDistance, target?)` | First hit within `maxDistance`, or `null`. |
-| `intersectsCirc(circ, maxDistance)` | Boolean version. |
+| `intersectsCirc(circ, maxDistance)` | Boolean version. Passes a Ray2-owned scratch hit and performs no heap allocation. |
 | `intersectTriangle(tri, maxDistance, target?)` | First hit on a `RightTriangle` within `maxDistance`, or `null`. |
-| `intersectsTriangle(tri, maxDistance)` | Boolean version. |
+| `intersectsTriangle(tri, maxDistance)` | Boolean version. Passes a Ray2-owned scratch hit and performs no heap allocation. |
 
 A ray that starts inside the shape hits at `fraction = 0`. Pass a `target` hit object to avoid allocating.

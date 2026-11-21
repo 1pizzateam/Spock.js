@@ -3,6 +3,8 @@ Version 4.6.1 (November 21st 2026)
  * Circ:
     * Eliminate allocations in `boundsMin` and `boundsMax` by pre-allocating cached `Vec2` references updated on geometry mutations
     * Reuse module-level scratch `RayHit2D` instance in `Circ.raycast` when `target` parameter is omitted to eliminate object literal and vector allocations
+ * Ray2:
+    * `intersectsRect`, `intersectsCirc` and `intersectsTriangle` pass an explicit preallocated scratch `RayHit2D` instead of relying on shape fallbacks
  * Rect:
     * Reuse a module-level scratch `RayHit2D` in `Rect.raycast` when `target` is omitted to eliminate object literal and `Vec2` allocations
  * RightTriangle:
