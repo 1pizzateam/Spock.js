@@ -12,7 +12,6 @@ The classes — vectors, matrices, quaternions, and shapes — are mutable. Thei
 
 - [Vec2](./vec2) — mutable two-dimensional vector, the workhorse for positions, directions, and sizes
 - [Vec3](./vec3) — mutable three-dimensional vector, plus cross products, spherical coordinates, and the type the 3D transforms speak
-- `Vec` — TypeScript interface with `x`, `y`, and optional `z`, for code that accepts either vector
 
 ## Matrices and rotations
 

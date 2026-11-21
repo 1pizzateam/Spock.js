@@ -19,7 +19,6 @@ export { Frustum }    from './geometry/frustum';
 export type { PointSource } from './geometry/points';
 export { Vec2 }      from './vectors/vec2';
 export { Vec3 }      from './vectors/vec3';
-export type { Vec }  from './vectors/vec';
 export { Mat3 }    from './matrices/mat3';
 export { Mat4x3 }    from './matrices/mat4x3';
 export { Mat4 }    from './matrices/mat4';
