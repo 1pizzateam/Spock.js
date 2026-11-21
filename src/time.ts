@@ -1,3 +1,5 @@
+const scratchSubSteps: { steps: number; remainder: number } = { steps: 0, remainder: 0 };
+
 /** Convert between milliseconds, seconds, and frame rates. */
 export const Time = {
 
@@ -40,9 +42,9 @@ export const Time = {
     return currentFps * (1 - alpha) + instantFps * alpha;
   },
 
-  /** Compute fixed-timestep simulation sub-steps and accumulator remainder. */
+  /** Compute fixed-timestep simulation sub-steps and accumulator remainder. When no target is passed the returned object is shared and reused; copy it if retained. */
   subSteps(delta: number, fixedStep: number, maxSubSteps: number = 4, target?: { steps: number; remainder: number }): { steps: number; remainder: number } {
-    const out = target ?? { steps: 0, remainder: 0 };
+    const out = target ?? scratchSubSteps;
     if (fixedStep <= 0) {
       out.steps = 0;
       out.remainder = delta;
