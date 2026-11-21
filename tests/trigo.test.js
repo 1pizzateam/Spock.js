@@ -60,4 +60,27 @@ describe('Trigo', () => {
     expect(Trigo.arctan2(0, 0)).toBe(false);
   });
 
+  it('AC-1 should evaluate sineEquation as amplitude * sin(period + shiftX) + shiftY', () => {
+    expect(Trigo.sineEquation(2, 0.5, 0.25, 1)).toBeCloseTo(2 * Math.sin(0.75) + 1, 3);
+  });
+
+  it('AC-2 should evaluate cosineEquation as amplitude * cos(period + shiftX) + shiftY', () => {
+    expect(Trigo.cosineEquation(-1.5, 1.2, -0.4, 0.3)).toBeCloseTo(-1.5 * Math.cos(0.8) + 0.3, 3);
+  });
+
+  it('AC-3 should evaluate arctanEquation as amplitude * atan(period + shiftX) + shiftY', () => {
+    expect(Trigo.arctanEquation(3, 0.7, 0.3, -2)).toBeCloseTo(3 * Math.atan(1.0) - 2, 12);
+  });
+
+  it('AC-4 should return shiftY when amplitude is zero for sine, cosine, and arctan equations', () => {
+    expect(Trigo.sineEquation(0, 0.5, 0.25, 1)).toBeCloseTo(1, 3);
+    expect(Trigo.cosineEquation(0, 1.2, -0.4, 0.3)).toBeCloseTo(0.3, 3);
+    expect(Trigo.arctanEquation(0, 0.7, 0.3, -2)).toBe(-2);
+  });
+
+  it('AC-5 should return shiftY when period + shiftX is zero for sine and arctan equations', () => {
+    expect(Trigo.sineEquation(2, 0.5, -0.5, 0)).toBeCloseTo(0, 3);
+    expect(Trigo.arctanEquation(3, 0.4, -0.4, -2)).toBe(-2);
+  });
+
 });
