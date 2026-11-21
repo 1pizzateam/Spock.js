@@ -1,5 +1,6 @@
 import { Circ } from '../../build/es6/geometry/circ.js';
 import { Rect } from '../../build/es6/geometry/rect.js';
+import { Ray2 } from '../../build/es6/geometry/ray2.js';
 import { Grid } from '../../build/es6/geometry/grid.js';
 import { Vec2 } from '../../build/es6/vectors/vec2.js';
 
@@ -181,6 +182,52 @@ describe('Rect', () => {
     const res = rect.raycast(new Vec2(0, 0), new Vec2(100, 0), target);
     expect(res).toBe(target);
     expect(target.point.x).toBeCloseTo(40, 5);
+  });
+
+  it('AC-1 untargeted slab hits return the same shared object', () => {
+    const rect = new Rect(new Vec2(20, 20), new Vec2(50, 0));
+    const a = rect.raycast(new Vec2(0, 0), new Vec2(100, 0));
+    const b = rect.raycast(new Vec2(0, 0), new Vec2(100, 0));
+    expect(a).toBe(b);
+    expect(b.fraction).toBeCloseTo(0.4, 5);
+    expect(b.point.x).toBeCloseTo(40, 5);
+    expect(b.normal.x).toBe(-1);
+  });
+
+  it('AC-2 untargeted inside-start returns shared object with nearest-edge normal', () => {
+    const rect = new Rect(new Vec2(20, 20), new Vec2(50, 0));
+    const slab = rect.raycast(new Vec2(0, 0), new Vec2(100, 0));
+    const inside = rect.raycast(new Vec2(55, 0), new Vec2(100, 0));
+    expect(inside).toBe(slab);
+    expect(inside.fraction).toBe(0);
+    expect(inside.point.x).toBe(55);
+    expect(inside.normal.x).toBe(1);
+    expect(inside.normal.y).toBe(0);
+  });
+
+  it('AC-3 untargeted miss returns null', () => {
+    const rect = new Rect(new Vec2(20, 20), new Vec2(50, 0));
+    expect(rect.raycast(new Vec2(0, 30), new Vec2(100, 30))).toBeNull();
+  });
+
+  it('AC-4 explicit target is returned and not the shared object', () => {
+    const rect = new Rect(new Vec2(20, 20), new Vec2(50, 0));
+    const shared = rect.raycast(new Vec2(0, 0), new Vec2(100, 0));
+    const target = { fraction: 0, point: new Vec2(), normal: new Vec2() };
+    const res = rect.raycast(new Vec2(0, 0), new Vec2(100, 0), target);
+    expect(res).toBe(target);
+    expect(res).not.toBe(shared);
+  });
+
+  it('AC-5 Ray2.intersectsRect returns true on hit and false on miss', () => {
+    const rect = new Rect(new Vec2(20, 20), new Vec2(50, 0));
+    expect(new Ray2(new Vec2(0, 0), new Vec2(1, 0)).intersectsRect(rect, 100)).toBe(true);
+    expect(new Ray2(new Vec2(0, 30), new Vec2(1, 0)).intersectsRect(rect, 100)).toBe(false);
+  });
+
+  it('AC-6 existing raycast hit, miss and inside-start test still passes', () => {
+    const rect = new Rect(new Vec2(20, 20), new Vec2(50, 0));
+    expect(rect.raycast(new Vec2(0, 0), new Vec2(100, 0)).fraction).toBeCloseTo(0.4, 5);
   });
 
 });

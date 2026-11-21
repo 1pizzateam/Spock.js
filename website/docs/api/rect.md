@@ -400,7 +400,7 @@ raycast(start: Vec2, end: Vec2, target?: RayHit2D): RayHit2D | null
 
 - `start` — `Vec2`. Line segment start point.
 - `end` — `Vec2`. Line segment end point.
-- `target` — `RayHit2D` *(optional)*. Existing hit object to mutate.
+- `target` — `RayHit2D` *(optional)*. Existing hit object to mutate. When omitted, the returned `RayHit2D` is a shared scratch object overwritten by the next untargeted call; pass your own `target` to retain a hit.
 
 ### Returns
 
