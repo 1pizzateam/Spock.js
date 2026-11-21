@@ -1,3 +1,5 @@
+import type { Vec2 } from './vectors/vec2';
+
 const SIN_LUT_SIZE = 16384;
 const SIN_LUT_MASK = SIN_LUT_SIZE - 1;
 const SIN_LUT_QUARTER = SIN_LUT_SIZE >> 2;
@@ -24,7 +26,7 @@ function fastCosine(angle: number): number {
 }
 
 /** Set target to a vector of the given length at angle (radians). */
-export function applySineCosine(target: { x: number; y: number }, angle: number, length: number): void {
+export function applySineCosine(target: Vec2, angle: number, length: number): void {
   target.x = Math.cos(angle) * length;
   target.y = Math.sin(angle) * length;
 }

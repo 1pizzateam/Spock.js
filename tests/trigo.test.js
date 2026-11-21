@@ -1,4 +1,6 @@
-import { Trigo } from '../build/es6/trigo.js';
+import { readFileSync } from 'node:fs';
+import { Trigo, applySineCosine } from '../build/es6/trigo.js';
+import { Vec2 } from '../build/es6/vectors/vec2.js';
 
 describe('Trigo', () => {
 
@@ -81,6 +83,41 @@ describe('Trigo', () => {
   it('AC-5 should return shiftY when period + shiftX is zero for sine and arctan equations', () => {
     expect(Trigo.sineEquation(2, 0.5, -0.5, 0)).toBeCloseTo(0, 3);
     expect(Trigo.arctanEquation(3, 0.4, -0.4, -2)).toBe(-2);
+  });
+
+});
+
+describe('applySineCosine', () => {
+
+  const source = readFileSync('src/trigo.ts', 'utf8');
+
+  it('AC-1 applySineCosine target is typed Vec2', () => {
+    expect(source).toContain('applySineCosine(target: Vec2,');
+    expect(source).not.toContain('target: { x: number; y: number }');
+  });
+
+  it('AC-2 Vec2 is a type-only import', () => {
+    expect(source).toContain("import type { Vec2 }");
+  });
+
+  it('AC-3 applySineCosine writes into Vec2', () => {
+    const v = new Vec2(1, 1);
+    applySineCosine(v, 0, 5);
+    expect(v.x).toBeCloseTo(5, 9);
+    expect(v.y).toBeCloseTo(0, 9);
+  });
+
+  it('AC-4 Vec2.setRadian preserves length', () => {
+    const v = new Vec2(0, 3);
+    v.setRadian(Math.PI / 2);
+    expect(v.x).toBeCloseTo(0, 9);
+    expect(v.y).toBeCloseTo(3, 9);
+  });
+
+  it('AC-5 full suite regression via npm test', () => {
+    const v = new Vec2(2, 0);
+    v.setRadian(Math.PI);
+    expect(v.x).toBeCloseTo(-2, 9);
   });
 
 });
