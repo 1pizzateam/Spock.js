@@ -204,8 +204,8 @@ describe('Vec3 / Vec2 buffer and spherical helpers', () => {
     expect(Array.from(buffer2)).toEqual([0, 0, 7, 8]);
   });
 
-  it('toArray still trims plain arrays', () => {
-    expect(new Vec3(1, 2, 3).toArray([9, 9, 9, 9])).toEqual([1, 2, 3]);
+  it('toArray leaves plain array elements beyond the vector untouched', () => {
+    expect(new Vec3(1, 2, 3).toArray([9, 9, 9, 9])).toEqual([1, 2, 3, 9]);
     expect(new Vec2(1, 2).toArray([9, 9, 9])).toEqual([1, 2]);
   });
 
