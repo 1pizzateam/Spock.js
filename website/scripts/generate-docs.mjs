@@ -95,7 +95,7 @@ const model = new Mat4x3()
   Mat4: {
     summary: 'A full 4×4 matrix: affine transforms plus the projection matrices a renderer needs.',
     body: [
-      'It covers everything `Mat4x3` does — translate, scale, rotate about each axis, `lookAtRH()` — and adds `perspective()` and `orthographic()`, which write the projection row that `Mat4x3` leaves out.',
+      'It covers everything `Mat4x3` does — translate, scale, rotate about each axis, `lookAtRH()` — and adds `perspective()` and `orthographicBox()` (plus the deprecated scalar `orthographic()`), which write the projection row that `Mat4x3` leaves out.',
       'Entries live in a `Float32Array`. `toArray()` with no argument returns that live buffer for a WebGL upload; pass a target to copy instead. `multiply()` preserves the last row, so composing with a perspective matrix behaves.',
     ],
     example: `import { Mat4, Vec3 } from '@1pizzateam/spock';
@@ -367,7 +367,8 @@ const methodNotes = {
     translate: 'Composes a translation onto the current matrix, so an earlier rotation also rotates this movement.',
     multiply: 'Multiplies this matrix by another in place. It preserves the last row, so composing a projection with a view matrix behaves correctly.',
     perspective: 'Builds a perspective projection from a vertical field of view in radians, an aspect ratio, and the near and far clip distances. Anything outside those planes is clipped, and a very small `znear` costs depth precision.',
-    orthographic: 'Builds a parallel projection from six clip planes, so on-screen size does not fall off with distance. This is the projection for 2D overlays, CAD-style views, and shadow maps.',
+    orthographic: 'Builds a parallel projection from six clip planes, so on-screen size does not fall off with distance. This is the projection for 2D overlays, CAD-style views, and shadow maps. Deprecated: use `orthographicBox()` instead.',
+    orthographicBox: 'Builds a parallel projection from a `Box` view volume, where `min` is left, bottom, near and `max` is right, top, far. Prefer it over the deprecated scalar `orthographic()`.',
     transpose: 'Flips the matrix about its diagonal, swapping rows and columns.',
     determinant: 'Returns a number describing how the transform scales volume. Zero means the matrix is singular and has no inverse.',
     invert: 'Replaces this matrix with its inverse, which is how a view matrix becomes a camera-to-world transform. A singular matrix is left unchanged.',

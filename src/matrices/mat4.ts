@@ -4,6 +4,7 @@ import {Vec3} from '../vectors/vec3';
 import { matrixToArray, transpose4, determinant4, invert4 } from './buffer';
 import { setLookAtAxes } from './lookAt';
 import type { Mat4x3 } from './mat4x3';
+import type { Box } from '../geometry/box';
 
 /** 4×4 matrix stored as a Float32Array. */
 export class Mat4 {
@@ -234,8 +235,24 @@ export class Mat4 {
 
   }
 
-  /** Orthographic projection. */
+  /**
+   * Orthographic projection.
+   * @deprecated Use orthographicBox(volume) instead.
+   */
   public orthographic(left:number, right:number, top:number, bottom:number, near:number, far:number ): Mat4 {
+
+    return this.orthographicCore(left, right, top, bottom, near, far);
+
+  }
+
+  /** Orthographic projection from a Box view volume (min is left, bottom, near; max is right, top, far). */
+  public orthographicBox(volume: Box): Mat4 {
+
+    return this.orthographicCore(volume.min.x, volume.max.x, volume.max.y, volume.min.y, volume.min.z, volume.max.z);
+
+  }
+
+  private orthographicCore(left:number, right:number, top:number, bottom:number, near:number, far:number ): Mat4 {
 
     const w = right - left;
     const h = top - bottom;
