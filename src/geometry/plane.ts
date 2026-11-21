@@ -19,13 +19,6 @@ export class Plane {
     return this;
   }
 
-  /** Set from (a, b, c, d) plane coefficients and normalize. */
-  public setComponents(x: number, y: number, z: number, w: number): this {
-    this.normal.setScalar(x, y, z);
-    this.constant = w;
-    return this.normalize();
-  }
-
   /** Scale so the normal has unit length. */
   public normalize(): this {
     const len = this.normal.getMagnitude() || 1.0;

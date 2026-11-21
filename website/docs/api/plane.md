@@ -6,7 +6,7 @@ An infinite plane in 3D: a unit `normal` and a `constant`, so that points on the
 
 `distanceToPoint()` returns the signed distance: positive on the side the normal points to, negative behind, zero on the plane. That single number classifies points for clipping and culling, and it is what `Frustum` evaluates for each of its six planes.
 
-Planes are normally built from the four coefficients `(a, b, c, d)` of `ax + by + cz + d = 0`, as in the frustum extraction from a projection-view matrix. `setComponents()` normalizes them so distances are in world units.
+Planes with arbitrary coefficients `(a, b, c, d)` of `ax + by + cz + d = 0` are built by passing a `Vec3` normal and the constant to `Plane.set()`, then calling `normalize()` so distances are in world units. `Frustum` does this for each of its six planes.
 
 ```js
 import { Plane, Vec3 } from '@1pizzateam/spock';
@@ -22,7 +22,7 @@ floor.distanceToPoint(new Vec3(0, 2, 0)); // -3
 
 The plane x = 0 by default.
 
-Takes the normal (copied, not normalized) and the constant. Pass a unit normal for distances in world units, or use `setComponents()` / `normalize()`.
+Takes the normal (copied, not normalized) and the constant. Pass a unit normal for distances in world units, or pass the coefficients to `Plane.set()` as a `Vec3` normal and constant, then call `normalize()`.
 
 ```ts
 new Plane(normal: Vec3 = new Vec3(1, 0, 0), constant: number = 0)
@@ -70,35 +70,6 @@ set(normal: Vec3, constant: number): Plane
 import { Plane, Vec3 } from '@1pizzateam/spock';
 
 const plane = new Plane().set(new Vec3(0, 0, 1), -2);
-```
-
-## Plane.setComponents()
-
-Set from `(a, b, c, d)` coefficients and normalize.
-
-Sets the normal to `(a, b, c)` and the constant to `d`, then scales both so the normal has unit length.
-
-```ts
-setComponents(x: number, y: number, z: number, w: number): Plane
-```
-
-### Parameters
-
-- `x` — `number`. Normal x (a).
-- `y` — `number`. Normal y (b).
-- `z` — `number`. Normal z (c).
-- `w` — `number`. Constant (d).
-
-### Returns
-
-`Plane` — the normalized Plane
-
-### Example
-
-```js
-import { Plane } from '@1pizzateam/spock';
-
-const plane = new Plane().setComponents(0, 2, 0, -10); // normal (0, 1, 0), constant -5
 ```
 
 ## Plane.normalize()
