@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs';
 import { Sphere, Box, Vec3, Mat4x3, Mat4, Quat } from '../../build/es6/spock.js';
 
 describe('Sphere', () => {
@@ -68,5 +69,55 @@ describe('Sphere', () => {
     clone.center.x = 9;
     expect(sphere.center.x).toBe(1);
     expect(new Sphere().copy(sphere).radius).toBe(4);
+  });
+  test('AC-1 setFromPoints keeps scratch Box and Vec3 identity across calls', () => {
+    const box = Sphere._scratchBox;
+    const tmp = Sphere._scratchTmp;
+    expect(box).toBeInstanceOf(Box);
+    expect(tmp).toBeInstanceOf(Vec3);
+    new Sphere().setFromPoints([new Vec3(-1, 0, 0), new Vec3(1, 0, 0)]);
+    new Sphere().setFromPoints([0, 0, 0, 2, 0, 0]);
+    new Sphere().setFromPoints([0, 0, 4, 2], undefined, 2);
+    expect(Sphere._scratchBox).toBe(box);
+    expect(Sphere._scratchTmp).toBe(tmp);
+  });
+
+  test('AC-2 setFromPoints yields exact center and radius for all input shapes', () => {
+    const s3 = new Sphere().setFromPoints([-2, 0, 0, 2, 0, 0]);
+    expect(s3.center.x).toBe(0);
+    expect(s3.radius).toBe(2);
+    const s2 = new Sphere().setFromPoints([0, 0, 4, 2], undefined, 2);
+    expect([s2.center.x, s2.center.y, s2.center.z, s2.radius]).toEqual([2, 1, 0, Math.sqrt(5)]);
+    const sv = new Sphere().setFromPoints([new Vec3(-2, 0, 0), new Vec3(2, 0, 0)]);
+    expect([sv.center.x, sv.radius]).toEqual([0, 2]);
+    const sc = new Sphere().setFromPoints([1, 0, 0, 3, 0, 0], new Vec3(0, 0, 0));
+    expect([sc.center.x, sc.radius]).toEqual([0, 3]);
+  });
+
+  test('AC-3 consecutive calls do not leak stale scratch state', () => {
+    const sphere = new Sphere();
+    sphere.setFromPoints([-100, 0, 0, 100, 0, 0]);
+    expect(sphere.radius).toBe(100);
+    sphere.setFromPoints([0, 0, 0, 2, 0, 0]);
+    expect([sphere.center.x, sphere.radius]).toEqual([1, 1]);
+    sphere.setFromPoints([]);
+    expect(sphere.radius).toBe(0);
+  });
+
+  test('AC-4 empty input yields radius 0 and returns this', () => {
+    const sphere = new Sphere();
+    expect(sphere.setFromPoints([])).toBe(sphere);
+    expect(sphere.radius).toBe(0);
+    expect(sphere.center.isOrigin()).toBe(true);
+  });
+
+  test('AC-5 existing Sphere tests pass unchanged', () => {
+    expect(new Sphere().setFromPoints([-2, 0, 0, 2, 0, 0]).radius).toBe(2);
+  });
+
+  test('AC-6 changelog documents the scratch reuse change', () => {
+    const log = readFileSync(new URL('../../CHANGELOG.md', import.meta.url), 'utf8');
+    expect(log).toContain('Sphere.setFromPoints');
+    expect(log).toMatch(/scratch `Box` and `Vec3`/);
   });
 });
