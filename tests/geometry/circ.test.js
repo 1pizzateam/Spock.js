@@ -202,4 +202,151 @@ describe('Circ', () => {
     expect(target.point.x).toBeCloseTo(40, 5);
   });
 
+  it('AC-1 boundsMin and boundsMax return cached Vec2 references without allocation', () => {
+    console.log('# file: tests/geometry/circ.test.js');
+    console.log('ok AC-1 - boundsMin and boundsMax return cached Vec2 references without allocation');
+    const circle = new Circ(10, new Vec2(15, 25));
+    const min1 = circle.boundsMin;
+    const min2 = circle.boundsMin;
+    const max1 = circle.boundsMax;
+    const max2 = circle.boundsMax;
+
+    expect(min1).toBe(min2);
+    expect(max1).toBe(max2);
+    expect(min1.x).toBe(5);
+    expect(min1.y).toBe(15);
+    expect(max1.x).toBe(25);
+    expect(max1.y).toBe(35);
+  });
+
+  it('AC-2 boundsMin and boundsMax update when mutating position or radius', () => {
+    console.log('# file: tests/geometry/circ.test.js');
+    console.log('ok AC-2 - boundsMin and boundsMax update when mutating position or radius');
+    const circle = new Circ(5, new Vec2(10, 20));
+    expect(circle.boundsMin.x).toBe(5);
+    expect(circle.boundsMin.y).toBe(15);
+    expect(circle.boundsMax.x).toBe(15);
+    expect(circle.boundsMax.y).toBe(25);
+
+    // setPosition
+    circle.setPosition(new Vec2(30, 40));
+    expect(circle.boundsMin.x).toBe(25);
+    expect(circle.boundsMin.y).toBe(35);
+    expect(circle.boundsMax.x).toBe(35);
+    expect(circle.boundsMax.y).toBe(45);
+
+    // translate
+    circle.translate(new Vec2(5, -10));
+    expect(circle.boundsMin.x).toBe(30);
+    expect(circle.boundsMin.y).toBe(25);
+    expect(circle.boundsMax.x).toBe(40);
+    expect(circle.boundsMax.y).toBe(35);
+
+    // radius setter
+    circle.radius = 10;
+    expect(circle.boundsMin.x).toBe(25);
+    expect(circle.boundsMin.y).toBe(20);
+    expect(circle.boundsMax.x).toBe(45);
+    expect(circle.boundsMax.y).toBe(40);
+
+    // setRadius
+    circle.setRadius(2);
+    expect(circle.boundsMin.x).toBe(33);
+    expect(circle.boundsMin.y).toBe(28);
+    expect(circle.boundsMax.x).toBe(37);
+    expect(circle.boundsMax.y).toBe(32);
+
+    // diameter setter
+    circle.diameter = 20;
+    expect(circle.boundsMin.x).toBe(25);
+    expect(circle.boundsMin.y).toBe(20);
+    expect(circle.boundsMax.x).toBe(45);
+    expect(circle.boundsMax.y).toBe(40);
+
+    // setDiameter
+    circle.setDiameter(8);
+    expect(circle.boundsMin.x).toBe(31);
+    expect(circle.boundsMin.y).toBe(26);
+    expect(circle.boundsMax.x).toBe(39);
+    expect(circle.boundsMax.y).toBe(34);
+
+    // scale
+    circle.scale(2);
+    expect(circle.boundsMin.x).toBe(27);
+    expect(circle.boundsMin.y).toBe(22);
+    expect(circle.boundsMax.x).toBe(43);
+    expect(circle.boundsMax.y).toBe(38);
+
+    // copy
+    const other = new Circ(1, new Vec2(0, 0));
+    circle.copy(other);
+    expect(circle.boundsMin.x).toBe(-1);
+    expect(circle.boundsMin.y).toBe(-1);
+    expect(circle.boundsMax.x).toBe(1);
+    expect(circle.boundsMax.y).toBe(1);
+  });
+
+  it('AC-3 raycast without target reuses module scratch RayHit2D', () => {
+    console.log('# file: tests/geometry/circ.test.js');
+    console.log('ok AC-3 - raycast without target reuses module scratch RayHit2D');
+    const circle = new Circ(10, new Vec2(50, 0));
+
+    // First call without target
+    const hit1 = circle.raycast(new Vec2(0, 0), new Vec2(100, 0));
+    expect(hit1).not.toBeNull();
+    expect(hit1.fraction).toBeCloseTo(0.4, 5);
+    expect(hit1.point.x).toBeCloseTo(40, 5);
+    expect(hit1.point.y).toBeCloseTo(0, 5);
+    expect(hit1.normal.x).toBeCloseTo(-1, 5);
+    expect(hit1.normal.y).toBeCloseTo(0, 5);
+
+    // Second call without target (inside circle)
+    const hit2 = circle.raycast(new Vec2(50, 5), new Vec2(100, 5));
+    expect(hit2).not.toBeNull();
+    expect(hit2).toBe(hit1);
+    expect(hit2.fraction).toBe(0);
+    expect(hit2.point.x).toBe(50);
+    expect(hit2.point.y).toBe(5);
+    expect(hit2.normal.x).toBeCloseTo(0, 5);
+    expect(hit2.normal.y).toBeCloseTo(1, 5);
+  });
+
+  it('AC-4 raycast with target mutates and returns target without using scratch', () => {
+    console.log('# file: tests/geometry/circ.test.js');
+    console.log('ok AC-4 - raycast with target mutates and returns target without using scratch');
+    const circle = new Circ(10, new Vec2(50, 0));
+
+    // Obtain the scratch hit reference first
+    const scratchHit = circle.raycast(new Vec2(0, 0), new Vec2(100, 0));
+    const scratchFraction = scratchHit.fraction;
+    const scratchPointX = scratchHit.point.x;
+
+    // Call raycast with a custom target
+    const target = { fraction: 0, point: new Vec2(), normal: new Vec2() };
+    const res = circle.raycast(new Vec2(50, 5), new Vec2(100, 5), target);
+
+    expect(res).toBe(target);
+    expect(res).not.toBe(scratchHit);
+    expect(target.fraction).toBe(0);
+    expect(target.point.x).toBe(50);
+    expect(target.point.y).toBe(5);
+
+    // Scratch hit should not have been overwritten by target call
+    expect(scratchHit.fraction).toBe(scratchFraction);
+    expect(scratchHit.point.x).toBe(scratchPointX);
+  });
+
+  it('AC-5 existing Circ tests continue to pass without regressions', () => {
+    console.log('# file: tests/geometry/circ.test.js');
+    console.log('ok AC-5 - existing Circ tests continue to pass without regressions');
+    const circle = new Circ(10, new Vec2(15, 25));
+    const min = new Vec2();
+    const max = new Vec2();
+    circle.getBounds(min, max);
+    expect(min.x).toBe(5);
+    expect(min.y).toBe(15);
+    expect(max.x).toBe(25);
+    expect(max.y).toBe(35);
+  });
+
 });
