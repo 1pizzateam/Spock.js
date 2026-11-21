@@ -1,3 +1,4 @@
+import { jest } from '@jest/globals';
 import { Ray3, Sphere, Box, Vec3 } from '../../build/es6/spock.js';
 
 describe('Ray3', () => {
@@ -89,5 +90,83 @@ describe('Ray3', () => {
     expect(front.intersectTriangle(a, b, c, true)).not.toBeNull();
     expect(back.intersectTriangle(a, b, c, false)).not.toBeNull();
     expect(back.intersectTriangle(a, b, c, true)).toBeNull();
+  });
+
+  describe('boolean queries without allocation', () => {
+    const box = new Box(new Vec3(-1, -1, -1), new Vec3(1, 1, 1));
+    const sphere = new Sphere(new Vec3(0, 0, 0), 2);
+    const hitRay = () => new Ray3(new Vec3(0, 0, -10), new Vec3(0, 0, 1));
+
+    const receivers = (fn) => {
+      const spy = jest.spyOn(Vec3.prototype, 'copy');
+      try {
+        fn();
+        return spy.mock.instances.slice();
+      } finally {
+        spy.mockRestore();
+      }
+    };
+
+    test('AC-1 intersectsBox reuses a single target across calls', () => {
+      const ray = hitRay();
+      const results = [];
+      const used = receivers(() => {
+        for (let i = 0; i < 3; i++) results.push(ray.intersectsBox(box));
+      });
+      expect(results).toEqual([true, true, true]);
+      const targets = used.filter((v) => v !== ray.origin && v !== ray.direction);
+      expect(targets.length).toBeGreaterThanOrEqual(3);
+      expect(new Set(targets).size).toBe(1);
+    });
+
+    test('AC-2 intersectsSphere reuses a single target across calls', () => {
+      const ray = hitRay();
+      const results = [];
+      const used = receivers(() => {
+        for (let i = 0; i < 3; i++) results.push(ray.intersectsSphere(sphere));
+      });
+      expect(results).toEqual([true, true, true]);
+      const targets = used.filter((v) => v !== ray.origin && v !== ray.direction);
+      expect(targets.length).toBeGreaterThanOrEqual(3);
+      expect(new Set(targets).size).toBe(1);
+    });
+
+    test('AC-3 boolean queries keep miss, inside and parallel-ray results', () => {
+      const miss = new Ray3(new Vec3(0, 10, -10), new Vec3(0, 0, 1));
+      expect(miss.intersectsBox(box)).toBe(false);
+      expect(miss.intersectsSphere(sphere)).toBe(false);
+      const inside = new Ray3(new Vec3(0, 0, 0), new Vec3(0, 0, 1));
+      expect(inside.intersectsBox(box)).toBe(true);
+      expect(inside.intersectsSphere(sphere)).toBe(true);
+      const parallelIn = new Ray3(new Vec3(0.5, 0.5, -10), new Vec3(0, 0, 1));
+      const parallelOut = new Ray3(new Vec3(5, 0, -10), new Vec3(0, 0, 1));
+      expect(parallelIn.intersectsBox(box)).toBe(true);
+      expect(parallelOut.intersectsBox(box)).toBe(false);
+    });
+
+    test('AC-4 hit-point queries keep target semantics', () => {
+      const ray = hitRay();
+      const target = new Vec3();
+      expect(ray.intersectBox(box, target)).toBe(target);
+      expect(target.z).toBeCloseTo(-1);
+      expect(ray.intersectSphere(sphere, target)).toBe(target);
+      expect(target.z).toBeCloseTo(-2);
+
+      const boxHit = ray.intersectBox(box);
+      const sphereHit = ray.intersectSphere(sphere);
+      expect(boxHit.z).toBeCloseTo(-1);
+      expect(sphereHit.z).toBeCloseTo(-2);
+      expect(boxHit).not.toBe(sphereHit);
+      const used = receivers(() => ray.intersectsBox(box));
+      expect(used).not.toContain(boxHit);
+      expect(used).not.toContain(sphereHit);
+    });
+
+    test('AC-5 existing Ray3 cases keep passing', () => {
+      const ray = new Ray3(new Vec3(0, 0, 0), new Vec3(0, 0, 1));
+      const point = ray.at(2);
+      expect(point.z).toBeCloseTo(2);
+      expect(ray.intersectsBox(box)).toBe(true);
+    });
   });
 });
