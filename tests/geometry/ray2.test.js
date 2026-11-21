@@ -143,5 +143,11 @@ describe('Ray2', () => {
       expect(hit.fraction).toBe(fraction);
       expect(hit.point.x).toBe(px);
     });
+
+    test('AC-6 existing Ray2 tests remain green: boolean and hit queries agree', () => {
+      const rect = new Rect(new Vec2(2, 2), new Vec2(5, 0));
+      expect(hitRay().intersectsRect(rect, 20)).toBe(hitRay().intersectRect(rect, 20) !== null);
+      expect(missRay().intersectsRect(rect, 20)).toBe(missRay().intersectRect(rect, 20) !== null);
+    });
   });
 });
