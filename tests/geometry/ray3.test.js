@@ -161,5 +161,12 @@ describe('Ray3', () => {
       expect(used).not.toContain(boxHit);
       expect(used).not.toContain(sphereHit);
     });
+
+    test('AC-5 existing Ray3 cases keep passing', () => {
+      const ray = new Ray3(new Vec3(0, 0, 0), new Vec3(0, 0, 1));
+      const point = ray.at(2);
+      expect(point.z).toBeCloseTo(2);
+      expect(ray.intersectsBox(box)).toBe(true);
+    });
   });
 });
