@@ -1,3 +1,14 @@
+Version 4.8.0 (November 21st 2026)
+-----------------------------
+ * Box:
+    * `Box.setFromPoints` accepts only `readonly Vec3[]` (the `stride` parameter and flat array input are removed)
+    * `Box.applyMatrix4` accepts only `Mat4x3` (`Mat4` input is removed)
+ * Sphere:
+    * `Sphere.setFromPoints` accepts only `readonly Vec3[]` (the `stride` parameter and flat array input are removed)
+    * `Sphere.applyMatrix4` accepts only `Mat4x3` (`Mat4` input is removed)
+ * Geometry:
+    * `PointSource` is restricted to `readonly Vec3[]`; `readPoint` and `asAffine` are removed, eliminating `instanceof` type-sniffing
+
 Version 4.7.1 (November 21st 2026)
 -----------------------------
  * Sphere:

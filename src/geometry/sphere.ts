@@ -1,7 +1,6 @@
 import { Vec3 } from '../vectors/vec3';
 import type { Mat4x3 } from '../matrices/mat4x3';
-import type { Mat4 } from '../matrices/mat4';
-import { readPoint, asAffine, type PointSource } from './points';
+import type { PointSource } from './points';
 import { Box } from './box';
 
 /** 3D bounding sphere. */
@@ -13,7 +12,6 @@ export class Sphere {
   private static _scratchClamp = new Vec3();
   private static _scale = new Vec3();
   private static readonly _scratchBox = new Box();
-  private static readonly _scratchTmp = new Vec3();
 
   /** Sphere at the origin with radius 0 by default. */
   constructor(center: Vec3 = new Vec3(), radius: number = 0) {
@@ -29,22 +27,16 @@ export class Sphere {
   }
 
   /** Enclose points around their box center (or optionalCenter). */
-  public setFromPoints(points: PointSource, optionalCenter?: Vec3, stride: number = 3): this {
-    const box = Sphere._scratchBox.setFromPoints(points, stride);
+  public setFromPoints(points: PointSource, optionalCenter?: Vec3): this {
+    const box = Sphere._scratchBox.setFromPoints(points);
     if (optionalCenter)
       this.center.copy(optionalCenter);
     else
       box.getCenter(this.center);
 
     let maxRadiusSq = 0;
-    if (points.length > 0 && points[0] instanceof Vec3)
-      for (const p of <Vec3[]>points)
-        maxRadiusSq = Math.max(maxRadiusSq, this.center.getDistance(p, true));
-    else {
-      const arr = <number[] | Float32Array>points;
-      for (let i = 0; i + stride <= arr.length; i += stride)
-        maxRadiusSq = Math.max(maxRadiusSq, this.center.getDistance(readPoint(arr, i, stride, Sphere._scratchTmp), true));
-    }
+    for (let i = 0; i < points.length; i++)
+      maxRadiusSq = Math.max(maxRadiusSq, this.center.getDistance(points[i], true));
 
     this.radius = Math.sqrt(maxRadiusSq);
     return this;
@@ -68,10 +60,9 @@ export class Sphere {
   }
 
   /** Transform the center and scale the radius by the largest axis scale. */
-  public applyMatrix4(matrix: Mat4x3 | Mat4): this {
-    const affine = asAffine(matrix);
-    affine.transformPoint(this.center, this.center);
-    this.radius *= affine.getScale(Sphere._scale).maxComponent();
+  public applyMatrix4(matrix: Mat4x3): this {
+    matrix.transformPoint(this.center, this.center);
+    this.radius *= matrix.getScale(Sphere._scale).maxComponent();
     return this;
   }
 

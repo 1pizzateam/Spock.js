@@ -54,7 +54,7 @@ const frustum = new Frustum().setFromProjectionViewMatrix(projectionView);
 
 const world = new Mat4x3().translate(new Vec3(0, 1, 0));
 const bounds = new Sphere(new Vec3(0, 0, 0), 1).applyMatrix4(world);
-const box = new Box().setFromPoints([-1, -1, -1, 1, 1, 1]).applyMatrix4(world); // (-1,0,-1) to (1,2,1)
+const box = new Box().setFromPoints([new Vec3(-1, -1, -1), new Vec3(1, 1, 1)]).applyMatrix4(world); // (-1,0,-1) to (1,2,1)
 
 frustum.intersectsSphere(bounds); // true: draw it
 
@@ -92,7 +92,7 @@ for (const wall of walls) {
 
 ## Reading and writing vertex buffers
 
-`setArray()` and `toArray()` work on typed arrays with an offset, so vectors can read from and write into a packed buffer without temporary arrays. `Box.setFromPoints()` accepts the buffer directly.
+`setArray()` and `toArray()` work on typed arrays with an offset, so vectors can read from and write into a packed buffer without temporary arrays. `Box.setFromPoints()` takes a `Vec3[]`, so read the points out of the buffer first.
 
 ```js
 import { Box, Vec3 } from '@1pizzateam/spock';
@@ -103,7 +103,8 @@ new Vec3(4, 5, 6).toArray(positions, 3);
 new Vec3(7, 8, 9).toArray(positions, 6);
 
 const second = new Vec3().setArray(positions, 3);   // (4, 5, 6)
-const bounds = new Box().setFromPoints(positions);  // (1, 2, 3) to (7, 8, 9)
+const points = [0, 3, 6].map((offset) => new Vec3().setArray(positions, offset));
+const bounds = new Box().setFromPoints(points);     // (1, 2, 3) to (7, 8, 9)
 ```
 
 ## Facing a target
