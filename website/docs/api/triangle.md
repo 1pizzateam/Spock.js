@@ -195,6 +195,25 @@ Draw the triangle on a 2D canvas context. Vertices are written to module-level s
 draw(context: CanvasRenderingContext2D, fillColor: string, strokeColor: string, strokeWidth: number): void
 ```
 
+## TriangleCorner and TriangleShape
+
+Exported string literal union types from `@1pizzateam/spock`. Import them as type-only imports when annotating your own code.
+
+```ts
+type TriangleCorner = 'nw' | 'ne' | 'sw' | 'se';
+type TriangleShape = 'triangle-nw' | 'triangle-ne' | 'triangle-sw' | 'triangle-se';
+```
+
+- `TriangleCorner` — the right-angle corner passed to the constructor and stored in `corner`.
+- `TriangleShape` — the matching shape identifier stored in `shape`, prefixed with `triangle-`.
+
+```ts
+import type { TriangleCorner, TriangleShape } from '@1pizzateam/spock';
+
+const corner: TriangleCorner = 'nw';
+const shape: TriangleShape = 'triangle-nw';
+```
+
 ## raycastSegment()
 
 Standalone 2D segment-vs-edge intersection helper used by `RightTriangle.raycast()`. When `target` is omitted, the returned `RayHit2D` is a reused module-level scratch object overwritten by the next omitted-`target` call; pass your own `target` or copy the values to retain a hit.
