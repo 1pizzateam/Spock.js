@@ -4,6 +4,18 @@ import { Plane } from './plane';
 import type { Sphere } from './sphere';
 import type { Box } from './box';
 
+const row3 = new Vec3();
+const axisRow = new Vec3();
+const normal = new Vec3();
+
+/** Set a normalized plane from row 3 + sign * row `axis` of a column-major matrix. */
+function setPlane(plane: Plane, m: Float32Array, axis: number, sign: 1 | -1): void {
+  row3.setScalar(m[3], m[7], m[11]);
+  axisRow.setScalar(m[axis], m[axis + 4], m[axis + 8]);
+  normal.copy(row3).addScaledVector(axisRow, sign);
+  plane.set(normal, m[15] + sign * m[12 + axis]).normalize();
+}
+
 /** Six-plane view frustum with inward-facing normals. */
 export class Frustum {
 
@@ -26,18 +38,13 @@ export class Frustum {
     const m = matrix.toArray();
     // Column-major rows: row 0 = m[0], m[4], m[8], m[12]; row 3 = m[3], m[7], m[11], m[15]
 
-    // Left plane: row 3 + row 0
-    this.planes[0].setComponents(m[3] + m[0], m[7] + m[4], m[11] + m[8], m[15] + m[12]);
-    // Right plane: row 3 - row 0
-    this.planes[1].setComponents(m[3] - m[0], m[7] - m[4], m[11] - m[8], m[15] - m[12]);
-    // Bottom plane: row 3 + row 1
-    this.planes[2].setComponents(m[3] + m[1], m[7] + m[5], m[11] + m[9], m[15] + m[13]);
-    // Top plane: row 3 - row 1
-    this.planes[3].setComponents(m[3] - m[1], m[7] - m[5], m[11] - m[9], m[15] - m[13]);
-    // Near plane: row 3 + row 2
-    this.planes[4].setComponents(m[3] + m[2], m[7] + m[6], m[11] + m[10], m[15] + m[14]);
-    // Far plane: row 3 - row 2
-    this.planes[5].setComponents(m[3] - m[2], m[7] - m[6], m[11] - m[10], m[15] - m[14]);
+    // Left, right, bottom, top, near, far: row 3 ± row 0/1/2
+    setPlane(this.planes[0], m, 0, 1);
+    setPlane(this.planes[1], m, 0, -1);
+    setPlane(this.planes[2], m, 1, 1);
+    setPlane(this.planes[3], m, 1, -1);
+    setPlane(this.planes[4], m, 2, 1);
+    setPlane(this.planes[5], m, 2, -1);
 
     return this;
   }
