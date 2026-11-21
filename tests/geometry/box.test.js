@@ -109,6 +109,27 @@ describe('Box', () => {
     expect(b.max.toArray()).toEqual([-1, -2, -3]);
   });
 
+  test('setFromPoints keeps results independent of the input vectors and of prior calls', () => {
+    const p0 = new Vec3(1, 2, 3);
+    const p1 = new Vec3(-4, 5, 6);
+    const p2 = new Vec3(0, -1, 9);
+    const box = new Box().setFromPoints([p0, p1, p2]);
+    expect(box.min.toArray()).toEqual([-4, -1, 3]);
+    expect(box.max.toArray()).toEqual([1, 5, 9]);
+    expect(box.min).not.toBe(p0);
+    expect(box.min).not.toBe(p1);
+    expect(box.min).not.toBe(p2);
+    expect(box.max).not.toBe(p0);
+    expect(box.max).not.toBe(p1);
+    expect(box.max).not.toBe(p2);
+    expect(p0.toArray()).toEqual([1, 2, 3]);
+    expect(p1.toArray()).toEqual([-4, 5, 6]);
+    expect(p2.toArray()).toEqual([0, -1, 9]);
+    box.setFromPoints([new Vec3(7, 7, 7)]);
+    expect(box.min.toArray()).toEqual([7, 7, 7]);
+    expect(box.max.toArray()).toEqual([7, 7, 7]);
+  });
+
   test('AC-5 applyMatrix4 with a rotating Mat4x3 matches transforming every corner and keeps an empty box empty', () => {
     const box = new Box(new Vec3(-1, -2, -3), new Vec3(2, 1, 4));
     const m = new Mat4x3().compose(new Vec3(5, -1, 2), new Quat().setFromEuler(new Vec3(0.4, 0.9, -0.3)), new Vec3(2, 1, 3));
