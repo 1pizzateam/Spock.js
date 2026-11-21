@@ -39,4 +39,4 @@ Most vector, matrix, quaternion, Circ, Rect, and RightTriangle operations mutate
 - [Box](/api/box), [Sphere](/api/sphere), [Plane](/api/plane), [Ray3](/api/ray3), and [Frustum](/api/frustum) in 3D
 - [Quadratic](/api/bezier-quadratic) and [Cubic Bézier](/api/bezier-cubic)
 - [Trigo](/api/trigo), [Rand](/api/rand), and [Utils](/api/utils)
-- [NumArray](/api/num-array), [RollingAverage](/api/rolling-average), [Time](/api/time), and [Accumulator](/api/time#accumulator)
+- [NumArray](/api/num-array), [RollingAverage](/api/rolling-average), [Time](/api/time), and [Accumulator](/api/time#accumulator), an exported public class of `@1pizzateam/spock`
