@@ -1,3 +1,9 @@
+Version 4.7.0 (November 21st 2026)
+-----------------------------
+ * Mat4:
+    * Add `Mat4.orthographicBox(volume)` building the orthographic projection from a `Box` view volume
+    * Mark scalar `Mat4.orthographic(left, right, top, bottom, near, far)` as deprecated in favor of `orthographicBox`
+
 Version 4.6.1 (November 21st 2026)
 -----------------------------
  * Circ:
