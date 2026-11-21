@@ -97,8 +97,10 @@ describe('Box', () => {
 
   test('AC-1 setFromPoints on number[] constructs no Vec3', () => {
     const scratch = Box._point;
+    expect(scratch).toBeInstanceOf(Vec3);
     const box = new Box().setFromPoints([1, 2, 3, -4, 5, 6]);
     expect(Box._point).toBe(scratch);
+    expect(scratch.toArray()).toEqual([-4, 5, 6]);
     expect(box.min).not.toBe(scratch);
     expect(box.max).not.toBe(scratch);
     expect(box.min.toArray()).toEqual([-4, 2, 3]);
@@ -107,8 +109,10 @@ describe('Box', () => {
 
   test('AC-2 setFromPoints on Float32Array constructs no Vec3 and fits extremes', () => {
     const scratch = Box._point;
+    expect(scratch).toBeInstanceOf(Vec3);
     const box = new Box().setFromPoints(new Float32Array([1, 2, 3, -4, 5, 6, 0, -1, 9]));
     expect(Box._point).toBe(scratch);
+    expect(scratch.toArray()).toEqual([0, -1, 9]);
     expect(box.min.toArray()).toEqual([-4, -1, 3]);
     expect(box.max.toArray()).toEqual([1, 5, 9]);
   });
