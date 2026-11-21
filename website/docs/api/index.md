@@ -52,4 +52,4 @@ The classes — vectors, matrices, quaternions, shapes, `Accumulator`, and `Roll
 - [RollingAverage](./rolling-average) — fixed-capacity circular buffer for $O(1)$ real-time rolling averages with zero allocations
 - [Utils](./utils) — clamping, linear/smoothstep/damped interpolation, range mapping, and decimal rounding
 - [Time](./time) — conversions between ms, seconds, and frame rates, monotonic clock, delta clamping, and sub-stepping
-- [Accumulator](./time#accumulator) — mutable deterministic fixed-timestep simulation accumulator that splits frame time into fixed steps, with an interpolation `alpha`
+- [Accumulator](./time#accumulator) — exported public class, a mutable deterministic fixed-timestep simulation accumulator that splits frame time into fixed steps, with an interpolation `alpha`

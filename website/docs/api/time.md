@@ -220,8 +220,6 @@ subSteps(
 
 Deterministic fixed-timestep loop accumulator.
 
-`Accumulator` is an exported class of `@1pizzateam/spock`, unlike the stateless functions on `Time`. Each instance holds mutable state, so create one per simulation and reuse it every frame.
-
 Accumulates variable frame elapsed time and consumes it in discrete fixed time steps, preventing spiral-of-death by clamping to `fixedStep * maxSubSteps`.
 
 ```ts
