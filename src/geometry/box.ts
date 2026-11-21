@@ -12,6 +12,7 @@ export class Box {
   private static _center = new Vec3();
   private static _extent = new Vec3();
   private static _column = new Vec3();
+  private static _point = new Vec3();
 
   /** Empty box by default. */
   constructor(min: Vec3 = new Vec3(Infinity, Infinity, Infinity), max: Vec3 = new Vec3(-Infinity, -Infinity, -Infinity)) {
@@ -36,9 +37,8 @@ export class Box {
         this.expandByPoint(p);
     else {
       const arr = <number[] | Float32Array>points;
-      const tmp = new Vec3();
       for (let i = 0; i + stride <= arr.length; i += stride)
-        this.expandByPoint(readPoint(arr, i, stride, tmp));
+        this.expandByPoint(readPoint(arr, i, stride, Box._point));
     }
     return this;
   }
