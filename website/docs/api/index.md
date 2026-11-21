@@ -6,7 +6,7 @@ All public APIs are named ESM exports from `@1pizzateam/spock`. There is no defa
 import { Vec2, Rect, Utils } from '@1pizzateam/spock';
 ```
 
-The classes — vectors, matrices, quaternions, and shapes — are mutable. Their methods write into the instance they were called on and return it, so operations chain and a render loop can reuse instances instead of allocating each frame. Methods that measure or test return a number or boolean instead. `Trigo`, `Bezier`, `Rand`, `NumArray`, `Utils`, and `Time` are plain objects of stateless functions, called directly on the export.
+The classes — vectors, matrices, quaternions, and shapes — are mutable. Their methods write into the instance they were called on and return it, so operations chain and a render loop can reuse instances instead of allocating each frame. Methods that measure or test return a number or boolean instead. `Accumulator` and `RollingAverage` are also mutable classes: construct them with `new` and they keep state between calls, as the other classes do. `Trigo`, `Bezier`, `Rand`, `NumArray`, `Utils`, and `Time` are plain objects of stateless functions, called directly on the export.
 
 ## Vectors
 
@@ -26,6 +26,8 @@ The classes — vectors, matrices, quaternions, and shapes — are mutable. Thei
 - [Circ](./circ) — circle with a centre, a radius, and optional grid occupancy
 - [Rect](./rect) — axis-aligned rectangle with cached corners and optional grid occupancy
 - [RightTriangle](./triangle) — axis-aligned right triangle (`'nw' | 'ne' | 'sw' | 'se'`) extending `Rect` with hypotenuse normal/tangent helpers
+- `TriangleCorner` — type-only export, the corner union of [RightTriangle](./triangle#types)
+- `TriangleShape` — type-only export, the shape union of [RightTriangle](./triangle#types)
 - [Grid](./grid) — uniform cell lattice used as a broad-phase spatial index
 - [Box](./box) — axis-aligned 3D bounding box: fit, refit through a matrix, containment and overlap
 - [Sphere](./sphere) — 3D bounding sphere with matrix transforms and sphere/box tests
@@ -51,3 +53,4 @@ The classes — vectors, matrices, quaternions, and shapes — are mutable. Thei
 - [RollingAverage](./rolling-average) — fixed-capacity circular buffer for $O(1)$ real-time rolling averages with zero allocations
 - [Utils](./utils) — clamping, linear/smoothstep/damped interpolation, range mapping, and decimal rounding
 - [Time](./time) — conversions between ms, seconds, and frame rates, monotonic clock, delta clamping, and sub-stepping
+- [Accumulator](./time#accumulator) — exported public class, a mutable deterministic fixed-timestep simulation accumulator that splits frame time into fixed steps, with an interpolation `alpha`

@@ -18,6 +18,25 @@ tri.isIn(new Vec2(48, 48));                          // false (open SE half)
 tri.overlapsCircle(new Circ(12, new Vec2(36, 36)));  // true
 ```
 
+## Types
+
+`TriangleCorner` and `TriangleShape` are exported string literal union types from `@1pizzateam/spock`. Import them as type-only imports when annotating your own code.
+
+```ts
+type TriangleCorner = 'nw' | 'ne' | 'sw' | 'se';
+type TriangleShape = 'triangle-nw' | 'triangle-ne' | 'triangle-sw' | 'triangle-se';
+```
+
+- `TriangleCorner` — the right-angle corner of the bounding box, passed to the constructor and stored in `corner`.
+- `TriangleShape` — the type of the `shape` property of `RightTriangle`, derived from the corner as `triangle-` followed by the corner value.
+
+```ts
+import type { TriangleCorner, TriangleShape } from '@1pizzateam/spock';
+
+const corner: TriangleCorner = 'nw';
+const shape: TriangleShape = 'triangle-nw';
+```
+
 ## Constructor
 
 Create a right triangle of `size` centered at `position` with its right-angle corner at `corner` (`'nw'`, `'ne'`, `'sw'`, or `'se'`).
