@@ -11,7 +11,7 @@ Containment and overlap use squared distances, so there is no square root. `appl
 ```js
 import { Sphere, Vec3 } from '@1pizzateam/spock';
 
-const bound = new Sphere().setFromPoints(vertices); // flat [x, y, z, ...] or Vec3[]
+const bound = new Sphere().setFromPoints(vertices); // Vec3[]
 const world = bound.clone().applyMatrix4(model);
 
 world.containsPoint(new Vec3(0, 0, 0));
@@ -73,17 +73,16 @@ const sphere = new Sphere().set(new Vec3(1, 2, 3), 4);
 
 Enclose points around their box centre.
 
-By default the centre is the centre of the points' bounding box. Pass `optionalCenter` to pin the centre (for example a mesh origin) and size the radius from it instead. `stride` is 3 for flat (x, y, z) data or 2 for (x, y) data with z taken as 0.
+By default the centre is the centre of the points' bounding box. Pass `optionalCenter` to pin the centre (for example a mesh origin) and size the radius from it instead.
 
 ```ts
-setFromPoints(points: Vec3[] | number[] | Float32Array, optionalCenter?: Vec3, stride: number = 3): Sphere
+setFromPoints(points: readonly Vec3[], optionalCenter?: Vec3): Sphere
 ```
 
 ### Parameters
 
-- `points` — `Vec3[] | number[] | Float32Array`. The points.
+- `points` — `readonly Vec3[]`. The points.
 - `optionalCenter` — `Vec3`. Optional. Fixed centre.
-- `stride` — `number`. Optional. Values per point in a flat array, 2 or 3.
 
 ### Returns
 
@@ -94,7 +93,7 @@ setFromPoints(points: Vec3[] | number[] | Float32Array, optionalCenter?: Vec3, s
 ```js
 import { Sphere } from '@1pizzateam/spock';
 
-const sphere = new Sphere().setFromPoints([-2, 0, 0, 2, 0, 0]); // centre (0, 0, 0), radius 2
+const sphere = new Sphere().setFromPoints([new Vec3(-2, 0, 0), new Vec3(2, 0, 0)]); // centre (0, 0, 0), radius 2
 ```
 
 ## Sphere.containsPoint()
@@ -181,15 +180,15 @@ sphere.intersectsBox(new Box(new Vec3(1, 1, 1), new Vec3(3, 3, 3))); // true
 
 Transform the sphere.
 
-Accepts a `Mat4x3`, or an affine `Mat4`. The centre is transformed as a point and the radius is multiplied by the largest axis scale of the matrix. Clone first if you need the original.
+Accepts a `Mat4x3`. The centre is transformed as a point and the radius is multiplied by the largest axis scale of the matrix. Clone first if you need the original.
 
 ```ts
-applyMatrix4(matrix: Mat4x3 | Mat4): Sphere
+applyMatrix4(matrix: Mat4x3): Sphere
 ```
 
 ### Parameters
 
-- `matrix` — `Mat4x3 | Mat4`. An affine transform.
+- `matrix` — `Mat4x3`. An affine transform.
 
 ### Returns
 
