@@ -26,7 +26,7 @@ const travelled = position.getDistance(start);
 
 | Category | Methods |
 | :--- | :--- |
-| **Creation & Component State** | [`new Vec2()`](#constructor) · [`setScalar()`](#vec2-setscalar) · [`setArray()`](#vec2-setarray) · [`copy()`](#vec2-copy) · [`clone()`](#vec2-clone) · [`toArray()`](#vec2-toarray) · [`toString()`](#vec2-tostring) · [`isOrigin()`](#vec2-isorigin) · [`origin()`](#vec2-origin) · [`equals()`](#vec2-equals) · [`isEqualTo()`](#vec2-isequalto) · [`isPositive()`](#vec2-ispositive) |
+| **Creation & Component State** | [`new Vec2()`](#constructor) · [`setScalar()`](#vec2-setscalar) · [`copy()`](#vec2-copy) · [`clone()`](#vec2-clone) · [`toArray()`](#vec2-toarray) · [`toString()`](#vec2-tostring) · [`isOrigin()`](#vec2-isorigin) · [`origin()`](#vec2-origin) · [`equals()`](#vec2-equals) · [`isEqualTo()`](#vec2-isequalto) · [`isPositive()`](#vec2-ispositive) |
 | **Arithmetic & Modification** | [`add()`](#vec2-add) · [`addScaledVector()`](#vec2-addscaledvector) · [`addScalar()`](#vec2-addscalar) · [`addComponents()`](#vec2-addcomponents) · [`subtract()`](#vec2-subtract) · [`subtractScaledVector()`](#vec2-subtractscaledvector) · [`subtractScalar()`](#vec2-subtractscalar) · [`multiply()`](#vec2-multiply) · [`multiplyScaledVector()`](#vec2-multiplyscaledvector) · [`scale()`](#vec2-scale) · [`divide()`](#vec2-divide) · [`divideScaledVector()`](#vec2-dividescaledvector) · [`divideScalar()`](#vec2-dividescalar) · [`halve()`](#vec2-halve) · [`opposite()`](#vec2-opposite) · [`absolute()`](#vec2-absolute) · [`sign()`](#vec2-sign) · [`floor()`](#vec2-floor) · [`ceil()`](#vec2-ceil) · [`max()`](#vec2-max) · [`min()`](#vec2-min) · [`maxScalar()`](#vec2-maxscalar) · [`minScalar()`](#vec2-minscalar) |
 | **Target Operations** | [`addVectors()`](#vec2-addvectors) · [`subVectors()`](#vec2-subvectors) · [`multiplyVectors()`](#vec2-multiplyvectors) · [`scaleVector()`](#vec2-scalevector) · [`divideVectors()`](#vec2-dividevectors) · [`minVectors()`](#vec2-minvectors) · [`maxVectors()`](#vec2-maxvectors) · [`clampVectors()`](#vec2-clampvectors) · [`oppositeVector()`](#vec2-oppositevector) · [`absoluteVector()`](#vec2-absolutevector) · [`normalizeVector()`](#vec2-normalizevector) · [`perpVector()`](#vec2-perpvector) · [`perpCWVector()`](#vec2-perpcwvector) |
 | **Geometric & Spatial Operations** | [`getMagnitude()`](#vec2-getmagnitude) · [`getDistance()`](#vec2-getdistance) · [`normalize()`](#vec2-normalize) · [`dotProduct()`](#vec2-dotproduct) · [`crossProduct()`](#vec2-crossproduct) · [`perp()`](#vec2-perp) · [`perpCW()`](#vec2-perpcw) · [`project()`](#vec2-project) · [`reflect()`](#vec2-reflect) · [`clamp()`](#vec2-clamp) · [`clampScalar()`](#vec2-clampscalar) · [`isInBounds()`](#vec2-isinbounds) · [`lerp()`](#vec2-lerp) |
@@ -92,34 +92,6 @@ import { Vec2 } from '@1pizzateam/spock';
 const result = new Vec2().setScalar(1, 1);
 ```
 
-### Vec2.setArray()
-
-Set x, y from array at offset.
-
-Reads consecutive entries starting at `offset`, which makes it easy to pull one vertex out of a packed buffer. Entries past the end of the array leave that axis unchanged.
-
-```ts
-setArray(array: ArrayLike<number>, offset: number = 0): Vec2
-```
-
-#### Parameters
-
-- `array` — `ArrayLike<number>`. A `number[]` or typed array (e.g. `Float32Array`) containing values for X and Y
-- `offset` — `number`. Optional. the starting index of the array
-
-#### Returns
-
-`Vec2` — The vector with its new values
-
-#### Example
-
-```js
-import { Vec2 } from '@1pizzateam/spock';
-
-const uvs = new Float32Array([0, 0, 1, 0, 1, 1]);
-const second = new Vec2().setArray(uvs, 2); // (1, 0)
-```
-
 ### Vec2.copy()
 
 Copy another vector into this one.
@@ -178,7 +150,7 @@ const result = new Vec2().clone();
 
 Write [x, y] into target (or a new array).
 
-Passing a target writes into it and returns it, so you can fill part of a larger buffer without allocating. The target can be a `number[]` or a typed array, and `offset` selects where in it the two values go; a plain array is only trimmed to length 2 when `offset` is 0.
+Passing a target writes into it and returns it, so you can fill part of a larger buffer without allocating. The target can be a `number[]` or a typed array, and `offset` selects where in it the two values go.
 
 ```ts
 toArray(target: number[] | Float32Array | Float64Array = [], offset: number = 0): typeof target

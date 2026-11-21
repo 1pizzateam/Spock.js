@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs';
 import { Bezier } from '../../build/es6/bezier.js';
 import { Vec2 } from '../../build/es6/vectors/vec2.js';
 import { Rect } from '../../build/es6/geometry/rect.js';
@@ -83,11 +84,13 @@ describe('Vec2', () => {
     expect(v.y).toBe(0);
   });
 
-  it('should write components into a provided array', () => {
+  it('AC-2 toArray writes into a provided plain array without truncating', () => {
     const out = [9, 9, 9];
     const result = new Vec2(1, 2).toArray(out);
     expect(result).toBe(out);
-    expect(out).toEqual([1, 2]);
+    expect(out).toEqual([1, 2, 9]);
+    console.log('# file: tests/vectors/vec2.test.js');
+    console.log('ok   AC-2 toArray writes into a provided plain array without truncating');
   });
 
   it('should split a quadratic bezier into two curves that meet', () => {
@@ -121,11 +124,11 @@ describe('Vec2', () => {
     )).toBeCloseTo(0.5, 5);
   });
 
-  it('should set components from scalars and arrays', () => {
+  it('should set components from scalars and vectors', () => {
     const v = new Vec2(1, 2).setScalar(null, 8);
     expect(v.x).toBe(1);
     expect(v.y).toBe(8);
-    v.setArray([4, 5, 6], 1);
+    v.copy(new Vec2(5, 6));
     expect(v.x).toBe(5);
     expect(v.y).toBe(6);
   });
@@ -566,6 +569,51 @@ describe('Vec2', () => {
     const first = a.quadraticBezierLength(a, b, b, 8);
     a.quadraticBezierLength(c, d, c, 8);
     expect(a.quadraticBezierLength(a, b, b, 8)).toBe(first);
+  });
+
+  it('AC-1 toArray has no Array.isArray type-sniffing', () => {
+    const src = readFileSync('src/vectors/vec2.ts', 'utf8');
+    const start = src.indexOf('public toArray');
+    const body = src.slice(start, src.indexOf('\n  }', start));
+    expect(start).toBeGreaterThan(-1);
+    expect(body).not.toContain('Array.isArray');
+    console.log('# file: tests/vectors/vec2.test.js');
+    console.log('ok   AC-1 toArray has no Array.isArray type-sniffing');
+  });
+
+  it('AC-3 toArray writes into a typed array at offset', () => {
+    const buffer = new Float32Array(4);
+    const result = new Vec2(1, 2).toArray(buffer, 2);
+    expect(result).toBe(buffer);
+    expect(Array.from(buffer)).toEqual([0, 0, 1, 2]);
+    console.log('# file: tests/vectors/vec2.test.js');
+    console.log('ok   AC-3 toArray writes into a typed array at offset');
+  });
+
+  it('AC-4 Vec2 no longer exposes setArray', () => {
+    expect(typeof Vec2.prototype.setArray).toBe('undefined');
+    expect(typeof Vec2.prototype.copy).toBe('function');
+    expect(typeof Vec2.prototype.setScalar).toBe('function');
+    expect(typeof Vec2.prototype.clone).toBe('function');
+    console.log('# file: tests/vectors/vec2.test.js');
+    console.log('ok   AC-4 Vec2 no longer exposes setArray');
+  });
+
+  it('AC-5 copy replaces loose array setting', () => {
+    const a = new Vec2(3, 4);
+    const b = new Vec2();
+    expect(b.copy(a)).toBe(b);
+    expect(b.equals(a)).toBe(true);
+    console.log('# file: tests/vectors/vec2.test.js');
+    console.log('ok   AC-5 copy replaces loose array setting');
+  });
+
+  it('AC-6 docs no longer mention Vec2 setArray or trimming', () => {
+    const doc = readFileSync('website/docs/api/vec2.md', 'utf8');
+    expect(doc).not.toContain('setArray');
+    expect(doc).not.toContain('only trimmed');
+    console.log('# file: tests/vectors/vec2.test.js');
+    console.log('ok   AC-6 docs no longer mention Vec2 setArray or trimming');
   });
 
 });

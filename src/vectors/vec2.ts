@@ -22,13 +22,6 @@ export class Vec2 {
     return this;
   }
 
-  /** Set x, y from array at offset. */
-  public setArray(array: ArrayLike<number>, offset: number = 0): Vec2 {
-    this.x = array[offset] ?? this.x;
-    this.y = array[offset + 1] ?? this.y;
-    return this;
-  }
-
   /** Copy another vector into this one. */
   public copy(vector: Vec2): Vec2 {
     this.x = vector.x;
@@ -60,8 +53,6 @@ export class Vec2 {
   public toArray<T extends number[] | Float32Array | Float64Array>(target: T = [] as unknown as T, offset: number = 0): T {
     target[offset] = this.x;
     target[offset + 1] = this.y;
-    if (offset === 0 && Array.isArray(target))
-      target.length = 2;
     return target;
   }
 

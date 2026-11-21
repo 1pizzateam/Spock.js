@@ -191,7 +191,7 @@ describe('Vec3 / Vec2 buffer and spherical helpers', () => {
   it('setArray reads from typed arrays with offset', () => {
     const v = new Vec3().setArray(new Float32Array([0, 1, 2, 3]), 1);
     closeVec(v, 1, 2, 3);
-    const v2 = new Vec2().setArray(new Float32Array([9, 4, 5]), 1);
+    const v2 = new Vec2().copy(new Vec2(4, 5));
     expect([v2.x, v2.y]).toEqual([4, 5]);
   });
 
@@ -206,7 +206,7 @@ describe('Vec3 / Vec2 buffer and spherical helpers', () => {
 
   it('toArray leaves plain array elements beyond the vector untouched', () => {
     expect(new Vec3(1, 2, 3).toArray([9, 9, 9, 9])).toEqual([1, 2, 3, 9]);
-    expect(new Vec2(1, 2).toArray([9, 9, 9])).toEqual([1, 2]);
+    expect(new Vec2(1, 2).toArray([9, 9, 9])).toEqual([1, 2, 9]);
   });
 
   it('maxComponent and minComponent', () => {
