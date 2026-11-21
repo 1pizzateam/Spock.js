@@ -5,6 +5,8 @@ import type { TriangleShape } from './triangle';
 import { type Grid, clearGridCells, GRID_EMPTY_CELL } from './grid';
 import { applyCanvasStyle } from './canvas';
 
+const scratchHit: RayHit2D = { fraction: 0, point: new Vec2(), normal: new Vec2() };
+
 /** Axis-aligned rectangle with optional grid occupancy. */
 export class Rect {
 
@@ -151,7 +153,7 @@ export class Rect {
 
     // Start inside AABB
     if (start.isInBounds(this.topLeftCorner, this.bottomRightCorner)) {
-      const out = target ?? { fraction: 0, point: new Vec2(), normal: new Vec2() };
+      const out = target ?? scratchHit;
       out.fraction = 0;
       out.point.copy(start);
       const distLeft = start.x - minX;
@@ -228,7 +230,7 @@ export class Rect {
         return null;
     }
 
-    const out = target ?? { fraction: 0, point: new Vec2(), normal: new Vec2() };
+    const out = target ?? scratchHit;
     out.fraction = tMin;
     out.point.lerpVectors(start, end, tMin);
     out.normal.x = normalX;

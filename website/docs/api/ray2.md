@@ -18,7 +18,7 @@ if (hit) console.log(hit.point, hit.fraction * 20);
 | `set(origin, direction)` / `copy(ray)` / `clone()` | Assign or duplicate. |
 | `at(t, target?)` | Point at distance `t`. |
 | `intersectRect(rect, maxDistance, target?)` | First hit within `maxDistance`, or `null`. |
-| `intersectsRect(rect, maxDistance)` | Boolean version. |
+| `intersectsRect(rect, maxDistance)` | Boolean version. Performs no heap allocation because the untargeted `Rect.raycast` reuses a shared scratch hit. |
 | `intersectCirc(circ, maxDistance, target?)` | First hit within `maxDistance`, or `null`. |
 | `intersectsCirc(circ, maxDistance)` | Boolean version. |
 | `intersectTriangle(tri, maxDistance, target?)` | First hit on a `RightTriangle` within `maxDistance`, or `null`. |
