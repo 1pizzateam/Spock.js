@@ -1,4 +1,5 @@
 import { Circ } from '../../build/es6/geometry/circ.js';
+import * as gridModule from '../../build/es6/geometry/grid.js';
 import { Grid } from '../../build/es6/geometry/grid.js';
 import { Vec2 } from '../../build/es6/vectors/vec2.js';
 
@@ -88,16 +89,32 @@ describe('Grid', () => {
     expect(outOfBounds.y).toBe(Grid.emptyCell);
   });
 
-  it('should support spatial query helpers getCellsForBounds and getCellsForCircle', () => {
+  it('AC-1: keeps fillGridCells private to the grid module', () => {
+    expect(gridModule.fillGridCells).toBeUndefined();
+  });
+
+  it('AC-2: getCellsForBounds returns the expected overlapping cell indices', () => {
     const grid = new Grid(new Vec2(100, 100), 10); // 10 cols, 10 rows
     expect(grid.getCell(new Vec2(25, 15))).toBe(12);
 
     const boundsCells = grid.getCellsForBounds(new Vec2(5, 5), new Vec2(15, 15));
     expect(boundsCells).toEqual([0, 1, 10, 11]);
+  });
 
+  it('AC-3: getCellsForCircle returns the expected overlapping cell indices', () => {
+    const grid = new Grid(new Vec2(100, 100), 10);
     const circleCells = grid.getCellsForCircle(new Circ(5, new Vec2(10, 10)));
     expect(circleCells).toEqual([0, 1, 10, 11]);
+  });
 
+  it('AC-4: grid queries remain usable with the compiled library module', () => {
+    const grid = new Grid(new Vec2(100, 100), 10);
+    expect(grid.getCellsForBounds(new Vec2(5, 5), new Vec2(15, 15))).toEqual([0, 1, 10, 11]);
+    expect(grid.getCellsForCircle(new Circ(5, new Vec2(10, 10)))).toEqual([0, 1, 10, 11]);
+  });
+
+  it('should support other spatial query helpers', () => {
+    const grid = new Grid(new Vec2(100, 100), 10);
     const centerTarget = new Vec2();
     expect(grid.getCellCenter(12, centerTarget)).toBe(centerTarget);
     expect(centerTarget.x).toBe(25);
