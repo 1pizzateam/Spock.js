@@ -1,6 +1,8 @@
 import { Mat4 } from '../../build/es6/matrices/mat4.js';
 import { Mat4x3 } from '../../build/es6/matrices/mat4x3.js';
 import { Vec3 } from '../../build/es6/vectors/vec3.js';
+import { Box } from '../../build/es6/geometry/box.js';
+import fs from 'fs';
 
 describe('Mat4', () => {
 
@@ -194,6 +196,61 @@ describe('Mat4', () => {
     expect(m[13]).toBe(0);
     expect(m[14]).toBeCloseTo(near * far * expectedRangeInv * 2, 5);
     expect(m[15]).toBe(0);
+  });
+
+  it('AC-1 orthographicBox builds the expected matrix for a symmetric Box', () => {
+    const m = new Mat4().orthographicBox(new Box(new Vec3(-1, -1, 1), new Vec3(1, 1, 3))).toArray();
+    expect(m[0]).toBeCloseTo(1, 5);
+    expect(m[5]).toBeCloseTo(1, 5);
+    expect(m[10]).toBeCloseTo(-1, 5);
+    expect(m[12]).toBeCloseTo(0, 5);
+    expect(m[13]).toBeCloseTo(0, 5);
+    expect(m[14]).toBeCloseTo(-2, 5);
+    expect(m[15]).toBeCloseTo(1, 5);
+  });
+
+  it('AC-2 orthographicBox matches scalar orthographic for an asymmetric Box', () => {
+    const a = new Mat4().orthographicBox(new Box(new Vec3(-2, -1, 0.5), new Vec3(6, 3, 10))).toArray();
+    const b = new Mat4().orthographic(-2, 6, 3, -1, 0.5, 10).toArray();
+    for (let i = 0; i < 16; i++)
+      expect(a[i]).toBe(b[i]);
+  });
+
+  it('AC-3 orthographicBox returns the same instance and does not mutate the Box', () => {
+    const box = new Box(new Vec3(-2, -1, 0.5), new Vec3(6, 3, 10));
+    const m = new Mat4();
+    expect(m.orthographicBox(box)).toBe(m);
+    expect([box.min.x, box.min.y, box.min.z]).toEqual([-2, -1, 0.5]);
+    expect([box.max.x, box.max.y, box.max.z]).toEqual([6, 3, 10]);
+  });
+
+  it('AC-4 scalar orthographic output is unchanged', () => {
+    const m = new Mat4().orthographic(-1, 1, 1, -1, 1, 3).toArray();
+    expect(m[12]).toBeCloseTo(0, 5);
+    expect(m[13]).toBeCloseTo(0, 5);
+    expect(m[14]).toBeCloseTo(-2, 5);
+  });
+
+  it('AC-5 orthographicBox on the default Box does not throw and yields non-finite entries', () => {
+    let m;
+    expect(() => { m = new Mat4().orthographicBox(new Box()).toArray(); }).not.toThrow();
+    expect(Array.from(m).some((v) => !Number.isFinite(v))).toBe(true);
+  });
+
+  it('AC-6 orthographic is deprecated and Box is a type-only import', () => {
+    const src = fs.readFileSync('src/matrices/mat4.ts', 'utf8');
+    const doc = src.slice(src.lastIndexOf('/**', src.indexOf('public orthographic(')), src.indexOf('public orthographic('));
+    expect(doc).toContain('@deprecated');
+    expect(doc).toContain('orthographicBox');
+    expect(src).toContain('import type { Box }');
+  });
+
+  it('AC-7 docs and changelog mention orthographicBox and deprecate scalar orthographic', () => {
+    for (const f of ['website/docs/api/mat4.md', 'website/docs/api/index.md', 'website/scripts/generate-docs.mjs', 'CHANGELOG.md']) {
+      const t = fs.readFileSync(f, 'utf8');
+      expect(t).toContain('orthographicBox');
+      expect(t.toLowerCase()).toContain('deprecated');
+    }
   });
 
 });

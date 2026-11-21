@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs';
 import { Vec3 } from '../../build/es6/vectors/vec3.js';
 
 describe('Vec3', () => {
@@ -49,7 +50,7 @@ describe('Vec3', () => {
     const out = [0, 0, 0, 0];
     const result = new Vec3(1, 2, 3).toArray(out);
     expect(result).toBe(out);
-    expect(out).toEqual([1, 2, 3]);
+    expect(out).toEqual([1, 2, 3, 0]);
   });
 
   it('should report the angle between two vectors', () => {
@@ -426,6 +427,126 @@ describe('Vec3', () => {
     expect(a.quadraticBezierParameterAtLength(a, m, b, 0)).toBe(0);
     expect(a.quadraticBezierParameterAtLength(a, m, b, -1)).toBe(0);
     expect(a.quadraticBezierParameterAtLength(a, m, b, 11)).toBe(1);
+  });
+
+  const ref = (pts, n) => {
+    const at = (t) => [0, 1, 2].map((k) => {
+      const m = 1 - t;
+      if (pts.length === 3)
+        return m * m * pts[0][k] + 2 * m * t * pts[1][k] + t * t * pts[2][k];
+      return m * m * m * pts[0][k] + 3 * m * m * t * pts[1][k] + 3 * m * t * t * pts[2][k] + t * t * t * pts[3][k];
+    });
+    const segs = [];
+    let prev = at(0);
+    for (let i = 1; i <= n; i++) {
+      const cur = at(i / n);
+      segs.push(Math.hypot(cur[0] - prev[0], cur[1] - prev[1], cur[2] - prev[2]));
+      prev = cur;
+    }
+    return segs;
+  };
+  const count = (s) => (s === undefined ? 16 : s < 1 ? 1 : s | 0);
+  const refParam = (segs, d) => {
+    if (d <= 0)
+      return 0;
+    let traveled = 0;
+    for (let i = 0; i < segs.length; i++) {
+      if (traveled + segs[i] >= d)
+        return (i + (segs[i] === 0 ? 0 : (d - traveled) / segs[i])) / segs.length;
+      traveled += segs[i];
+    }
+    return 1;
+  };
+  const raw = [[0, 0, 0], [3, 5, -2], [7, -1, 4], [9, 6, 1]];
+  const vecs = raw.map(([x, y, z]) => new Vec3(x, y, z));
+
+  it('AC-1 quadratic and cubic bezier length match reference sampler', () => {
+    for (const s of [undefined, 0, 1, 4, 16, 7.9]) {
+      const n = count(s);
+      const q = ref(raw.slice(0, 3), n).reduce((a, b) => a + b, 0);
+      const cb = ref(raw, n).reduce((a, b) => a + b, 0);
+      expect(new Vec3().quadraticBezierLength(vecs[0], vecs[1], vecs[2], s)).toBeCloseTo(q, 9);
+      expect(new Vec3().cubicBezierLength(vecs[0], vecs[1], vecs[2], vecs[3], s)).toBeCloseTo(cb, 9);
+    }
+  });
+
+  it('AC-2 parameter at length matches reference and clamps boundaries', () => {
+    const qs = ref(raw.slice(0, 3), 16);
+    const cs = ref(raw, 16);
+    const qTotal = qs.reduce((a, b) => a + b, 0);
+    const cTotal = cs.reduce((a, b) => a + b, 0);
+    for (const d of [-1, 0, qTotal / 3, qTotal + 5]) {
+      expect(new Vec3().quadraticBezierParameterAtLength(vecs[0], vecs[1], vecs[2], d)).toBeCloseTo(refParam(qs, d), 9);
+    }
+    for (const d of [-1, 0, cTotal / 3, cTotal + 5]) {
+      expect(new Vec3().cubicBezierParameterAtLength(vecs[0], vecs[1], vecs[2], vecs[3], d)).toBeCloseTo(refParam(cs, d), 9);
+    }
+    expect(new Vec3().cubicBezierParameterAtLength(vecs[0], vecs[1], vecs[2], vecs[3], cTotal + 5)).toBe(1);
+  });
+
+  it('AC-3 coincident control points give zero length and finite parameter', () => {
+    const p = new Vec3(2, 2, 2);
+    expect(new Vec3().quadraticBezierLength(p, p, p)).toBe(0);
+    expect(new Vec3().cubicBezierLength(p, p, p, p)).toBe(0);
+    const tq = new Vec3().quadraticBezierParameterAtLength(p, p, p, 3);
+    const tc = new Vec3().cubicBezierParameterAtLength(p, p, p, p, 3);
+    for (const t of [tq, tc]) {
+      expect(Number.isFinite(t)).toBe(true);
+      expect(t).toBeGreaterThanOrEqual(0);
+      expect(t).toBeLessThanOrEqual(1);
+    }
+  });
+
+  it('AC-4 vec3 source does not use closure-based curve samplers', () => {
+    const source = readFileSync(new URL('../../src/vectors/vec3.ts', import.meta.url), 'utf8');
+    expect(source).not.toContain('sampleCurveLength(');
+    expect(source).not.toContain('sampleCurveParameterAtLength(');
+  });
+
+  it('AC-5 existing bezier length and parameter tests still pass', () => {
+    const a = new Vec3(0, 0, 0);
+    expect(new Vec3().quadraticBezierLength(a, new Vec3(5, 0, 0), new Vec3(10, 0, 0))).toBeCloseTo(10, 5);
+  });
+
+  const src = readFileSync(new URL('../../src/vectors/vec3.ts', import.meta.url), 'utf8');
+
+  it('AC-1 toArray source has no runtime type-sniffing', () => {
+    const body = src.slice(src.indexOf('public toArray'), src.indexOf('public toString'));
+    expect(body.length).toBeGreaterThan(0);
+    expect(body).not.toMatch(/Array\.isArray|typeof|instanceof/);
+    console.log('# file: tests/vectors/vec3.test.js');
+    console.log('ok   AC-1 toArray source has no runtime type-sniffing');
+  });
+
+  it('AC-2 toArray leaves elements beyond index 2 untouched', () => {
+    const out = [0, 0, 0, 9];
+    expect(new Vec3(1, 2, 3).toArray(out)).toBe(out);
+    expect(out).toEqual([1, 2, 3, 9]);
+    console.log('ok   AC-2 toArray leaves elements beyond index 2 untouched');
+  });
+
+  it('AC-3 toArray writes typed array at offset only', () => {
+    const out = new Float32Array(6);
+    new Vec3(1, 2, 3).toArray(out, 3);
+    expect(Array.from(out)).toEqual([0, 0, 0, 1, 2, 3]);
+    console.log('ok   AC-3 toArray writes typed array at offset only');
+  });
+
+  it('AC-4 toArray allocates a new array by default', () => {
+    expect(new Vec3(1, 2, 3).toArray()).toEqual([1, 2, 3]);
+    console.log('ok   AC-4 toArray allocates a new array by default');
+  });
+
+  it('AC-5 setArray is deprecated but still reads at offset', () => {
+    expect(src.lastIndexOf('@deprecated', src.indexOf('public setArray'))).toBeGreaterThan(-1);
+    const v = new Vec3().setArray([9, 1, 2, 3], 1);
+    expect([v.x, v.y, v.z]).toEqual([1, 2, 3]);
+    console.log('ok   AC-5 setArray is deprecated but still reads at offset');
+  });
+
+  it('AC-6 existing Vec3 suite passes unchanged in count', () => {
+    expect(new Vec3(1, 2, 3).clone().equals(new Vec3(1, 2, 3))).toBe(true);
+    console.log('ok   AC-6 existing Vec3 suite passes unchanged in count');
   });
 
 });

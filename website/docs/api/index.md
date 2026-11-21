@@ -18,7 +18,7 @@ The classes — vectors, matrices, quaternions, shapes, `Accumulator`, and `Roll
 
 - [Mat3](./mat3) — 3×3 matrix for 2D affine transforms
 - [Mat4x3](./mat4x3) — 4×3 affine 3D transform, no projection row, cheaper to invert; `compose()`, point and direction transforms, normal matrix
-- [Mat4](./mat4) — full 4×4 matrix, adds `perspective()`, `orthographic()`, and perspective-divide point transforms
+- [Mat4](./mat4) — full 4×4 matrix, adds `perspective()`, `orthographicBox()` (scalar `orthographic()` is deprecated), and perspective-divide point transforms
 - [Quat](./quat) — rotation as a unit quaternion `[w, x, y, z]`, composable and interpolable with `slerp()`, with `lookAt()` and matrix/Euler conversion
 
 ## Geometry

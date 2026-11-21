@@ -1,3 +1,25 @@
+Version 4.8.0 (November 21st 2026)
+-----------------------------
+ * Box:
+    * `Box.setFromPoints` accepts only `readonly Vec3[]` (the `stride` parameter and flat array input are removed)
+    * `Box.applyMatrix4` accepts only `Mat4x3` (`Mat4` input is removed)
+ * Sphere:
+    * `Sphere.setFromPoints` accepts only `readonly Vec3[]` (the `stride` parameter and flat array input are removed)
+    * `Sphere.applyMatrix4` accepts only `Mat4x3` (`Mat4` input is removed)
+ * Geometry:
+    * `PointSource` is restricted to `readonly Vec3[]`; `readPoint` and `asAffine` are removed, eliminating `instanceof` type-sniffing
+
+Version 4.7.1 (November 21st 2026)
+-----------------------------
+ * Sphere:
+    * `Sphere.setFromPoints` reuses private static scratch `Box` and `Vec3` instances, no longer allocating them per call, with no API change
+
+Version 4.7.0 (November 21st 2026)
+-----------------------------
+ * Mat4:
+    * Add `Mat4.orthographicBox(volume)` building the orthographic projection from a `Box` view volume
+    * Mark scalar `Mat4.orthographic(left, right, top, bottom, near, far)` as deprecated in favor of `orthographicBox`
+
 Version 4.6.1 (November 21st 2026)
 -----------------------------
  * Circ:

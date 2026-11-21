@@ -1,4 +1,4 @@
-import { Bezier, sampleCurveLength, sampleCurveParameterAtLength } from '../bezier';
+import { Bezier, bezierSampleCount } from '../bezier';
 import { Utils } from '../utils';
 
 /** Mutable 3D vector. */
@@ -24,7 +24,10 @@ export class Vec3 {
     return this;
   }
 
-  /** Set x, y, z from an array or typed array at offset. */
+  /**
+   * Set x, y, z from an array or typed array at offset.
+   * @deprecated Use Vec3.copy(vector) for vector-to-vector copies.
+   */
   public setArray(array: ArrayLike<number>, offset: number = 0): Vec3 {
     this.x = array[offset] ?? this.x;
     this.y = array[offset + 1] ?? this.y;
@@ -60,13 +63,11 @@ export class Vec3 {
     return this.x === 0 && this.y === 0 && this.z === 0;
   }
 
-  /** Write [x, y, z] into target at offset (or a new array). */
+  /** Write [x, y, z] into target at offset (or a new array); elements beyond offset + 2 are left untouched. */
   public toArray<T extends number[] | Float32Array | Float64Array>(target: T = [] as unknown as T, offset: number = 0): T {
     target[offset] = this.x;
     target[offset + 1] = this.y;
     target[offset + 2] = this.z;
-    if (offset === 0 && Array.isArray(target))
-      target.length = 3;
     return target;
   }
 
@@ -562,44 +563,22 @@ export class Vec3 {
 
   /** Sampled arc length of a quadratic. */
   public quadraticBezierLength(p0: Vec3, p1: Vec3, p2: Vec3, samples?: number): number {
-    return sampleCurveLength(
-      (t, target) => target.setScalar(Bezier.quadratic(p0.x, p1.x, p2.x, t), Bezier.quadratic(p0.y, p1.y, p2.y, t), Bezier.quadratic(p0.z, p1.z, p2.z, t)),
-      bezierPrevious,
-      bezierCurrent,
-      samples
-    );
+    return sampleLength(p0, p1, p2, null, samples);
   }
 
   /** Sampled arc length of a cubic. */
   public cubicBezierLength(p0: Vec3, p1: Vec3, p2: Vec3, p3: Vec3, samples?: number): number {
-    return sampleCurveLength(
-      (t, target) => target.setScalar(Bezier.cubic(p0.x, p1.x, p2.x, p3.x, t), Bezier.cubic(p0.y, p1.y, p2.y, p3.y, t), Bezier.cubic(p0.z, p1.z, p2.z, p3.z, t)),
-      bezierPrevious,
-      bezierCurrent,
-      samples
-    );
+    return sampleLength(p0, p1, p2, p3, samples);
   }
 
   /** Parameter t at the given quadratic arc length. */
   public quadraticBezierParameterAtLength(p0: Vec3, p1: Vec3, p2: Vec3, distance: number, samples?: number): number {
-    return sampleCurveParameterAtLength(
-      (t, target) => target.setScalar(Bezier.quadratic(p0.x, p1.x, p2.x, t), Bezier.quadratic(p0.y, p1.y, p2.y, t), Bezier.quadratic(p0.z, p1.z, p2.z, t)),
-      bezierPrevious,
-      bezierCurrent,
-      distance,
-      samples
-    );
+    return sampleParameter(p0, p1, p2, null, distance, samples);
   }
 
   /** Parameter t at the given cubic arc length. */
   public cubicBezierParameterAtLength(p0: Vec3, p1: Vec3, p2: Vec3, p3: Vec3, distance: number, samples?: number): number {
-    return sampleCurveParameterAtLength(
-      (t, target) => target.setScalar(Bezier.cubic(p0.x, p1.x, p2.x, p3.x, t), Bezier.cubic(p0.y, p1.y, p2.y, p3.y, t), Bezier.cubic(p0.z, p1.z, p2.z, p3.z, t)),
-      bezierPrevious,
-      bezierCurrent,
-      distance,
-      samples
-    );
+    return sampleParameter(p0, p1, p2, p3, distance, samples);
   }
 
   /** Clamp each component between min and max. */
@@ -726,3 +705,50 @@ export class Vec3 {
 
 const bezierPrevious = new Vec3();
 const bezierCurrent = new Vec3();
+
+/** Evaluates a quadratic (p3 null) or cubic curve at t into target without allocating. */
+function sampleAt(p0: Vec3, p1: Vec3, p2: Vec3, p3: Vec3 | null, t: number, target: Vec3): void {
+  if (p3 === null)
+    target.setScalar(Bezier.quadratic(p0.x, p1.x, p2.x, t), Bezier.quadratic(p0.y, p1.y, p2.y, t), Bezier.quadratic(p0.z, p1.z, p2.z, t));
+  else
+    target.setScalar(Bezier.cubic(p0.x, p1.x, p2.x, p3.x, t), Bezier.cubic(p0.y, p1.y, p2.y, p3.y, t), Bezier.cubic(p0.z, p1.z, p2.z, p3.z, t));
+}
+
+function sampleLength(p0: Vec3, p1: Vec3, p2: Vec3, p3: Vec3 | null, samples?: number): number {
+  const n = bezierSampleCount(samples);
+  let previous = bezierPrevious;
+  let current = bezierCurrent;
+  sampleAt(p0, p1, p2, p3, 0, previous);
+  let length = 0;
+  for (let i = 1; i <= n; i++) {
+    sampleAt(p0, p1, p2, p3, i / n, current);
+    length += current.getDistance(previous);
+    const swap = previous;
+    previous = current;
+    current = swap;
+  }
+  return length;
+}
+
+function sampleParameter(p0: Vec3, p1: Vec3, p2: Vec3, p3: Vec3 | null, distance: number, samples?: number): number {
+  if (distance <= 0)
+    return 0;
+  const n = bezierSampleCount(samples);
+  let previous = bezierPrevious;
+  let current = bezierCurrent;
+  let traveled = 0;
+  sampleAt(p0, p1, p2, p3, 0, previous);
+  for (let i = 1; i <= n; i++) {
+    sampleAt(p0, p1, p2, p3, i / n, current);
+    const segment = current.getDistance(previous);
+    if (traveled + segment >= distance) {
+      const u = segment === 0 ? 0 : (distance - traveled) / segment;
+      return (i - 1 + u) / n;
+    }
+    traveled += segment;
+    const swap = previous;
+    previous = current;
+    current = swap;
+  }
+  return 1;
+}

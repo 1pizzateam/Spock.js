@@ -4,7 +4,7 @@ A full 4×4 matrix: affine transforms plus the projection matrices a renderer ne
 
 <Mat4Demo />
 
-It covers everything `Mat4x3` does — translate, scale, rotate about each axis, `lookAtRH()` — and adds `perspective()` and `orthographic()`, which write the projection row that `Mat4x3` leaves out.
+It covers everything `Mat4x3` does — translate, scale, rotate about each axis, `lookAtRH()` — and adds `perspective()` and `orthographicBox()` (plus the deprecated scalar `orthographic()`), which write the projection row that `Mat4x3` leaves out.
 
 Entries live in a `Float32Array`. `toArray()` with no argument returns that live buffer for a WebGL upload; pass a target to copy instead. `multiply()` preserves the last row, so composing with a perspective matrix behaves.
 
@@ -366,7 +366,7 @@ const result = new Mat4().perspective(Math.PI / 4, 16 / 9, 0.1, 100);
 
 Orthographic projection.
 
-Builds a parallel projection from six clip planes, so on-screen size does not fall off with distance. This is the projection for 2D overlays, CAD-style views, and shadow maps.
+Builds a parallel projection from six clip planes, so on-screen size does not fall off with distance. This is the projection for 2D overlays, CAD-style views, and shadow maps. Deprecated: use `orthographicBox()` instead.
 
 ```ts
 orthographic(left:number, right:number, top:number, bottom:number, near:number, far:number): Mat4
@@ -392,6 +392,33 @@ import { Mat4 } from '@1pizzateam/spock';
 
 
 const result = new Mat4().orthographic(-1, 1, 1, -1, 0.1, 100);
+```
+
+## Mat4.orthographicBox()
+
+Orthographic projection from a Box view volume (min is left, bottom, near; max is right, top, far).
+
+Builds a parallel projection from a `Box` view volume, where `min` is left, bottom, near and `max` is right, top, far. Prefer it over the deprecated scalar `orthographic()`.
+
+```ts
+orthographicBox(volume: Box): Mat4
+```
+
+### Parameters
+
+- `volume` — `Box`. Min is left, bottom, near; max is right, top, far.
+
+### Returns
+
+`Mat4` — the Mat4 with its new values
+
+### Example
+
+```js
+import { Mat4, Box, Vec3 } from '@1pizzateam/spock';
+
+const volume = new Box(new Vec3(-1, -1, 0.1), new Vec3(1, 1, 100));
+const result = new Mat4().orthographicBox(volume);
 ```
 
 ## Mat4.transpose()

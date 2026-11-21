@@ -141,7 +141,7 @@ describe('Quat', () => {
   });
 
   it('should clone without sharing the vector', () => {
-    const q = new Quat(0.5, 1, 2, 3);
+    const q = new Quat(0.5, new Vec3(1, 2, 3));
     const clone = q.clone();
     q.vector.x = 9;
     expect(clone.vector.x).toBe(1);
@@ -149,12 +149,12 @@ describe('Quat', () => {
   });
 
   it('should return components in constructor order [w, x, y, z]', () => {
-    expect(new Quat(1, 2, 3, 4).toArray()).toEqual([1, 2, 3, 4]);
+    expect(new Quat(1, new Vec3(2, 3, 4)).toArray()).toEqual([1, 2, 3, 4]);
   });
 
   it('should write components into a provided array', () => {
     const out = [0, 0, 0, 0];
-    const result = new Quat(1, 2, 3, 4).toArray(out);
+    const result = new Quat(1, new Vec3(2, 3, 4)).toArray(out);
     expect(result).toBe(out);
     expect(out).toEqual([1, 2, 3, 4]);
   });
@@ -169,7 +169,7 @@ describe('Quat', () => {
   it('AC-1 should return identity and self reference when axis is zero length', () => {
     console.log('# file: tests/quat.test.js');
     console.log('ok AC-1 - should return identity and self reference when axis is zero length');
-    const q = new Quat(0.5, 0.5, 0.5, 0.5);
+    const q = new Quat(0.5, new Vec3(0.5, 0.5, 0.5));
     const zeroAxis = new Vec3(0, 0, 0);
     const result = q.setAxisAngle(zeroAxis, Math.PI / 2);
 
@@ -184,7 +184,7 @@ describe('Quat', () => {
     expect(Number.isNaN(q.vector.y)).toBe(false);
     expect(Number.isNaN(q.vector.z)).toBe(false);
 
-    const q2 = new Quat(0.1, 0.2, 0.3, 0.4);
+    const q2 = new Quat(0.1, new Vec3(0.2, 0.3, 0.4));
     const result2 = q2.setAxisAngle(new Vec3(0, 0, 0), 1);
     expect(result2).toBe(q2);
     expect(q2.isIdentity()).toBe(true);
@@ -299,13 +299,13 @@ describe('Quat', () => {
     console.log('ok AC-5 - should compute quaternion dot product and verify non-commutative Hamilton multiply and premultiply');
 
     // Dot product: orthogonal, identical, and symmetric
-    const q1 = new Quat(1, 0, 0, 0);
-    const q2 = new Quat(0, 1, 0, 0);
+    const q1 = new Quat(1, new Vec3(0, 0, 0));
+    const q2 = new Quat(0, new Vec3(1, 0, 0));
     expect(q1.dot(q2)).toBe(0);
     expect(q1.dot(q1)).toBe(1);
 
-    const qA = new Quat(0.5, 0.5, 0.5, 0.5);
-    const qB = new Quat(0.2, 0.4, 0.6, 0.8);
+    const qA = new Quat(0.5, new Vec3(0.5, 0.5, 0.5));
+    const qB = new Quat(0.2, new Vec3(0.4, 0.6, 0.8));
     expect(qA.dot(qB)).toBeCloseTo(qB.dot(qA), 10);
     const expectedDot = 0.5 * 0.2 + (0.5 * 0.4 + 0.5 * 0.6 + 0.5 * 0.8);
     expect(qA.dot(qB)).toBeCloseTo(expectedDot, 10);
@@ -333,6 +333,62 @@ describe('Quat', () => {
     expect(preTarget.vector.x).toBeCloseTo(qXY.vector.x, 10);
     expect(preTarget.vector.y).toBeCloseTo(qXY.vector.y, 10);
     expect(preTarget.vector.z).toBeCloseTo(qXY.vector.z, 10);
+  });
+
+  test('AC-1 constructor copies the Vec3 vector part', () => {
+    console.log('# file: tests/quat.test.js');
+    const source = new Vec3(1, 2, 3);
+    const q = new Quat(0.5, source);
+    expect(q.w).toBe(0.5);
+    expect([q.vector.x, q.vector.y, q.vector.z]).toEqual([1, 2, 3]);
+    source.setScalar(9, 9, 9);
+    expect(q.vector.x).toBe(1);
+    expect(q.vector).not.toBe(source);
+    console.log('ok AC-1 - constructor copies the Vec3 vector part');
+  });
+
+  test('AC-2 default constructor is identity with unshared vectors', () => {
+    console.log('# file: tests/quat.test.js');
+    const a = new Quat();
+    const b = new Quat();
+    expect(a.isIdentity()).toBe(true);
+    expect(a.vector).not.toBe(b.vector);
+    console.log('ok AC-2 - default constructor is identity with unshared vectors');
+  });
+
+  test('AC-3 set copies a Vec3 and returns this', () => {
+    console.log('# file: tests/quat.test.js');
+    const q = new Quat();
+    const source = new Vec3(4, 5, 6);
+    expect(q.set(0.25, source)).toBe(q);
+    expect(q.w).toBe(0.25);
+    expect([q.vector.x, q.vector.y, q.vector.z]).toEqual([4, 5, 6]);
+    source.setScalar(0, 0, 0);
+    expect(q.vector.x).toBe(4);
+    console.log('ok AC-3 - set copies a Vec3 and returns this');
+  });
+
+  test('AC-4 clone, identity and toArray keep [w, x, y, z] order', () => {
+    console.log('# file: tests/quat.test.js');
+    const q = new Quat(0.5, new Vec3(1, 2, 3));
+    const c = q.clone();
+    expect(c.equals(q)).toBe(true);
+    expect(c.vector).not.toBe(q.vector);
+    expect(c.toArray()).toEqual([0.5, 1, 2, 3]);
+    expect(q.identity()).toBe(q);
+    expect(q.isIdentity()).toBe(true);
+    console.log('ok AC-4 - clone, identity and toArray keep [w, x, y, z] order');
+  });
+
+  test('AC-5 vector-first construction matches setAxisAngle rotation', () => {
+    console.log('# file: tests/quat.test.js');
+    const h = Math.PI / 4;
+    const q = new Quat(Math.cos(h), new Vec3(0, 0, Math.sin(h)));
+    const r = q.multiplyVector(new Vec3(1, 0, 0), new Vec3());
+    expect(r.x).toBeCloseTo(0, 6);
+    expect(r.y).toBeCloseTo(1, 6);
+    expect(r.z).toBeCloseTo(0, 6);
+    console.log('ok AC-5 - vector-first construction matches setAxisAngle rotation');
   });
 
 });

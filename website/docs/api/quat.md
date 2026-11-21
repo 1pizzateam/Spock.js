@@ -6,7 +6,7 @@ A rotation stored as a unit quaternion: a scalar `w` plus a `Vec3` named `vector
 
 Quaternions are the compact way to hold and blend 3D rotations. They avoid gimbal lock, compose with a single `multiply()`, and interpolate smoothly with `slerp()`, which is why they beat Euler angles for animation and camera work.
 
-`new Quat()` is the identity rotation. Build one from an axis and angle with `setAxisAngle()`, or from Euler angles with `setFromEuler()`. At render time `toMat4()` or `toMat4x3()` writes the rotation into a matrix. Component order is `[w, x, y, z]` in both the constructor and `toArray()`.
+`new Quat()` is the identity rotation. Build one from an axis and angle with `setAxisAngle()`, or from Euler angles with `setFromEuler()`. At render time `toMat4()` or `toMat4x3()` writes the rotation into a matrix. The constructor takes `w` first followed by the `Vec3` vector part, while `toArray()` returns `[w, x, y, z]`.
 
 ```js
 import { Quat, Vec3 } from '@1pizzateam/spock';
@@ -24,18 +24,16 @@ const current = rotation.clone().slerp(new Quat(), 0.5);
 
 Identity by default: (1, 0, 0, 0).
 
-Defaults to the identity rotation, `(1, 0, 0, 0)`. Arguments are in `[w, x, y, z]` order, matching what `toArray()` returns.
+Defaults to the identity rotation, `(1, 0, 0, 0)`. Takes `w` followed by a `Vec3` vector part; `toArray()` returns `[w, x, y, z]`.
 
 ```ts
-new Quat(w: number = 1, x: number = 0, y: number = 0, z: number = 0)
+new Quat(w: number = 1, vector?: Vec3)
 ```
 
 ### Parameters
 
 - `w` — `number`. Optional.
-- `x` — `number`. Optional.
-- `y` — `number`. Optional.
-- `z` — `number`. Optional.
+- `vector` — `Vec3`. Optional. Copied, not retained.
 
 ### Returns
 
@@ -44,27 +42,25 @@ new Quat(w: number = 1, x: number = 0, y: number = 0, z: number = 0)
 ### Example
 
 ```js
-import { Quat } from '@1pizzateam/spock';
+import { Quat, Vec3 } from '@1pizzateam/spock';
 
-const value = new Quat(1, 1, 1, 1);
+const value = new Quat(1, new Vec3(1, 1, 1));
 ```
 
 ## Quat.set()
 
-Set w, x, y, z.
+Set w and the Vec3 vector part.
 
-Writes all four components at once, in `[w, x, y, z]` order.
+Writes `w` and copies the vector part from a `Vec3`.
 
 ```ts
-set(w: number, x: number, y: number, z: number): Quat
+set(w: number, vector: Vec3): Quat
 ```
 
 ### Parameters
 
 - `w` — `number`.
-- `x` — `number`.
-- `y` — `number`.
-- `z` — `number`.
+- `vector` — `Vec3`. Copied, not retained.
 
 ### Returns
 
@@ -73,10 +69,9 @@ set(w: number, x: number, y: number, z: number): Quat
 ### Example
 
 ```js
-import { Quat } from '@1pizzateam/spock';
+import { Quat, Vec3 } from '@1pizzateam/spock';
 
-
-const result = new Quat().set(1, 1, 1, 1);
+const result = new Quat().set(1, new Vec3(1, 1, 1));
 ```
 
 ## Quat.identity()

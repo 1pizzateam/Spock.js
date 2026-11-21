@@ -91,4 +91,45 @@ describe('Accumulator', () => {
     expect(stepsCapped).toBe(5);
   });
 
+  it('AC-1 returns shared scratch object when target omitted', () => {
+    const a = Time.subSteps(50, 16, 4);
+    const b = Time.subSteps(20, 16, 4);
+    expect(b).toBe(a);
+    expect(b.steps).toBe(1);
+    expect(b.remainder).toBeCloseTo(4);
+  });
+
+  it('AC-2 populates and returns explicit target', () => {
+    const target = { steps: 0, remainder: 0 };
+    const out = Time.subSteps(50, 16, 4, target);
+    expect(out).toBe(target);
+    expect(out).not.toBe(Time.subSteps(50, 16, 4));
+    expect(target.steps).toBe(3);
+    expect(target.remainder).toBeCloseTo(2);
+  });
+
+  it('AC-3 computes steps and cap', () => {
+    const r = Time.subSteps(50, 16, 4);
+    expect(r.steps).toBe(3);
+    expect(r.remainder).toBeCloseTo(2);
+    const c = Time.subSteps(100, 16, 2);
+    expect(c.steps).toBe(2);
+    expect(c.remainder).toBeCloseTo(68);
+  });
+
+  it('AC-4 zero fixedStep overwrites stale scratch', () => {
+    Time.subSteps(50, 16, 4);
+    const z = Time.subSteps(50, 0);
+    expect(z.steps).toBe(0);
+    expect(z.remainder).toBe(50);
+  });
+
+  it('AC-5 keeps fixed timestep subSteps behavior with explicit target', () => {
+    const target = { steps: 0, remainder: 0 };
+    const r = Time.subSteps(50, 16, 4, target);
+    expect(r).toBe(target);
+    expect(target.steps).toBe(3);
+    expect(target.remainder).toBeCloseTo(2);
+  });
+
 });

@@ -11,7 +11,7 @@ A new box is empty (`max` below `min`) until it grows to include something, so `
 ```js
 import { Box, Mat4x3, Quat, Vec3 } from '@1pizzateam/spock';
 
-const local = new Box().setFromPoints(vertices); // flat [x, y, z, ...] or Vec3[]
+const local = new Box().setFromPoints(vertices); // Vec3[]
 const model = new Mat4x3().compose(position, new Quat().setFromEuler(new Vec3(0, 0.5, 0)), new Vec3(1, 1, 1));
 
 const world = local.clone().applyMatrix4(model);
@@ -75,18 +75,17 @@ const box = new Box().set(new Vec3(0, 0, 0), new Vec3(2, 2, 2));
 
 ## Box.setFromPoints()
 
-Fit around Vec3 points or a flat array.
+Fit around Vec3 points.
 
-Resets the box and grows it to include every point. A flat `number[]` or typed array is read `stride` values at a time: stride 3 for (x, y, z) positions, stride 2 for (x, y) data where z is taken as 0. An empty list leaves the box empty.
+Resets the box and grows it to include every point. Planar data uses `Vec3` points with z set to 0. An empty list leaves the box empty.
 
 ```ts
-setFromPoints(points: Vec3[] | number[] | Float32Array, stride: number = 3): Box
+setFromPoints(points: readonly Vec3[]): Box
 ```
 
 ### Parameters
 
-- `points` — `Vec3[] | number[] | Float32Array`. The points.
-- `stride` — `number`. Optional. Values per point in a flat array, 2 or 3.
+- `points` — `readonly Vec3[]`. The points.
 
 ### Returns
 
@@ -95,10 +94,10 @@ setFromPoints(points: Vec3[] | number[] | Float32Array, stride: number = 3): Box
 ### Example
 
 ```js
-import { Box } from '@1pizzateam/spock';
+import { Box, Vec3 } from '@1pizzateam/spock';
 
-const positions = new Float32Array([0, 0, 0, 1, 2, 3, -1, 5, 2]);
-const box = new Box().setFromPoints(positions); // (-1, 0, 0) to (1, 5, 3)
+const points = [new Vec3(0, 0, 0), new Vec3(1, 2, 3), new Vec3(-1, 5, 2)];
+const box = new Box().setFromPoints(points); // (-1, 0, 0) to (1, 5, 3)
 ```
 
 ## Box.makeEmpty()
@@ -334,15 +333,15 @@ const result = new Box().copy(original);
 
 Transform the box and refit it around the result.
 
-Accepts a `Mat4x3`, or an affine `Mat4` (its last row is ignored). The new bounds are `centre ± Σ |axis column| × half extent`, so rotation grows the box and scale and translation behave as expected. An empty box stays empty. Clone first if you need the original.
+Accepts a `Mat4x3`. The new bounds are `centre ± Σ |axis column| × half extent`, so rotation grows the box and scale and translation behave as expected. An empty box stays empty. Clone first if you need the original.
 
 ```ts
-applyMatrix4(matrix: Mat4x3 | Mat4): Box
+applyMatrix4(matrix: Mat4x3): Box
 ```
 
 ### Parameters
 
-- `matrix` — `Mat4x3 | Mat4`. An affine transform.
+- `matrix` — `Mat4x3`. An affine transform.
 
 ### Returns
 
