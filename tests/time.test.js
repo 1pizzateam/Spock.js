@@ -124,4 +124,12 @@ describe('Accumulator', () => {
     expect(z.remainder).toBe(50);
   });
 
+  it('AC-5 keeps fixed timestep subSteps behavior with explicit target', () => {
+    const target = { steps: 0, remainder: 0 };
+    const r = Time.subSteps(50, 16, 4, target);
+    expect(r).toBe(target);
+    expect(target.steps).toBe(3);
+    expect(target.remainder).toBeCloseTo(2);
+  });
+
 });
