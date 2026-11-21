@@ -1,5 +1,5 @@
 /** @jest-environment node */
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 const read = (relPath) => readFileSync(join(process.cwd(), relPath), 'utf8');
@@ -42,5 +42,28 @@ describe('API documentation (issue #67)', () => {
   it('AC-6: index Geometry list references TriangleCorner and TriangleShape linking to ./triangle#types', () => {
     expect(index).toContain('`TriangleCorner` — type-only export, the corner union of [RightTriangle](./triangle#types)');
     expect(index).toContain('`TriangleShape` — type-only export, the shape union of [RightTriangle](./triangle#types)');
+  });
+});
+
+describe('Loose Vec interface removal (issue #61)', () => {
+
+  it('AC-1 src/vectors/vec.ts no longer exists', () => {
+    expect(existsSync(join(process.cwd(), 'src/vectors/vec.ts'))).toBe(false);
+  });
+
+  it('AC-2 spock.ts has no loose Vec export but keeps Vec2 and Vec3', () => {
+    expect(source).not.toMatch(/from '\.\/vectors\/vec'/);
+    expect(source).toMatch(/Vec2.*from '\.\/vectors\/vec2'/);
+    expect(source).toMatch(/Vec3.*from '\.\/vectors\/vec3'/);
+  });
+
+  it('AC-3 spock.ts declares no Vec type export so build output has none', () => {
+    expect(source).not.toMatch(/export type \{ Vec \}/);
+  });
+
+  it('AC-4 API index no longer documents Vec and still links Vec2 and Vec3', () => {
+    expect(index).not.toContain('`Vec`');
+    expect(index).toContain('./vec2');
+    expect(index).toContain('./vec3');
   });
 });
