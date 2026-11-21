@@ -1,3 +1,8 @@
+Version 4.7.1 (November 21st 2026)
+-----------------------------
+ * Sphere:
+    * `Sphere.setFromPoints` reuses private static scratch `Box` and `Vec3` instances, no longer allocating them per call, with no API change
+
 Version 4.7.0 (November 21st 2026)
 -----------------------------
  * Mat4:

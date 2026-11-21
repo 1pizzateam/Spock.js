@@ -12,6 +12,8 @@ export class Sphere {
 
   private static _scratchClamp = new Vec3();
   private static _scale = new Vec3();
+  private static readonly _scratchBox = new Box();
+  private static readonly _scratchTmp = new Vec3();
 
   /** Sphere at the origin with radius 0 by default. */
   constructor(center: Vec3 = new Vec3(), radius: number = 0) {
@@ -28,7 +30,7 @@ export class Sphere {
 
   /** Enclose points around their box center (or optionalCenter). */
   public setFromPoints(points: PointSource, optionalCenter?: Vec3, stride: number = 3): this {
-    const box = new Box().setFromPoints(points, stride);
+    const box = Sphere._scratchBox.setFromPoints(points, stride);
     if (optionalCenter)
       this.center.copy(optionalCenter);
     else
@@ -40,9 +42,8 @@ export class Sphere {
         maxRadiusSq = Math.max(maxRadiusSq, this.center.getDistance(p, true));
     else {
       const arr = <number[] | Float32Array>points;
-      const tmp = new Vec3();
       for (let i = 0; i + stride <= arr.length; i += stride)
-        maxRadiusSq = Math.max(maxRadiusSq, this.center.getDistance(readPoint(arr, i, stride, tmp), true));
+        maxRadiusSq = Math.max(maxRadiusSq, this.center.getDistance(readPoint(arr, i, stride, Sphere._scratchTmp), true));
     }
 
     this.radius = Math.sqrt(maxRadiusSq);
