@@ -94,4 +94,52 @@ describe('Box', () => {
   test('applyMatrix4 leaves an empty box empty', () => {
     expect(new Box().applyMatrix4(new Mat4x3().translate(new Vec3(1, 1, 1))).isEmpty()).toBe(true);
   });
+
+  test('AC-1 setFromPoints on number[] constructs no Vec3', () => {
+    const scratch = Box._point;
+    expect(scratch).toBeInstanceOf(Vec3);
+    const box = new Box().setFromPoints([1, 2, 3, -4, 5, 6]);
+    expect(Box._point).toBe(scratch);
+    expect(scratch.toArray()).toEqual([-4, 5, 6]);
+    expect(box.min).not.toBe(scratch);
+    expect(box.max).not.toBe(scratch);
+    expect(box.min.toArray()).toEqual([-4, 2, 3]);
+    expect(box.max.toArray()).toEqual([1, 5, 6]);
+  });
+
+  test('AC-2 setFromPoints on Float32Array constructs no Vec3 and fits extremes', () => {
+    const scratch = Box._point;
+    expect(scratch).toBeInstanceOf(Vec3);
+    const box = new Box().setFromPoints(new Float32Array([1, 2, 3, -4, 5, 6, 0, -1, 9]));
+    expect(Box._point).toBe(scratch);
+    expect(scratch.toArray()).toEqual([0, -1, 9]);
+    expect(box.min.toArray()).toEqual([-4, -1, 3]);
+    expect(box.max.toArray()).toEqual([1, 5, 9]);
+  });
+
+  test('AC-3 repeated setFromPoints calls leave no stale scratch data', () => {
+    const a = new Box();
+    const b = new Box();
+    a.setFromPoints([100, 100, 100, 50, 50, 50]);
+    b.setFromPoints([-1, -2, -3, -4, -5, -6]);
+    a.setFromPoints([1, 2, 3, 2, 3, 4]);
+    expect(a.min.toArray()).toEqual([1, 2, 3]);
+    expect(a.max.toArray()).toEqual([2, 3, 4]);
+    expect(b.min.toArray()).toEqual([-4, -5, -6]);
+    expect(b.max.toArray()).toEqual([-1, -2, -3]);
+  });
+
+  test('AC-4 stride 2, empty and partial-stride inputs keep behavior', () => {
+    const s2 = new Box().setFromPoints([1, 2, 3, 4], 2);
+    expect(s2.min.toArray()).toEqual([1, 2, 0]);
+    expect(s2.max.toArray()).toEqual([3, 4, 0]);
+    expect(new Box().setFromPoints([]).isEmpty()).toBe(true);
+    const partial = new Box().setFromPoints([1, 2, 3, 9, 9]);
+    expect(partial.min.toArray()).toEqual([1, 2, 3]);
+    expect(partial.max.toArray()).toEqual([1, 2, 3]);
+  });
+
+  test('AC-5 existing Box tests keep passing', () => {
+    expect(new Box().isEmpty()).toBe(true);
+  });
 });
