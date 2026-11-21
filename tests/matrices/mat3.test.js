@@ -83,4 +83,12 @@ describe('Mat3', () => {
     expect(m[7]).toBeCloseTo(2, 5);
   });
 
+  it('AC-2: Mat3 multi-argument constructor correctly populates entries and defaults omitted arguments to 0', () => {
+    const full = new Mat3(1, 2, 3, 4, 5, 6, 7, 8, 9).toArray();
+    expect(Array.from(full)).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+
+    const partial = new Mat3(1, 2, 3).toArray();
+    expect(Array.from(partial)).toEqual([1, 2, 3, 0, 0, 0, 0, 0, 0]);
+  });
+
 });

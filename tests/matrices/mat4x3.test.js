@@ -31,7 +31,7 @@ describe('Mat4x3', () => {
     expect(new Mat4x3().scale(new Vec3(2, 3, 4)).determinantLinear()).toBeCloseTo(24, 5);
   });
 
-  it('should still produce a basis when up is parallel to the view axis', () => {
+  it('AC-1: should still produce a basis when up is parallel to the view axis', () => {
     const m = new Mat4x3().lookAtRH(
       new Vec3(0, 5, 0),
       new Vec3(0, 0, 0),
