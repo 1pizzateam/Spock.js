@@ -15,6 +15,7 @@ export class Ray2 {
   public direction: Vec2;
 
   private static _end = new Vec2();
+  private static _scratchHit: RayHit2D = { fraction: 0, point: new Vec2(), normal: new Vec2() };
 
   /** Ray along +X from the origin by default. The direction is normalized. */
   constructor(origin: Vec2 = new Vec2(), direction: Vec2 = new Vec2(1, 0)) {
@@ -41,7 +42,7 @@ export class Ray2 {
 
   /** True if the ray hits the rectangle within maxDistance. */
   public intersectsRect(rect: Rect, maxDistance: number): boolean {
-    return this.intersectRect(rect, maxDistance) !== null;
+    return this.intersectRect(rect, maxDistance, Ray2._scratchHit) !== null;
   }
 
   /** First hit on the circle within maxDistance, else null. */
@@ -51,7 +52,7 @@ export class Ray2 {
 
   /** True if the ray hits the circle within maxDistance. */
   public intersectsCirc(circ: Circ, maxDistance: number): boolean {
-    return this.intersectCirc(circ, maxDistance) !== null;
+    return this.intersectCirc(circ, maxDistance, Ray2._scratchHit) !== null;
   }
 
   /** First hit on the right triangle within maxDistance, else null. */
@@ -61,7 +62,7 @@ export class Ray2 {
 
   /** True if the ray hits the right triangle within maxDistance. */
   public intersectsTriangle(tri: RightTriangle, maxDistance: number): boolean {
-    return this.intersectTriangle(tri, maxDistance) !== null;
+    return this.intersectTriangle(tri, maxDistance, Ray2._scratchHit) !== null;
   }
 
   /** Independent copy. */
