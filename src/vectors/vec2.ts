@@ -1,5 +1,5 @@
 import { Trigo, applySineCosine } from '../trigo';
-import { Bezier, sampleCurveLength, sampleCurveParameterAtLength } from '../bezier';
+import { Bezier, bezierSampleCount } from '../bezier';
 import { Utils } from '../utils';
 
 /** Mutable 2D vector. */
@@ -631,44 +631,86 @@ export class Vec2 {
 
   /** Sampled arc length of a quadratic. */
   public quadraticBezierLength(p0: Vec2, p1: Vec2, p2: Vec2, samples?: number): number {
-    return sampleCurveLength(
-      (t, target) => target.setScalar(Bezier.quadratic(p0.x, p1.x, p2.x, t), Bezier.quadratic(p0.y, p1.y, p2.y, t)),
-      bezierPrevious,
-      bezierCurrent,
-      samples
-    );
+    const n = bezierSampleCount(samples);
+    let previous = bezierPrevious;
+    let current = bezierCurrent;
+    previous.setScalar(Bezier.quadratic(p0.x, p1.x, p2.x, 0), Bezier.quadratic(p0.y, p1.y, p2.y, 0));
+    let length = 0;
+    for (let i = 1; i <= n; i++) {
+      const t = i / n;
+      current.setScalar(Bezier.quadratic(p0.x, p1.x, p2.x, t), Bezier.quadratic(p0.y, p1.y, p2.y, t));
+      const segment = current.getDistance(previous);
+      length += segment;
+      const swap = previous;
+      previous = current;
+      current = swap;
+    }
+    return length;
   }
 
   /** Sampled arc length of a cubic. */
   public cubicBezierLength(p0: Vec2, p1: Vec2, p2: Vec2, p3: Vec2, samples?: number): number {
-    return sampleCurveLength(
-      (t, target) => target.setScalar(Bezier.cubic(p0.x, p1.x, p2.x, p3.x, t), Bezier.cubic(p0.y, p1.y, p2.y, p3.y, t)),
-      bezierPrevious,
-      bezierCurrent,
-      samples
-    );
+    const n = bezierSampleCount(samples);
+    let previous = bezierPrevious;
+    let current = bezierCurrent;
+    previous.setScalar(Bezier.cubic(p0.x, p1.x, p2.x, p3.x, 0), Bezier.cubic(p0.y, p1.y, p2.y, p3.y, 0));
+    let length = 0;
+    for (let i = 1; i <= n; i++) {
+      const t = i / n;
+      current.setScalar(Bezier.cubic(p0.x, p1.x, p2.x, p3.x, t), Bezier.cubic(p0.y, p1.y, p2.y, p3.y, t));
+      const segment = current.getDistance(previous);
+      length += segment;
+      const swap = previous;
+      previous = current;
+      current = swap;
+    }
+    return length;
   }
 
   /** Parameter t at the given quadratic arc length. */
   public quadraticBezierParameterAtLength(p0: Vec2, p1: Vec2, p2: Vec2, distance: number, samples?: number): number {
-    return sampleCurveParameterAtLength(
-      (t, target) => target.setScalar(Bezier.quadratic(p0.x, p1.x, p2.x, t), Bezier.quadratic(p0.y, p1.y, p2.y, t)),
-      bezierPrevious,
-      bezierCurrent,
-      distance,
-      samples
-    );
+    if (distance <= 0)
+      return 0;
+    const n = bezierSampleCount(samples);
+    let previous = bezierPrevious;
+    let current = bezierCurrent;
+    previous.setScalar(Bezier.quadratic(p0.x, p1.x, p2.x, 0), Bezier.quadratic(p0.y, p1.y, p2.y, 0));
+    let traveled = 0;
+    for (let i = 1; i <= n; i++) {
+      const t = i / n;
+      current.setScalar(Bezier.quadratic(p0.x, p1.x, p2.x, t), Bezier.quadratic(p0.y, p1.y, p2.y, t));
+      const segment = current.getDistance(previous);
+      if (traveled + segment >= distance)
+        return (i - 1 + (segment === 0 ? 0 : (distance - traveled) / segment)) / n;
+      traveled += segment;
+      const swap = previous;
+      previous = current;
+      current = swap;
+    }
+    return 1;
   }
 
   /** Parameter t at the given cubic arc length. */
   public cubicBezierParameterAtLength(p0: Vec2, p1: Vec2, p2: Vec2, p3: Vec2, distance: number, samples?: number): number {
-    return sampleCurveParameterAtLength(
-      (t, target) => target.setScalar(Bezier.cubic(p0.x, p1.x, p2.x, p3.x, t), Bezier.cubic(p0.y, p1.y, p2.y, p3.y, t)),
-      bezierPrevious,
-      bezierCurrent,
-      distance,
-      samples
-    );
+    if (distance <= 0)
+      return 0;
+    const n = bezierSampleCount(samples);
+    let previous = bezierPrevious;
+    let current = bezierCurrent;
+    previous.setScalar(Bezier.cubic(p0.x, p1.x, p2.x, p3.x, 0), Bezier.cubic(p0.y, p1.y, p2.y, p3.y, 0));
+    let traveled = 0;
+    for (let i = 1; i <= n; i++) {
+      const t = i / n;
+      current.setScalar(Bezier.cubic(p0.x, p1.x, p2.x, p3.x, t), Bezier.cubic(p0.y, p1.y, p2.y, p3.y, t));
+      const segment = current.getDistance(previous);
+      if (traveled + segment >= distance)
+        return (i - 1 + (segment === 0 ? 0 : (distance - traveled) / segment)) / n;
+      traveled += segment;
+      const swap = previous;
+      previous = current;
+      current = swap;
+    }
+    return 1;
   }
 
   /** Name of the larger component. */
