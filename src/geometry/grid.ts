@@ -236,10 +236,49 @@ export class Grid {
 
   /** Fill target array with every in-bounds cell traversed by the segment [start, end]. */
   public getCellsForSegment(start: Vec2, end: Vec2, out: number[] = []): number[] {
+    const size = this.cellSize;
+    const cols = this.len.x;
+    const rows = this.len.y;
+    const dx = end.x - start.x;
+    const dy = end.y - start.y;
+
+    let col = Math.floor(start.x / size);
+    let row = Math.floor(start.y / size);
+    const endCol = Math.floor(end.x / size);
+    const endRow = Math.floor(end.y / size);
+
+    const stepX = dx > 0 ? 1 : dx < 0 ? -1 : 0;
+    const stepY = dy > 0 ? 1 : dy < 0 ? -1 : 0;
+
+    const tDeltaX = stepX !== 0 ? Math.abs(size / dx) : Infinity;
+    const tDeltaY = stepY !== 0 ? Math.abs(size / dy) : Infinity;
+
+    let tMaxX = stepX > 0
+      ? ((col + 1) * size - start.x) / dx
+      : stepX < 0
+        ? (col * size - start.x) / dx
+        : Infinity;
+    let tMaxY = stepY > 0
+      ? ((row + 1) * size - start.y) / dy
+      : stepY < 0
+        ? (row * size - start.y) / dy
+        : Infinity;
+
     let index = 0;
-    this.traverseRay(start, end, (cellId) => {
-      out[index++] = cellId;
-    });
+    const maxSteps = Math.abs(endCol - col) + Math.abs(endRow - row) + 1;
+    for (let s = 0; s < maxSteps; s++) {
+      if (col >= 0 && row >= 0 && col < cols && row < rows)
+        out[index++] = row * cols + col;
+      if (col === endCol && row === endRow)
+        break;
+      if (tMaxX < tMaxY) {
+        tMaxX += tDeltaX;
+        col += stepX;
+      } else {
+        tMaxY += tDeltaY;
+        row += stepY;
+      }
+    }
     out.length = index;
     return out;
   }
